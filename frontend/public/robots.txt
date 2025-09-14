@@ -1,0 +1,28 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://amberglobaltrade.com/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1
+
+# Disallow admin areas
+Disallow: /admin/
+Disallow: /profile/
+Disallow: /login
+Disallow: /signup
+
+# Allow important pages
+Allow: /products
+Allow: /blogs
+Allow: /contact
+Allow: /subcategories/
+
+# Block unnecessary files
+Disallow: /*.json$
+Disallow: /*.js$
+Disallow: /*.css$
+Disallow: /api/
+Disallow: /_next/
+Disallow: /static/

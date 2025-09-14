@@ -1,0 +1,24 @@
+# Core Web Framework
+fastapi==0.115.8
+uvicorn==0.34.0
+mangum==0.17.0
+
+# Database
+sqlalchemy==2.0.39
+mysql-connector-python==9.2.0
+
+# Authentication & Security
+python-jose[cryptography]==3.4.0
+passlib==1.7.4
+bcrypt==4.3.0
+
+# Data Validation
+pydantic[email]==2.10.5
+email-validator==2.2.0
+
+# Utilities
+python-dotenv==1.0.1
+requests==2.32.3
+
+# CORS & Middleware
+fastapi[all]==0.115.8
