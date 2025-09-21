@@ -15,10 +15,10 @@ def get_db_connection():
     """Get database connection"""
     try:
         connection = mysql.connector.connect(
-            host='amber-database.cbeyuko6yxme.ap-south-1.rds.amazonaws.com',
+            host='database-1.cfiuwyek2vbk.ap-south-1.rds.amazonaws.com',
             port=int(os.getenv('MYSQL_PORT', '3306')),
             user='admin',
-            password=os.getenv('MYSQL_ROOT_PASSWORD', 'Amberglobaltrade2424'),
+            password=os.getenv('MYSQL_ROOT_PASSWORD', 'Mohangola#123'),
             database=os.getenv('MYSQL_DATABASE', 'amberdata1')
         )
         return connection

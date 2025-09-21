@@ -180,3 +180,4 @@ MemoizedPackageIcon.displayName = 'MemoizedPackageIcon';
 MemoizedLeafIcon.displayName = 'MemoizedLeafIcon';
 MemoizedAwardIcon.displayName = 'MemoizedAwardIcon';
 MemoizedTruckIcon.displayName = 'MemoizedTruckIcon';
+

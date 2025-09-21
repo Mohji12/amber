@@ -153,13 +153,19 @@ const Products = ({
   const [isSearching, setIsSearching] = useState(false);
 
   // Always show subcategories first (natural flow: Categories → Subcategories → Products)
-  const showProducts = false;
+  const showProducts = false; // Always show subcategories, not products
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      // console.log('🔄 Products: useEffect triggered');
+      // console.log('🔄 Products: showProducts:', showProducts);
+      // console.log('🔄 Products: propShowProducts:', propShowProducts);
+      // console.log('🔄 Products: isHome:', isHome);
+      // console.log('🔄 Products: condition result:', showProducts || propShowProducts);
+      
       try {
-        if (showProducts) {
+        if (showProducts || propShowProducts) {
           // If initialProducts is provided, use those and fetch categories
           if (initialProducts) {
             setProducts(initialProducts);
@@ -326,33 +332,42 @@ const Products = ({
         )}
 
         {/* Enhanced Category Pills */}
-        <AnimatedSection animation="fadeInUp" delay={400} className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-12 sm:mb-16">
-          <button
-            key="all"
-            onClick={() => setActiveCategory('all')}
-            className={`flex items-center space-x-2 sm:space-x-3 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 text-sm sm:text-base ${
-              activeCategory === 'all'
-                ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-xl'
-                : 'bg-white/80 backdrop-blur-sm text-gray-700 hover:bg-green-50 border-2 border-green-200 hover:border-green-300 shadow-lg hover:shadow-xl'
-            }`}
-          >
-            <Package size={16} className="sm:w-5 sm:h-5" />
-            <span>All Categories</span>
-          </button>
-          {categories.map((category: any, index: number) => (
+        <AnimatedSection animation="fadeInUp" delay={400} className="mb-12 sm:mb-16">
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-center gap-3 sm:gap-4">
             <button
-              key={category.id}
-              onClick={() => setActiveCategory(category.id)}
-              className={`flex items-center space-x-2 sm:space-x-3 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 text-sm sm:text-base ${
-                activeCategory === category.id
+              key="all"
+              onClick={() => setActiveCategory('all')}
+              className={`flex items-center justify-center space-x-2 sm:space-x-3 px-3 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 text-sm sm:text-base ${
+                activeCategory === 'all'
                   ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-xl'
                   : 'bg-white/80 backdrop-blur-sm text-gray-700 hover:bg-green-50 border-2 border-green-200 hover:border-green-300 shadow-lg hover:shadow-xl'
               }`}
             >
-              <Award size={16} className="sm:w-5 sm:h-5" />
-              <span>{category.name}</span>
+              <Package size={16} className="sm:w-5 sm:h-5" />
+              <span className="truncate">All Categories</span>
             </button>
-          ))}
+            {categories
+              .sort((a: any, b: any) => {
+                // Put Wellness & Medicinals first, then others
+                if (a.name.toLowerCase() === 'wellness & medicinals') return -1;
+                if (b.name.toLowerCase() === 'wellness & medicinals') return 1;
+                return 0;
+              })
+              .map((category: any, index: number) => (
+              <button
+                key={category.id}
+                onClick={() => setActiveCategory(category.id)}
+                className={`flex items-center justify-center space-x-2 sm:space-x-3 px-3 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 text-sm sm:text-base ${
+                  activeCategory === category.id
+                    ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-xl'
+                    : 'bg-white/80 backdrop-blur-sm text-gray-700 hover:bg-green-50 border-2 border-green-200 hover:border-green-300 shadow-lg hover:shadow-xl'
+                }`}
+              >
+                <Award size={16} className="sm:w-5 sm:h-5" />
+                <span className="truncate">{category.name}</span>
+              </button>
+            ))}
+          </div>
         </AnimatedSection>
 
         {/* Content Grid */}

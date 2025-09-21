@@ -7,7 +7,7 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.exc import ProgrammingError
 
 # AWS RDS connection without database name
-AWS_DATABASE_URL = "mysql+mysqlconnector://admin:Amberglobaltrade2424@amber-database.cbeyuko6yxme.ap-south-1.rds.amazonaws.com:3306"
+AWS_DATABASE_URL = "mysql+mysqlconnector://admin:Mohangola%23123@database-1.cfiuwyek2vbk.ap-south-1.rds.amazonaws.com:3306"
 
 def setup_database():
     try:

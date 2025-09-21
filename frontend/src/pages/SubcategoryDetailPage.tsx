@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { getSubcategory, getProductsBySubcategory } from '../api';
-import LoadingSpinner from '../components/LoadingSpinner';
 import PopupForm from '../components/PopupForm';
 import Breadcrumb from '../components/Breadcrumb';
 
@@ -84,7 +83,10 @@ const SubcategoryDetailPage = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
-        <LoadingSpinner size="large" />
+        <div className="flex flex-col items-center">
+          <div className="w-12 h-12 animate-spin rounded-full border-2 border-gray-300 border-t-emerald-500 mb-4"></div>
+          <p className="text-gray-600 text-sm">Loading products...</p>
+        </div>
       </div>
     );
   }
@@ -221,8 +223,11 @@ function DetailedProductCard({ product, onQuote }: { product: any, onQuote: () =
         <div className="flex-shrink-0">
           <div className="relative">
             {!imgLoaded && (
-              <div className="absolute inset-0 flex items-center justify-center bg-white/80 z-10 rounded-2xl">
-                <LoadingSpinner size="large" />
+              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 z-10 rounded-2xl">
+                <div className="flex flex-col items-center">
+                  <div className="w-8 h-8 animate-spin rounded-full border-2 border-gray-300 border-t-emerald-500 mb-2"></div>
+                  <p className="text-gray-500 text-xs">Loading image...</p>
+                </div>
               </div>
             )}
             <img

@@ -11,7 +11,7 @@ from sqlalchemy import text
 # AWS RDS MySQL connection
 SQLALCHEMY_DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "mysql+mysqlconnector://admin:Amberglobaltrade2424@amber-database.cbeyuko6yxme.ap-south-1.rds.amazonaws.com:3306/amberdata1"
+    "mysql+mysqlconnector://admin:Mohangola%23123@database-1.cfiuwyek2vbk.ap-south-1.rds.amazonaws.com:3306/amberdata1"
 )
 
 engine = create_engine(

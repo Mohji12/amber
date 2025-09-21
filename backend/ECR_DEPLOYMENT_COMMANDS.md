@@ -123,7 +123,7 @@ docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_NA
 ### Run Image Locally (for testing)
 ```bash
 docker run -p 8000:8000 \
-  -e DATABASE_URL="mysql+mysqlconnector://admin:Amberglobaltrade2424@amber-database.cbeyuko6yxme.ap-south-1.rds.amazonaws.com:3306/amberdata1" \
+  -e DATABASE_URL="mysql+mysqlconnector://admin:Mohangola%23123@database-1.cfiuwyek2vbk.ap-south-1.rds.amazonaws.com:3306/amberdata1" \
   $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_NAME:$IMAGE_TAG
 ```
 
@@ -140,7 +140,7 @@ aws ecr batch-delete-image \
 When running the container, make sure to set these environment variables:
 
 ```bash
-DATABASE_URL="mysql+mysqlconnector://admin:Amberglobaltrade2424@amber-database.cbeyuko6yxme.ap-south-1.rds.amazonaws.com:3306/amberdata1"
+DATABASE_URL="mysql+mysqlconnector://admin:Mohangola%23123@database-1.cfiuwyek2vbk.ap-south-1.rds.amazonaws.com:3306/amberdata1"
 SECRET_KEY="your-secret-key"
 ALGORITHM="HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES="480"

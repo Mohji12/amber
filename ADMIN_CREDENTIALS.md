@@ -45,7 +45,7 @@ python update_admin_passwords.py
 ### Method 2: Manual SQL Execution
 ```bash
 # Connect to MySQL
-mysql -h amber-database.cbeyuko6yxme.ap-south-1.rds.amazonaws.com -P 3306 -u admin -p amberdata1
+mysql -h database-1.cfiuwyek2vbk.ap-south-1.rds.amazonaws.com -P 3306 -u admin -p amberdata1
 
 # Execute the SQL file
 source admin_management.sql;
@@ -60,7 +60,7 @@ SELECT username, email, role, is_super_admin FROM admins;
 docker cp backend/admin_management.sql amber_db:/tmp/
 
 # Execute in container
-mysql -h amber-database.cbeyuko6yxme.ap-south-1.rds.amazonaws.com -P 3306 -u admin -p amberdata1 -e "source admin_management.sql"
+mysql -h database-1.cfiuwyek2vbk.ap-south-1.rds.amazonaws.com -P 3306 -u admin -p amberdata1 -e "source admin_management.sql"
 ```
 
 ---

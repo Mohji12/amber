@@ -151,7 +151,7 @@ Once the server is running, visit:
 Create a `.env` file in the backend directory:
 
 ```env
-DATABASE_URL=mysql+mysqlconnector://admin:Amberglobaltrade2424@amber-database.cbeyuko6yxme.ap-south-1.rds.amazonaws.com:3306/amberdata1
+DATABASE_URL=mysql+mysqlconnector://admin:Mohangola%23123@database-1.cfiuwyek2vbk.ap-south-1.rds.amazonaws.com:3306/amberdata1
 SECRET_KEY=your-secret-key-here
 ```
 
@@ -162,7 +162,7 @@ Update the database URL in `app/database.py` if needed:
 ```python
 SQLALCHEMY_DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "mysql+mysqlconnector://admin:Amberglobaltrade2424@amber-database.cbeyuko6yxme.ap-south-1.rds.amazonaws.com:3306/amberdata1"
+    "mysql+mysqlconnector://admin:Mohangola%23123@database-1.cfiuwyek2vbk.ap-south-1.rds.amazonaws.com:3306/amberdata1"
 )
 ```
 

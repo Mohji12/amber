@@ -124,13 +124,17 @@ export async function cachedFetch<T>(
 
   // Make API call
   console.log(`Cache miss: ${key}`);
+  console.log(`Making API call to: ${url}`);
   const response = await fetch(url, options);
+  console.log(`API response status: ${response.status}`);
   
   if (!response.ok) {
+    console.error(`API error: ${response.status} - ${response.statusText}`);
     throw new Error(`HTTP error! status: ${response.status}`);
   }
   
   const data = await response.json();
+  console.log(`API data received:`, data);
   
   // Cache successful GET requests
   if (options.method === 'GET' || !options.method) {
@@ -166,3 +170,4 @@ setInterval(() => {
 }, 60 * 1000); // Clean every minute
 
 export default apiCache;
+

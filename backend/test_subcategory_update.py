@@ -57,3 +57,5 @@ except Exception as e:
     traceback.print_exc()
 finally:
     db.close()
+
+

@@ -26,3 +26,5 @@ Disallow: /*.css$
 Disallow: /api/
 Disallow: /_next/
 Disallow: /static/
+
+

@@ -44,7 +44,24 @@ def update_profile(db: Session, user_id: int, profile_data: dict) -> Optional[mo
 # Category CRUD
 
 def get_categories(db: Session) -> List[models.Category]:
-    return db.query(models.Category).all()
+    # Get all categories
+    all_categories = db.query(models.Category).all()
+    
+    # Find Wellness & Medicinals category
+    wellness_category = None
+    other_categories = []
+    
+    for category in all_categories:
+        if category.name.lower() == 'wellness & medicinals':
+            wellness_category = category
+        else:
+            other_categories.append(category)
+    
+    # Return Wellness first, then all others
+    if wellness_category:
+        return [wellness_category] + other_categories
+    else:
+        return all_categories
 
 def create_category(db: Session, name: str) -> models.Category:
     db_category = models.Category(name=name)

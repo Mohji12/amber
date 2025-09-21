@@ -1,8 +1,10 @@
 // Centralized API utility for frontend-backend connection
-//c
-// onst API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
-//const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://pq13kceala.execute-api.ap-south-1.amazonaws.com";
+// Force local backend for development
+//const API_BASE_URL = "http://127.0.0.1:8000";
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+const API_BASE_URL = "https://6hgfjwmhx4.execute-api.ap-south-1.amazonaws.com";
+
+// console.log('🚀 API_BASE_URL initialized to:', API_BASE_URL);
 
 
 import { cachedFetch, CACHE_CONFIG } from './utils/apiCache';
@@ -210,10 +212,22 @@ export async function updateProduct(productId: number, productData: any) {
 }
 
 export async function getCategories() {
+  // Add cache-busting parameter to ensure fresh data
+  const cacheBuster = Date.now();
+  const url = `${API_BASE_URL}/categories/?cb=${cacheBuster}`;
+  
+  // Clear cache to ensure fresh data
+  const { apiCache } = await import('./utils/apiCache');
+  apiCache.delete('categories');
+  apiCache.clear(); // Clear all cache
+  
+  // Use a unique cache key to bypass any cached data
+  const uniqueCacheKey = `categories_${cacheBuster}`;
+  
   return await cachedFetch(
-    `${API_BASE_URL}/categories/`,
+    url,
     {},
-    'categories',
+    uniqueCacheKey,
     CACHE_CONFIG.categories.ttl
   );
 }
@@ -346,10 +360,21 @@ export async function getFeaturedProducts() {
 }
 
 export async function getSubcategories() {
+  const cacheBuster = Date.now();
+  const url = `${API_BASE_URL}/subcategories/?cb=${cacheBuster}`;
+  
+  // Clear cache to ensure fresh data
+  const { apiCache } = await import('./utils/apiCache');
+  apiCache.delete('subcategories');
+  apiCache.clear(); // Clear all cache
+  
+  // Use a unique cache key to bypass any cached data
+  const uniqueCacheKey = `subcategories_${cacheBuster}`;
+  
   return await cachedFetch(
-    `${API_BASE_URL}/subcategories/`,
+    url,
     {},
-    'subcategories',
+    uniqueCacheKey,
     CACHE_CONFIG.subcategories.ttl
   );
 }

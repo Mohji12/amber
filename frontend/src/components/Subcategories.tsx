@@ -16,14 +16,19 @@ const Subcategories = ({ isHome = false }: { isHome?: boolean }) => {
     const fetchData = async () => {
       setLoading(true);
       try {
+        console.log('🔄 Fetching subcategories and categories...');
         const [subs, cats] = await Promise.all([
           getSubcategories(),
           getCategories()
         ]);
+        console.log('📊 Subcategories received:', subs);
+        console.log('📊 Categories received:', cats);
+        console.log('📊 Subcategories count:', Array.isArray(subs) ? subs.length : 0);
+        console.log('📊 Categories count:', Array.isArray(cats) ? cats.length : 0);
         setSubcategories(Array.isArray(subs) ? subs : []);
         setCategories(Array.isArray(cats) ? cats : []);
       } catch (error) {
-        console.error('Failed to fetch subcategories:', error);
+        console.error('❌ Failed to fetch subcategories:', error);
         setSubcategories([]);
         setCategories([]);
       }
@@ -92,33 +97,42 @@ const Subcategories = ({ isHome = false }: { isHome?: boolean }) => {
         </div>
 
         {/* Enhanced Category Pills */}
-        <div className="flex flex-wrap justify-center gap-4 mb-16">
-          <button
-            key="all"
-            onClick={() => setActiveCategory('all')}
-            className={`flex items-center space-x-3 px-8 py-4 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 ${
-              activeCategory === 'all'
-                ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-xl'
-                : 'bg-white/80 backdrop-blur-sm text-gray-700 hover:bg-green-50 border-2 border-green-200 hover:border-green-300 shadow-lg hover:shadow-xl'
-            }`}
-          >
-            <Package size={20} />
-            <span>All Categories</span>
-          </button>
-          {categories.map((category: any) => (
+        <div className="mb-16">
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-center gap-3 sm:gap-4">
             <button
-              key={category.id}
-              onClick={() => setActiveCategory(category.id)}
-              className={`flex items-center space-x-3 px-8 py-4 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 ${
-                activeCategory === category.id
+              key="all"
+              onClick={() => setActiveCategory('all')}
+              className={`flex items-center justify-center space-x-2 sm:space-x-3 px-3 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 text-sm sm:text-base ${
+                activeCategory === 'all'
                   ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-xl'
                   : 'bg-white/80 backdrop-blur-sm text-gray-700 hover:bg-green-50 border-2 border-green-200 hover:border-green-300 shadow-lg hover:shadow-xl'
               }`}
             >
-              <Award size={20} />
-              <span>{category.name}</span>
+              <Package size={16} className="sm:w-5 sm:h-5" />
+              <span className="truncate">All Categories</span>
             </button>
-          ))}
+            {categories
+              .sort((a: any, b: any) => {
+                // Put Wellness & Medicinals first, then others
+                if (a.name.toLowerCase() === 'wellness & medicinals') return -1;
+                if (b.name.toLowerCase() === 'wellness & medicinals') return 1;
+                return 0;
+              })
+              .map((category: any) => (
+              <button
+                key={category.id}
+                onClick={() => setActiveCategory(category.id)}
+                className={`flex items-center justify-center space-x-2 sm:space-x-3 px-3 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 text-sm sm:text-base ${
+                  activeCategory === category.id
+                    ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-xl'
+                    : 'bg-white/80 backdrop-blur-sm text-gray-700 hover:bg-green-50 border-2 border-green-200 hover:border-green-300 shadow-lg hover:shadow-xl'
+                }`}
+              >
+                <Award size={16} className="sm:w-5 sm:h-5" />
+                <span className="truncate">{category.name}</span>
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Subcategories Grid */}

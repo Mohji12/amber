@@ -118,3 +118,5 @@ const FAQ: React.FC<FAQProps> = ({ faqs = defaultFAQs, className = '' }) => {
 };
 
 export default FAQ;
+
+
