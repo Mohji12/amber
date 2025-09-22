@@ -58,7 +58,7 @@ export const MemoizedSubcategoryCard = memo<SubcategoryCardProps>(({
         </div>
 
         <div className="flex flex-col flex-grow">
-          <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4 group-hover:text-green-700 transition-colors line-clamp-2">
+          <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4 group-hover:text-green-700 transition-colors">
             {searchResult ? (
               <span dangerouslySetInnerHTML={{ __html: searchResult.highlightedText }} />
             ) : (
@@ -128,7 +128,7 @@ export const MemoizedProductCard = memo<ProductCardProps>(({ product, onQuote, o
 
         <div className="flex-1 flex flex-col justify-between min-h-[128px] sm:min-h-[160px]">
           <div>
-            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 group-hover:text-green-700 transition-colors line-clamp-2">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 group-hover:text-green-700 transition-colors">
               {product.name}
             </h3>
             

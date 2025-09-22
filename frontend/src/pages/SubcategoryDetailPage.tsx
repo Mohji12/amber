@@ -147,7 +147,7 @@ const SubcategoryDetailPage = () => {
         </script>
       </Helmet>
       
-      <div className="min-h-screen bg-gradient-to-br from-white via-emerald-50 to-green-50 py-6 lg:py-12 px-3 sm:px-4">
+      <div className="min-h-screen bg-gradient-to-br from-white via-emerald-50 to-green-50 pt-32 pb-6 sm:pt-28 lg:pt-28 lg:pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Breadcrumb Navigation */}
         <Breadcrumb 
@@ -159,8 +159,8 @@ const SubcategoryDetailPage = () => {
         />
         
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-12 px-2 sm:px-4">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 break-words leading-tight">
             {subcategory.name}
           </h1>
           {subcategory.description && (

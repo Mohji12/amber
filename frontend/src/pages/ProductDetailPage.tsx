@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Package, MapPin, Award, Truck, Star, Scale, Calendar, Tag } from 'lucide-react';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -12,12 +12,11 @@ const ProductDetailPage: React.FC = () => {
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isQuoteOpen, setIsQuoteOpen] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const products = await getProducts();
+        const products = await getProducts() as any[];
         const found = products.find((p: any) => p.id?.toString() === id);
         setProduct(found);
         
@@ -115,7 +114,7 @@ const ProductDetailPage: React.FC = () => {
         </script>
       </Helmet>
       
-      <div className="min-h-screen bg-gradient-to-br from-white via-emerald-50 to-green-50 py-6 lg:py-12 px-3 sm:px-4">
+      <div className="min-h-screen bg-gradient-to-br from-white via-emerald-50 to-green-50 pt-24 pb-6 lg:pt-28 lg:pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Breadcrumb Navigation */}
         <Breadcrumb 
@@ -159,7 +158,7 @@ const ProductDetailPage: React.FC = () => {
               {/* Product Information */}
               <div className="p-4 lg:p-6 space-y-3 lg:space-y-4">
                 <div>
-                  <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">{product.name}</h1>
+                  <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2 break-words leading-tight">{product.name}</h1>
                   <p className="text-sm lg:text-base text-gray-600 leading-relaxed">
                     {product.description || 'Premium quality product sourced from the finest locations.'}
                   </p>

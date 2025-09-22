@@ -285,7 +285,7 @@ const Products = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <AnimatedSection animation="fadeInUp" className="text-center mb-16">
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-5xl font-bold text-gray-900 mb-6 break-words leading-tight">
             {pageTitle || "Product Categories"}
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
@@ -518,7 +518,7 @@ function ProductCard({ product, onQuote, onDetails }: { product: any, onQuote: (
         </div>
 
         <div className="flex flex-col flex-grow">
-          <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-green-700 transition-colors line-clamp-2">
+          <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-green-700 transition-colors">
             {product.name}
           </h3>
           
@@ -660,7 +660,7 @@ function SubcategoryCard({ subcategory, categoryName, searchResult }: { subcateg
 
         <div className="flex flex-col flex-grow">
           <div className="flex items-start justify-between mb-3 sm:mb-4">
-            <h3 className="text-lg sm:text-xl font-bold text-gray-900 group-hover:text-green-700 transition-colors line-clamp-2 flex-1">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 group-hover:text-green-700 transition-colors flex-1">
               {searchResult ? (
                 <span dangerouslySetInnerHTML={{ __html: searchResult.highlightedText }} />
               ) : (
