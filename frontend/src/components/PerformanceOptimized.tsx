@@ -143,17 +143,12 @@ export const MemoizedProductCard = memo<ProductCardProps>(({ product, onQuote, o
 
           <div className="flex gap-3 pt-2">
             <button
-              className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg transition-all transform hover:scale-105"
+              className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg transition-all transform hover:scale-105"
               onClick={handleQuote}
             >
               Get Quote
             </button>
-            <button
-              className="flex-1 bg-white border-2 border-green-500 text-green-600 hover:bg-green-50 hover:border-green-600 px-6 py-3 rounded-xl font-semibold shadow-lg transition-all transform hover:scale-105"
-              onClick={handleDetails}
-            >
-              View Details
-            </button>
+            {/* View Details button is hidden since product description is already visible in this detailed card view */}
           </div>
         </div>
       </div>

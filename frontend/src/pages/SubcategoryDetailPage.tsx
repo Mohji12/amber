@@ -351,12 +351,7 @@ function DetailedProductCard({ product, onQuote }: { product: any, onQuote: () =
             >
               Get Quote
             </button>
-            <button
-              className="flex-1 bg-white border-2 border-green-500 text-green-600 hover:bg-green-50 hover:border-green-600 px-6 py-3 rounded-xl font-semibold shadow-lg transition-all transform hover:scale-105"
-              aria-label={`View details for ${product.name}`}
-            >
-              View Details
-            </button>
+            {/* View Details button is hidden since product description is already visible */}
           </div>
         </div>
       </div>

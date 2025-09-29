@@ -546,16 +546,9 @@ function ProductCard({ product, onQuote, onDetails }: { product: any, onQuote: (
           </div>
 
           <div className="flex gap-3 mt-auto">
-            <Link
-              to={`/products/${product.id}`}
-              className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600 font-semibold py-3 px-4 rounded-2xl transition-all transform hover:scale-105 shadow-lg text-center"
-              onClick={e => e.stopPropagation()}
-              aria-label={`View details for ${product.name}`}
-            >
-              View Details
-            </Link>
+            {/* View Details button is hidden since product description is already visible in this detailed card view */}
             <button 
-              className="flex-1 bg-white border-2 border-green-500 text-green-600 hover:bg-green-50 hover:border-green-600 font-semibold py-3 px-4 rounded-2xl transition-all transform hover:scale-105 shadow-lg" 
+              className="w-full bg-white border-2 border-green-500 text-green-600 hover:bg-green-50 hover:border-green-600 font-semibold py-3 px-4 rounded-2xl transition-all transform hover:scale-105 shadow-lg" 
               onClick={e => { e.stopPropagation(); onQuote(); }} 
               aria-label={`Get Quote for ${product.name}`}
             >
