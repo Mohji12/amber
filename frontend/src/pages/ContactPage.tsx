@@ -170,7 +170,6 @@ const ContactPage: React.FC = () => {
             "name": "Amber Global Trade",
             "description": "Premium agricultural export company specializing in Basmati rice, organic spices, dry fruits, and pulses with full compliance certification.",
             "url": "https://amberglobaltrade.com",
-            "telephone": "+91-7978801622",
             "email": "amberglobaltrade1@gmail.com",
             "address": {
               "@type": "PostalAddress",
