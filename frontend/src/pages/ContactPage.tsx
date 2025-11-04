@@ -103,14 +103,7 @@ const ContactPage: React.FC = () => {
   };
 
   const contactDetails = [
-    {
-      icon: Phone,
-      title: 'WhatsApp',
-      value: '+91 7978801622',
-      href: 'https://wa.me/917978801622?text=Hi%20Amber%20Global%20Team,%20I%20am%20interested%20in%20getting%20a%20quote%20for%20your%20products.%20Please%20help%20me%20with%20more%20information.',
-      color: 'from-green-400 to-emerald-500',
-      description: 'Quick response for urgent queries'
-    },
+    
     {
       icon: Mail,
       title: 'Email',
