@@ -48,7 +48,7 @@ const Hero = () => {
       {/* Video Background */}
       <video
         className="absolute inset-0 w-full h-full object-cover z-0"
-        src="https://jgi-menteetracker.s3.ap-south-1.amazonaws.com/agri1.mp4"
+        src="https://jgi-menteetrackers.s3.ap-south-1.amazonaws.com/agri1.mp4"
         autoPlay
         loop
         muted
