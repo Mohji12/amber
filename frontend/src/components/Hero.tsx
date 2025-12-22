@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import { ArrowRight, Users, Sparkles, Globe, Award, Truck, Shield } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
 import InteractiveButton from './InteractiveButton';
-import agri1 from '../assets/agri1.mp4';
 
 const Hero = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -54,8 +53,11 @@ const Hero = () => {
         muted
         playsInline
         preload="auto"
-        style={{ pointerEvents: 'none' }}
+        style={{ pointerEvents: 'none', filter: 'brightness(0.0)' }}
       />
+      
+      {/* Dark Overlay for better text readability */}
+      <div className="absolute inset-0 bg-black/30 z-[5]"></div>
       
       {/* Enhanced Animated background elements */}
       <div className="absolute inset-0 overflow-hidden z-10">

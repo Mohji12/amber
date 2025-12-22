@@ -1,23 +1,55 @@
 // Performance test utilities for development
 import { performanceMonitor } from './performance';
 
+// Check if backend is available
+const checkBackendAvailability = async (): Promise<boolean> => {
+  try {
+    const API_BASE_URL = "http://127.0.0.1:8000";
+    const response = await fetch(`${API_BASE_URL}/health`, {
+      method: 'GET',
+      signal: AbortSignal.timeout(2000) // 2 second timeout
+    });
+    return response.ok;
+  } catch (error) {
+    return false;
+  }
+};
+
 // Test API caching performance
 export const testAPICaching = async () => {
   console.log('🧪 Testing API Caching Performance...');
   
+  // Check if backend is available first
+  const backendAvailable = await checkBackendAvailability();
+  if (!backendAvailable) {
+    console.warn('⚠️ Backend server is not available. Skipping API caching tests.');
+    console.warn('   Make sure the backend server is running on http://127.0.0.1:8000');
+    return;
+  }
+  
   const testAPI = async (name: string, apiCall: () => Promise<any>) => {
-    const start = performance.now();
-    await apiCall();
-    const end = performance.now();
-    const duration = end - start;
-    
-    console.log(`${name}: ${duration.toFixed(2)}ms`);
-    return duration;
+    try {
+      const start = performance.now();
+      await apiCall();
+      const end = performance.now();
+      const duration = end - start;
+      
+      console.log(`${name}: ${duration.toFixed(2)}ms`);
+      return duration;
+    } catch (error: any) {
+      console.warn(`⚠️ ${name} failed:`, error.message || error);
+      return -1;
+    }
   };
 
   // Test with caching
   console.log('First call (cache miss):');
-  await testAPI('Categories API', () => import('../api').then(m => m.getCategories()));
+  const firstCall = await testAPI('Categories API', () => import('../api').then(m => m.getCategories()));
+  
+  if (firstCall === -1) {
+    console.warn('⚠️ API test failed, skipping cache hit test');
+    return;
+  }
   
   console.log('Second call (cache hit):');
   await testAPI('Categories API', () => import('../api').then(m => m.getCategories()));
@@ -78,51 +110,58 @@ export const runPerformanceTests = async () => {
   console.log('================================');
   
   try {
+    // Test API caching (will skip if backend unavailable)
     await testAPICaching();
     console.log('');
     
     // Test component render
-    testComponentRender('Test Component', () => {
-      // Simulate component render
-      const div = document.createElement('div');
-      div.innerHTML = 'Test content';
-      document.body.appendChild(div);
-      document.body.removeChild(div);
-    });
-    console.log('');
-    
-    // Test image loading
-    await testImageLoading('https://via.placeholder.com/400x400?text=Test');
-    console.log('');
-    
-    // Report overall performance
-    const metrics = performanceMonitor.getMetrics();
-    const issues = performanceMonitor.reportPerformanceIssues();
-    
-    console.log('📊 Performance Summary:');
-    console.log('======================');
-    console.log(`Page Load Time: ${metrics.pageLoadTime}ms`);
-    console.log(`First Contentful Paint: ${metrics.firstContentfulPaint}ms`);
-    console.log(`Largest Contentful Paint: ${metrics.largestContentfulPaint}ms`);
-    console.log(`Cumulative Layout Shift: ${metrics.cumulativeLayoutShift}`);
-    console.log(`First Input Delay: ${metrics.firstInputDelay}ms`);
-    
-    if (issues.length === 0) {
-      console.log('✅ All performance metrics are within acceptable ranges!');
-    } else {
-      console.log('⚠️ Performance issues detected:', issues);
+    try {
+      testComponentRender('Test Component', () => {
+        // Simulate component render
+        const div = document.createElement('div');
+        div.innerHTML = 'Test content';
+        document.body.appendChild(div);
+        document.body.removeChild(div);
+      });
+      console.log('');
+    } catch (error: any) {
+      console.warn('⚠️ Component render test failed:', error.message || error);
     }
     
-  } catch (error) {
-    console.error('❌ Performance tests failed:', error);
+    // Test image loading
+    try {
+      await testImageLoading('https://via.placeholder.com/400x400?text=Test');
+      console.log('');
+    } catch (error: any) {
+      console.warn('⚠️ Image loading test failed:', error.message || error);
+    }
+    
+    // Report overall performance
+    try {
+      const metrics = performanceMonitor.getMetrics();
+      const issues = performanceMonitor.reportPerformanceIssues();
+      
+      console.log('📊 Performance Summary:');
+      console.log('======================');
+      console.log(`Page Load Time: ${metrics.pageLoadTime}ms`);
+      console.log(`First Contentful Paint: ${metrics.firstContentfulPaint}ms`);
+      console.log(`Largest Contentful Paint: ${metrics.largestContentfulPaint}ms`);
+      console.log(`Cumulative Layout Shift: ${metrics.cumulativeLayoutShift}`);
+      console.log(`First Input Delay: ${metrics.firstInputDelay}ms`);
+      
+      if (issues.length === 0) {
+        console.log('✅ All performance metrics are within acceptable ranges!');
+      } else {
+        console.log('⚠️ Performance issues detected:', issues);
+      }
+    } catch (error: any) {
+      console.warn('⚠️ Performance metrics collection failed:', error.message || error);
+    }
+    
+  } catch (error: any) {
+    console.warn('⚠️ Some performance tests failed:', error.message || error);
+    console.log('   This is normal if the backend server is not running.');
   }
 };
 
-// Auto-run tests in development
-if (process.env.NODE_ENV === 'development') {
-  // Run tests after a short delay to allow app to initialize
-  setTimeout(() => {
-    runPerformanceTests();
-  }, 2000);
-}
 

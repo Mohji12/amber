@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="E:\amber-final-1\import-main\backend\import"
+VIRTUAL_ENV="D:\amber-main\amber-main\backend\import"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

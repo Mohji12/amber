@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { X, Send } from 'lucide-react';
+import { X, Send, MessageCircle } from 'lucide-react';
 import InteractiveButton from './InteractiveButton';
 import FeedbackToast from './FeedbackToast';
 import LoadingSpinner from './LoadingSpinner';
 import { createEnquiry } from '../api';
+import { openWhatsApp } from '../utils/whatsapp';
+import WhatsAppQuestionnaire from './WhatsAppQuestionnaire';
+import type { QuestionnaireAnswers } from './WhatsAppQuestionnaire';
 
 interface PopupFormProps {
   isVisible: boolean;
@@ -32,6 +35,7 @@ const PopupForm: React.FC<PopupFormProps> = ({ isVisible, onClose, onSubmit, pro
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
   const [errors, setErrors] = useState<any>({});
+  const [showWhatsAppQuestionnaire, setShowWhatsAppQuestionnaire] = useState(false);
 
   // Auto-fill product interest when productInfo changes
   useEffect(() => {
@@ -275,23 +279,44 @@ const PopupForm: React.FC<PopupFormProps> = ({ isVisible, onClose, onSubmit, pro
               />
             </div>
 
-            <InteractiveButton
-              variant="primary"
-              size="lg"
-              icon={isSubmitting ? undefined : Send}
-              disabled={isSubmitting}
-              className="w-full"
-              aria-label="Send Quote Request"
-            >
-              {isSubmitting ? (
-                <>
-                  <LoadingSpinner size="sm" color="white" />
-                  <span>Sending...</span>
-                </>
-              ) : (
-                'Send Quote Request'
-              )}
-            </InteractiveButton>
+            <div className="space-y-3">
+              <InteractiveButton
+                variant="primary"
+                size="lg"
+                icon={isSubmitting ? undefined : Send}
+                disabled={isSubmitting}
+                className="w-full"
+                aria-label="Send Quote Request"
+              >
+                {isSubmitting ? (
+                  <>
+                    <LoadingSpinner size="sm" color="white" />
+                    <span>Sending...</span>
+                  </>
+                ) : (
+                  'Send Quote Request'
+                )}
+              </InteractiveButton>
+              
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-gray-500">or</span>
+                </div>
+              </div>
+              
+              <button
+                type="button"
+                onClick={() => setShowWhatsAppQuestionnaire(true)}
+                className="w-full bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
+                aria-label="Contact via WhatsApp"
+              >
+                <MessageCircle size={20} />
+                Contact via WhatsApp
+              </button>
+            </div>
           </form>
         </div>
       </div>
@@ -301,6 +326,26 @@ const PopupForm: React.FC<PopupFormProps> = ({ isVisible, onClose, onSubmit, pro
         type={toastType}
         isVisible={showToast}
         onClose={() => setShowToast(false)}
+      />
+      
+      <WhatsAppQuestionnaire
+        isOpen={showWhatsAppQuestionnaire}
+        onClose={() => setShowWhatsAppQuestionnaire(false)}
+        onComplete={(answers: QuestionnaireAnswers) => {
+          setShowWhatsAppQuestionnaire(false);
+          // Merge form data with questionnaire answers
+          openWhatsApp({
+            ...answers,
+            name: answers.name || formData.name,
+            email: answers.email || formData.email,
+            phone: answers.phone || formData.contact,
+            company: answers.company || formData.company,
+            product_interest: answers.specificProduct || formData.product_interest,
+            quantity: answers.quantity || formData.amount,
+            destination_country: answers.destinationCountry || formData.destination_country,
+            message: answers.additionalRequirements || formData.message
+          });
+        }}
       />
     </>
   );

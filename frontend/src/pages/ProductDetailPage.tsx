@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import { Package, MapPin, Award, Truck, Star, Scale, Calendar, Tag } from 'lucide-react';
 import LoadingSpinner from '../components/LoadingSpinner';
 import PopupForm from '../components/PopupForm';
 import Breadcrumb from '../components/Breadcrumb';
+import CompleteSEO from '../components/SEO/CompleteSEO';
+import { useSEO } from '../hooks/useSEO';
 import { getProducts, trackProductView } from '../api';
 
 const ProductDetailPage: React.FC = () => {
@@ -12,6 +13,9 @@ const ProductDetailPage: React.FC = () => {
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isQuoteOpen, setIsQuoteOpen] = useState(false);
+  
+  // Fetch SEO data using the SEO hook
+  const { seoData, loading: seoLoading } = useSEO('product', id ? Number(id) : undefined);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -34,85 +38,11 @@ const ProductDetailPage: React.FC = () => {
     fetchProduct();
   }, [id]);
 
-
-  if (loading) return <div className="flex justify-center items-center min-h-[200px]"><LoadingSpinner size="large" /></div>;
+  if (loading || seoLoading) return <div className="flex justify-center items-center min-h-[200px]"><LoadingSpinner size="large" /></div>;
   if (!product) return <div className="text-center text-gray-500">Product not found.</div>;
 
-  // Generate SEO data based on product
-  const seoTitle = `${product.name} - Premium Export Quality | Amber Global Trade`;
-  const seoDescription = `Premium ${product.name} for export. ${product.description || 'High-quality agricultural product'} with ${product.grade || 'Premium'} grade, MOQ ${product.moq || '100 KG'}, Origin: ${product.origin || 'India'}. FSSAI certified, APEDA registered.`;
-  const seoKeywords = `${product.name}, ${product.category_name}, ${product.subcategory_name}, export quality, FSSAI certified, APEDA registered, premium grade, ${product.origin || 'India'} origin, agricultural export`;
-
   return (
-    <div>
-      <Helmet>
-        <title>{seoTitle}</title>
-        <meta name="description" content={seoDescription} />
-        <meta name="keywords" content={seoKeywords} />
-        <meta name="author" content="Amber Global Trade" />
-        <meta name="robots" content="index, follow" />
-        <link rel="canonical" href={`https://amberglobaltrade.com/products/${id}`} />
-        
-        {/* Open Graph Tags */}
-        <meta property="og:title" content={seoTitle} />
-        <meta property="og:description" content={seoDescription} />
-        <meta property="og:type" content="product" />
-        <meta property="og:url" content={`https://amberglobaltrade.com/products/${id}`} />
-        <meta property="og:image" content={product.image_url || 'https://amberglobaltrade.com/assets/product-default.jpg'} />
-        <meta property="og:site_name" content="Amber Global Trade" />
-        
-        {/* Twitter Card Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={seoTitle} />
-        <meta name="twitter:description" content={seoDescription} />
-        <meta name="twitter:image" content={product.image_url || 'https://amberglobaltrade.com/assets/product-default.jpg'} />
-        
-        {/* JSON-LD Structured Data for Product */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            "name": product.name,
-            "description": product.description || `Premium ${product.name} for export`,
-            "image": product.image_url || 'https://amberglobaltrade.com/assets/product-default.jpg',
-            "brand": {
-              "@type": "Brand",
-              "name": "Amber Global Trade"
-            },
-            "offers": {
-              "@type": "Offer",
-              "availability": product.status === 'In Stock' ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-              "priceCurrency": "USD",
-              "seller": {
-                "@type": "Organization",
-                "name": "Amber Global Trade"
-              }
-            },
-            "additionalProperty": [
-              {
-                "@type": "PropertyValue",
-                "name": "Grade",
-                "value": product.grade || "Premium"
-              },
-              {
-                "@type": "PropertyValue",
-                "name": "MOQ",
-                "value": product.moq || "100 KG"
-              },
-              {
-                "@type": "PropertyValue",
-                "name": "Origin",
-                "value": product.origin || "India"
-              },
-              {
-                "@type": "PropertyValue",
-                "name": "Category",
-                "value": product.category_name
-              }
-            ]
-          })}
-        </script>
-      </Helmet>
+    <CompleteSEO seoData={seoData}>
       
       <div className="min-h-screen bg-gradient-to-br from-white via-emerald-50 to-green-50 pt-24 pb-6 lg:pt-28 lg:pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -158,9 +88,11 @@ const ProductDetailPage: React.FC = () => {
               {/* Product Information */}
               <div className="p-4 lg:p-6 space-y-3 lg:space-y-4">
                 <div>
-                  <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2 break-words leading-tight">{product.name}</h1>
+                  <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2 break-words leading-tight">
+                    {seoData?.headings?.h1 || product.name}
+                  </h1>
                   <p className="text-sm lg:text-base text-gray-600 leading-relaxed">
-                    {product.description || 'Premium quality product sourced from the finest locations.'}
+                    {seoData?.content?.short_intro || product.description || 'Premium quality product sourced from the finest locations.'}
                   </p>
                 </div>
 
@@ -365,7 +297,7 @@ const ProductDetailPage: React.FC = () => {
         } : undefined}
       />
       </div>
-    </div>
+    </CompleteSEO>
   );
 };
 

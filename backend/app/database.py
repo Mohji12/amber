@@ -8,6 +8,7 @@ from sqlalchemy import text
 # Local MySQL connection (commented out)
 # SQLALCHEMY_DATABASE_URL = "mysql+mysqlconnector://root:AnithaS%4000@127.0.0.1:3306/amberdata"
 
+
 # AWS RDS MySQL connection
 SQLALCHEMY_DATABASE_URL = os.getenv(
     "DATABASE_URL",

@@ -22,3 +22,5 @@ requests==2.32.3
 
 # CORS & Middleware
 fastapi[all]==0.115.8
+
+pymysql

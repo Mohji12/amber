@@ -2,6 +2,7 @@
 // Force local backend for development
 //const API_BASE_URL = "http://127.0.0.1:8000";
 // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+//const API_BASE_URL = "https://6hgfjwmhx4.execute-api.ap-south-1.amazonaws.com";
 const API_BASE_URL = "https://nlq4zcho6j.execute-api.ap-south-1.amazonaws.com";
 
 // console.log('🚀 API_BASE_URL initialized to:', API_BASE_URL);
@@ -579,4 +580,117 @@ export async function getProductsBySubcategory(subcategoryId: number, token?: st
   } finally {
     setLoadingState(false);
   }
-} 
+}
+
+// SEO API functions
+export interface SEORequest {
+  url: string;
+  page_type: 'homepage' | 'category' | 'product' | 'blog' | 'static';
+  primary_keyword: string;
+  secondary_keywords?: string[];
+  brand_name?: string;
+  product_name?: string;
+  sku?: string;
+  short_description?: string;
+  long_description?: string;
+  price?: number;
+  currency?: string;
+  availability?: 'InStock' | 'OutOfStock' | 'PreOrder';
+  moq?: string;
+  certifications?: string;
+  country_of_origin?: string;
+  target_markets?: string[];
+  image_urls?: string[];
+  category_name?: string;
+  related_products?: string[];
+  specs?: Record<string, any>;
+}
+
+export interface SEOData {
+  url: string;
+  meta: {
+    title: string;
+    description: string;
+    keywords: string;
+  };
+  canonical: {
+    url: string;
+    pagination_rules?: string | null;
+  };
+  headings: {
+    h1: string;
+    h2_sections: string[];
+    h3_subsections: string[];
+  };
+  content: {
+    hero_tagline: string;
+    short_intro: string;
+    long_description: string;
+    bullet_features: string[];
+  };
+  product_data: Record<string, any>;
+  faq: Array<{
+    question: string;
+    answer: string;
+  }>;
+  images: Array<{
+    original_url: string;
+    seo_filename: string;
+    alt_text: string;
+    image_title: string;
+  }>;
+  internal_links: Array<{
+    anchor_text: string;
+    target_url: string;
+    placement_hint: string;
+  }>;
+  schema: Record<string, any>;
+  social_meta: Record<string, string>;
+  technical_notes: Record<string, any>;
+}
+
+export async function generateSEO(request: SEORequest): Promise<SEOData> {
+  const res = await fetch(`${API_BASE_URL}/seo/generate`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(request),
+  });
+  if (!res.ok) {
+    throw new Error('Failed to generate SEO data');
+  }
+  return res.json();
+}
+
+export async function getProductSEO(productId: number): Promise<SEOData> {
+  const res = await fetch(`${API_BASE_URL}/seo/product/${productId}`);
+  if (!res.ok) {
+    throw new Error('Failed to fetch product SEO data');
+  }
+  return res.json();
+}
+
+export async function getSubcategorySEO(subcategoryId: number): Promise<SEOData> {
+  const res = await fetch(`${API_BASE_URL}/seo/subcategory/${subcategoryId}`);
+  if (!res.ok) {
+    throw new Error('Failed to fetch subcategory SEO data');
+  }
+  return res.json();
+}
+
+export async function getHomepageSEO(): Promise<SEOData> {
+  const res = await fetch(`${API_BASE_URL}/seo/homepage`);
+  if (!res.ok) {
+    throw new Error('Failed to fetch homepage SEO data');
+  }
+  return res.json();
+}
+
+export async function getBlogSEO(blogId: number): Promise<SEOData> {
+  const res = await fetch(`${API_BASE_URL}/seo/blog/${blogId}`);
+  if (!res.ok) {
+    throw new Error('Failed to fetch blog SEO data');
+  }
+  return res.json();
+}

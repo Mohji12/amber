@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { X } from 'lucide-react';
+import { X, MessageCircle } from 'lucide-react';
+import { openWhatsApp } from '../utils/whatsapp';
+import WhatsAppQuestionnaire from './WhatsAppQuestionnaire';
+import type { QuestionnaireAnswers } from './WhatsAppQuestionnaire';
 
 interface QuoteFormProps {
   isOpen: boolean;
@@ -23,6 +26,7 @@ const QuoteForm: React.FC<QuoteFormProps> = ({ isOpen, onClose, productInterest 
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState<'success' | 'error'>('success');
+  const [showWhatsAppQuestionnaire, setShowWhatsAppQuestionnaire] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -201,13 +205,34 @@ const QuoteForm: React.FC<QuoteFormProps> = ({ isOpen, onClose, productInterest 
               />
             </div>
 
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed"
-            >
-              {isSubmitting ? 'Sending...' : 'Send Quote Request'}
-            </button>
+            <div className="space-y-3">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? 'Sending...' : 'Send Quote Request'}
+              </button>
+              
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-gray-500">or</span>
+                </div>
+              </div>
+              
+              <button
+                type="button"
+                onClick={() => setShowWhatsAppQuestionnaire(true)}
+                className="w-full bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
+                aria-label="Contact via WhatsApp"
+              >
+                <MessageCircle size={20} />
+                Contact via WhatsApp
+              </button>
+            </div>
           </form>
         </div>
       </div>
@@ -239,6 +264,26 @@ const QuoteForm: React.FC<QuoteFormProps> = ({ isOpen, onClose, productInterest 
           </div>
         </div>
       )}
+      
+      <WhatsAppQuestionnaire
+        isOpen={showWhatsAppQuestionnaire}
+        onClose={() => setShowWhatsAppQuestionnaire(false)}
+        onComplete={(answers: QuestionnaireAnswers) => {
+          setShowWhatsAppQuestionnaire(false);
+          // Merge form data with questionnaire answers
+          openWhatsApp({
+            ...answers,
+            name: answers.name || formData.name,
+            email: answers.email || formData.email,
+            phone: answers.phone || formData.phone,
+            company: answers.company || formData.company,
+            productInterest: answers.specificProduct || formData.productInterest,
+            quantity: answers.quantity || formData.quantity,
+            country: answers.destinationCountry || formData.country,
+            message: answers.additionalRequirements || formData.message
+          });
+        }}
+      />
     </>
   );
 };

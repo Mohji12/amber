@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { Mail, Phone, MapPin, Clock, Send, MessageCircle, Globe, Award, Users, Truck } from 'lucide-react';
 import FeedbackToast from '../components/FeedbackToast';
 import LoadingSpinner from '../components/LoadingSpinner';
+import CompleteSEO from '../components/SEO/CompleteSEO';
+import { useCustomSEO } from '../hooks/useSEO';
+import { SEORequest } from '../api';
 import { createEnquiry } from '../api';
+import { openWhatsApp } from '../utils/whatsapp';
+import WhatsAppQuestionnaire from '../components/WhatsAppQuestionnaire';
+import type { QuestionnaireAnswers } from '../components/WhatsAppQuestionnaire';
 
 const ContactPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -21,6 +26,24 @@ const ContactPage: React.FC = () => {
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState<'success' | 'error'>('success');
   const [errors, setErrors] = useState<any>({});
+  const [showWhatsAppQuestionnaire, setShowWhatsAppQuestionnaire] = useState(false);
+
+  // Generate SEO for contact page
+  const seoRequest: SEORequest = {
+    url: '/contact',
+    page_type: 'static',
+    primary_keyword: 'Contact Export Consultant',
+    secondary_keywords: [
+      'international trade support',
+      'export guidance India',
+      'trade consultation',
+      'export quotes',
+      'agricultural export support'
+    ],
+    short_description: 'Contact Amber Global Trade for expert export guidance, competitive quotes, and comprehensive support for your international trade needs. Get in touch today!'
+  };
+
+  const { seoData } = useCustomSEO(seoRequest);
 
   const validateEmail = (email: string) => {
     return /^\S+@\S+\.\S+$/.test(email);
@@ -154,71 +177,7 @@ const ContactPage: React.FC = () => {
   ];
 
   return (
-    <>
-      <Helmet>
-        <title>Contact Us - Get Expert Export Guidance | Amber Global Trade</title>
-        <meta name="description" content="Contact Amber Global Trade for expert export guidance, competitive quotes, and comprehensive support for your international trade needs. Get in touch today!" />
-        <meta name="keywords" content="contact export consultant, international trade support, export guidance India, trade consultation, export quotes" />
-        <meta name="author" content="Amber Global Trade" />
-        <meta name="robots" content="index, follow" />
-        
-        {/* Local Business Structured Data */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "LocalBusiness",
-            "name": "Amber Global Trade",
-            "description": "Premium agricultural export company specializing in Basmati rice, organic spices, dry fruits, and pulses with full compliance certification.",
-            "url": "https://amberglobaltrade.com",
-            "email": "amberglobaltrade1@gmail.com",
-            "address": {
-              "@type": "PostalAddress",
-              "addressLocality": "Bengaluru",
-              "addressRegion": "Karnataka",
-              "addressCountry": "India"
-            },
-            "geo": {
-              "@type": "GeoCoordinates",
-              "latitude": "12.9716",
-              "longitude": "77.5946"
-            },
-            "openingHours": "Mo-Sa 09:00-18:00",
-            "priceRange": "$$",
-            "serviceArea": {
-              "@type": "Country",
-              "name": "Global"
-            },
-            "hasOfferCatalog": {
-              "@type": "OfferCatalog",
-              "name": "Agricultural Export Products",
-              "itemListElement": [
-                {
-                  "@type": "Offer",
-                  "itemOffered": {
-                    "@type": "Product",
-                    "name": "Basmati Rice Export"
-                  }
-                },
-                {
-                  "@type": "Offer",
-                  "itemOffered": {
-                    "@type": "Product",
-                    "name": "Organic Spices Export"
-                  }
-                },
-                {
-                  "@type": "Offer",
-                  "itemOffered": {
-                    "@type": "Product",
-                    "name": "Dry Fruits Export"
-                  }
-                }
-              ]
-            }
-          })}
-        </script>
-      </Helmet>
-
+    <CompleteSEO seoData={seoData}>
       <div className="min-h-screen bg-gradient-to-br from-white via-emerald-50 to-green-50 pt-24">
         {/* Hero Section */}
         <div className="bg-gradient-to-r from-emerald-600 to-green-600 text-white py-16">
@@ -432,7 +391,7 @@ const ContactPage: React.FC = () => {
                       ></textarea>
                     </div>
                   </div>
-                  <div className="text-center pt-6">
+                  <div className="text-center pt-6 space-y-4">
                     <button
                       type="submit"
                       disabled={isSubmitting}
@@ -447,6 +406,25 @@ const ContactPage: React.FC = () => {
                         </>
                       )}
                     </button>
+                    
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-300"></div>
+                      </div>
+                      <div className="relative flex justify-center text-sm">
+                        <span className="px-4 bg-white text-gray-500 font-medium">or</span>
+                      </div>
+                    </div>
+                    
+                    <button
+                      type="button"
+                      onClick={() => setShowWhatsAppQuestionnaire(true)}
+                      className="inline-flex items-center justify-center px-12 py-5 bg-green-500 text-white font-bold rounded-2xl hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-green-500 transition-all duration-300 transform hover:scale-105 shadow-xl text-xl"
+                    >
+                      <MessageCircle size={24} className="mr-4" />
+                      Contact via WhatsApp
+                    </button>
+                    
                     <p className="text-lg text-gray-600 mt-4 font-medium">
                       We'll respond within 24 hours with a detailed quote and guidance.
                     </p>
@@ -463,8 +441,28 @@ const ContactPage: React.FC = () => {
           isVisible={showToast}
           onClose={() => setShowToast(false)}
         />
+        
+        <WhatsAppQuestionnaire
+          isOpen={showWhatsAppQuestionnaire}
+          onClose={() => setShowWhatsAppQuestionnaire(false)}
+          onComplete={(answers: QuestionnaireAnswers) => {
+            setShowWhatsAppQuestionnaire(false);
+            // Merge form data with questionnaire answers
+            openWhatsApp({
+              ...answers,
+              name: answers.name || formData.name,
+              email: answers.email || formData.email,
+              phone: answers.phone || formData.whatsappNumber,
+              company: answers.company || formData.company,
+              productInterest: answers.specificProduct || formData.productInterest,
+              quantity: answers.quantity || formData.quantityRequired,
+              country: answers.destinationCountry || formData.destinationCountry,
+              message: answers.additionalRequirements || formData.additionalRequirements
+            });
+          }}
+        />
       </div>
-    </>
+    </CompleteSEO>
   );
 };
 

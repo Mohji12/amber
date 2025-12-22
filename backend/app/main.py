@@ -14,7 +14,7 @@ try:
     MANGUM_AVAILABLE = True
 except ImportError:
     MANGUM_AVAILABLE = False
-from app.routers import auth, blogs, analytics, products, enquiries, categories, subcategories, admin
+from app.routers import auth, blogs, analytics, products, enquiries, categories, subcategories, admin, seo
 from app import models
 from app.database import engine
 
@@ -29,12 +29,17 @@ async def lifespan(app: FastAPI):
     
     # Pre-warm database connection
     try:
-        from app.database import get_db
-        async for db in get_db():
-            # Test connection
-            await db.execute("SELECT 1")
-            break
-        print("✅ Database connection established")
+        from app.database import SessionLocal
+        from sqlalchemy import text
+        db = SessionLocal()
+        try:
+            db.execute(text("SELECT 1"))
+            db.commit()
+            print("✅ Database connection established")
+        except Exception as db_error:
+            print(f"⚠️ Database connection warning: {db_error}")
+        finally:
+            db.close()
     except Exception as e:
         print(f"⚠️ Database connection warning: {e}")
     
@@ -72,6 +77,7 @@ app.include_router(enquiries.router, prefix="/enquiries", tags=["Enquiries"])
 app.include_router(categories.router, prefix="/categories", tags=["Categories"])
 app.include_router(subcategories.router, prefix="/subcategories", tags=["Subcategories"])
 app.include_router(admin.router, prefix="/admin", tags=["Admin"])
+app.include_router(seo.router, prefix="/seo", tags=["SEO"])
 
 @app.get("/")
 async def root():

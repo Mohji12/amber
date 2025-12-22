@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import { getSubcategory, getProductsBySubcategory } from '../api';
 import PopupForm from '../components/PopupForm';
 import Breadcrumb from '../components/Breadcrumb';
+import CompleteSEO from '../components/SEO/CompleteSEO';
+import { useSEO } from '../hooks/useSEO';
 
 const SubcategoryDetailPage = () => {
   const { id } = useParams();
@@ -12,6 +13,9 @@ const SubcategoryDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [isQuoteOpen, setIsQuoteOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  
+  // Fetch SEO data using the SEO hook
+  const { seoData, loading: seoLoading } = useSEO('subcategory', id ? Number(id) : undefined);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,7 +84,7 @@ const SubcategoryDetailPage = () => {
     localStorage.setItem('subcategoryViews', JSON.stringify(subcategoryViews));
   };
 
-  if (loading) {
+  if (loading || seoLoading) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
         <div className="flex flex-col items-center">
@@ -100,52 +104,8 @@ const SubcategoryDetailPage = () => {
     );
   }
 
-  // Generate SEO data based on subcategory
-  const seoTitle = `${subcategory.name} - Premium Export Products | Amber Global Trade`;
-  const seoDescription = `Explore premium ${subcategory.name} products for export. ${subcategory.description || 'High-quality agricultural products'} with FSSAI certification, APEDA registration, and full compliance.`;
-  const seoKeywords = `${subcategory.name}, ${subcategory.category_name}, export products, FSSAI certified, APEDA registered, premium quality, agricultural export, India export`;
-
   return (
-    <div>
-      <Helmet>
-        <title>{seoTitle}</title>
-        <meta name="description" content={seoDescription} />
-        <meta name="keywords" content={seoKeywords} />
-        <meta name="author" content="Amber Global Trade" />
-        <meta name="robots" content="index, follow" />
-        <link rel="canonical" href={`https://amberglobaltrade.com/subcategories/${id}`} />
-        
-        {/* Open Graph Tags */}
-        <meta property="og:title" content={seoTitle} />
-        <meta property="og:description" content={seoDescription} />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={`https://amberglobaltrade.com/subcategories/${id}`} />
-        <meta property="og:image" content={subcategory.image_url || 'https://amberglobaltrade.com/assets/subcategory-default.jpg'} />
-        <meta property="og:site_name" content="Amber Global Trade" />
-        
-        {/* Twitter Card Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={seoTitle} />
-        <meta name="twitter:description" content={seoDescription} />
-        <meta name="twitter:image" content={subcategory.image_url || 'https://amberglobaltrade.com/assets/subcategory-default.jpg'} />
-        
-        {/* JSON-LD Structured Data */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "CollectionPage",
-            "name": subcategory.name,
-            "description": subcategory.description || `Premium ${subcategory.name} products for export`,
-            "url": `https://amberglobaltrade.com/subcategories/${id}`,
-            "mainEntity": {
-              "@type": "ItemList",
-              "name": subcategory.name,
-              "description": subcategory.description,
-              "numberOfItems": products.length
-            }
-          })}
-        </script>
-      </Helmet>
+    <CompleteSEO seoData={seoData}>
       
       <div className="min-h-screen bg-gradient-to-br from-white via-emerald-50 to-green-50 pt-32 pb-6 sm:pt-28 lg:pt-28 lg:pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -161,14 +121,61 @@ const SubcategoryDetailPage = () => {
         {/* Header */}
         <div className="text-center mb-12 px-2 sm:px-4">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 break-words leading-tight">
-            {subcategory.name}
+            {seoData?.headings?.h1 || subcategory.name}
           </h1>
-          {subcategory.description && (
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              {subcategory.description}
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-4">
+            {seoData?.content?.hero_tagline || subcategory.description}
+          </p>
+          {seoData?.content?.short_intro && (
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              {seoData.content.short_intro}
             </p>
           )}
         </div>
+        
+        {/* SEO-generated long description */}
+        {seoData?.content?.long_description && (
+          <div className="max-w-4xl mx-auto mb-8 px-4">
+            <div className="bg-white rounded-xl p-6 shadow-md">
+              <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                {seoData.content.long_description}
+              </p>
+            </div>
+          </div>
+        )}
+        
+        {/* SEO-generated bullet features */}
+        {seoData?.content?.bullet_features && seoData.content.bullet_features.length > 0 && (
+          <div className="max-w-4xl mx-auto mb-8 px-4">
+            <div className="bg-gradient-to-r from-emerald-50 to-green-50 rounded-xl p-6 shadow-md">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                {seoData.headings?.h2_sections?.[0] || 'Key Features'}
+              </h2>
+              <ul className="list-disc list-inside space-y-2 text-gray-700">
+                {seoData.content.bullet_features.map((feature, idx) => (
+                  <li key={idx}>{feature}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
+        
+        {/* FAQ Section - SEO Generated */}
+        {seoData?.faq && seoData.faq.length > 0 && (
+          <div className="max-w-4xl mx-auto mb-8 px-4">
+            <div className="bg-white rounded-xl p-6 shadow-md">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+              <div className="space-y-4">
+                {seoData.faq.map((faq, idx) => (
+                  <div key={idx} className="border-b border-gray-200 pb-4 last:border-b-0">
+                    <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
+                    <p className="text-gray-600">{faq.answer}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Products in Single Column Layout */}
         {products.length > 0 ? (
@@ -209,7 +216,7 @@ const SubcategoryDetailPage = () => {
         } : undefined}
       />
       </div>
-    </div>
+    </CompleteSEO>
   );
 }
 

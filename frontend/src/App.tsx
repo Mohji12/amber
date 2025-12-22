@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { HelmetProvider, Helmet } from 'react-helmet-async';
+import { HelmetProvider } from 'react-helmet-async';
 import { preloadCriticalData } from './utils/apiCache';
 import { initPerformanceMonitoring } from './utils/performance';
-import './utils/performanceTest'; // Auto-run performance tests in development
+// Performance tests are disabled by default - enable via VITE_ENABLE_PERFORMANCE_TESTS=true
+// import './utils/performanceTest';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Products from './components/Products';
@@ -13,6 +14,9 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import PopupManager from './components/PopupManager';
 import FAQ from './components/FAQ';
+import CompleteSEO from './components/SEO/CompleteSEO';
+import { useSEO } from './hooks/useSEO';
+import WhatsAppButton from './components/WhatsAppButton';
 // Use lazy loading for better performance
 import {
   LazyProductsPage,
@@ -51,6 +55,8 @@ function ScrollToTop() {
 
 function HomeWithScroll() {
   const location = useLocation();
+  const { seoData } = useSEO('homepage');
+  
   React.useEffect(() => {
     if (location.state && location.state.scrollTo) {
       const el = document.getElementById(location.state.scrollTo);
@@ -61,150 +67,16 @@ function HomeWithScroll() {
       }
     }
   }, [location]);
+  
   return (
-    <>
-      <Helmet>
-        <title>Amber Global Trade - Premium Agricultural Export Company | Basmati Rice, Spices & Dry Fruits</title>
-        <meta name="description" content="Leading agricultural export company specializing in premium Basmati rice, organic spices, dry fruits, and pulses. FSSAI certified, APEDA registered with global compliance. Get competitive quotes for your export needs." />
-        <meta name="keywords" content="agricultural export, Basmati rice export, organic spices, dry fruits, pulses, FSSAI certified, APEDA registered, India export, premium quality, global compliance, export consultation" />
-        <meta name="author" content="Amber Global Trade" />
-        <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://amberglobaltrade.com" />
-        
-        {/* Open Graph Tags */}
-        <meta property="og:title" content="Amber Global Trade - Premium Agricultural Export Company | Basmati Rice, Spices & Dry Fruits" />
-        <meta property="og:description" content="Leading agricultural export company specializing in premium Basmati rice, organic spices, dry fruits, and pulses. FSSAI certified, APEDA registered with global compliance." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://amberglobaltrade.com" />
-        <meta property="og:image" content="https://amberglobaltrade.com/assets/og-homepage.jpg" />
-        <meta property="og:site_name" content="Amber Global Trade" />
-        <meta property="og:locale" content="en_US" />
-        
-        {/* Twitter Card Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Amber Global Trade - Premium Agricultural Export Company" />
-        <meta name="twitter:description" content="Leading agricultural export company specializing in premium Basmati rice, organic spices, dry fruits, and pulses." />
-        <meta name="twitter:image" content="https://amberglobaltrade.com/assets/og-homepage.jpg" />
-        <meta name="twitter:site" content="@AmberGlobal" />
-        
-        {/* JSON-LD Structured Data for Organization */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": "Amber Global Trade",
-            "alternateName": "Amber Global Export-Import Platform",
-            "url": "https://amberglobaltrade.com",
-            "logo": "https://amberglobaltrade.com/assets/logo.png",
-            "description": "Leading agricultural export company specializing in premium Basmati rice, organic spices, dry fruits, and pulses with full compliance certification.",
-            "foundingDate": "2020",
-            "address": {
-              "@type": "PostalAddress",
-              "addressLocality": "Bengaluru",
-              "addressRegion": "Karnataka",
-              "addressCountry": "India"
-            },
-            "contactPoint": {
-              "@type": "ContactPoint",
-              "contactType": "customer service",
-              "email": "amberglobaltrade1@gmail.com",
-              "availableLanguage": "English"
-            },
-            "hasOfferCatalog": {
-              "@type": "OfferCatalog",
-              "name": "Agricultural Export Products",
-              "itemListElement": [
-                {
-                  "@type": "Offer",
-                  "itemOffered": {
-                    "@type": "Product",
-                    "name": "Basmati Rice"
-                  }
-                },
-                {
-                  "@type": "Offer",
-                  "itemOffered": {
-                    "@type": "Product",
-                    "name": "Organic Spices"
-                  }
-                },
-                {
-                  "@type": "Offer",
-                  "itemOffered": {
-                    "@type": "Product",
-                    "name": "Dry Fruits"
-                  }
-                },
-                {
-                  "@type": "Offer",
-                  "itemOffered": {
-                    "@type": "Product",
-                    "name": "Pulses"
-                  }
-                }
-              ]
-            }
-          })}
-        </script>
-        
-        {/* FAQ Structured Data */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            "mainEntity": [
-              {
-                "@type": "Question",
-                "name": "What certifications does Amber Global Trade have?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "We are FSSAI certified, APEDA registered, ISO compliant, and have all necessary export licenses. Our products meet international quality standards for global export."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "What is the minimum order quantity (MOQ) for your products?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Our MOQ varies by product, typically starting from 100 KG for most agricultural products. We offer flexible quantities to meet both small and large-scale export requirements."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Which countries do you export to?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "We export to 25+ countries worldwide including the Middle East, North America, Europe, and Asia. Our products are shipped globally with full compliance documentation."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "How do you ensure product quality?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "We maintain strict quality control through lab testing, proper storage facilities, and regular quality audits. All products undergo rigorous testing before export to ensure premium quality."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Do you provide private labeling services?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Yes, we offer comprehensive private labeling services including custom packaging, branding, and labeling to help you build your own brand without owning manufacturing facilities."
-                }
-              }
-            ]
-          })}
-        </script>
-      </Helmet>
-      
+    <CompleteSEO seoData={seoData}>
       <Hero />
       <Products isHome={true} />
       <HowWeWork />
       <About />
       <FAQ />
       <Contact />
-    </>
+    </CompleteSEO>
   );
 }
 
@@ -288,6 +160,7 @@ function App() {
         </Routes>
         <Footer />
         <PopupManager />
+        <WhatsAppButton />
       </div>
       </Router>
     </HelmetProvider>
