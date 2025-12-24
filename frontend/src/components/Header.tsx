@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X, User } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import logo from '../assets/IMG_20250714_151848.jpg';
+import { generateQuoteUrl, trackQuoteClick, getTrackingParamsFromUrl } from '../utils/quoteTracking';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -54,6 +55,19 @@ const Header = () => {
     setIsMobileMenuOpen(false);
   };
 
+  const handleGetQuote = () => {
+    const trackingParams = getTrackingParamsFromUrl();
+    trackQuoteClick({
+      source: 'header',
+      ...trackingParams
+    });
+    navigate(generateQuoteUrl({
+      source: 'header',
+      ...trackingParams
+    }));
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${
       isScrolled ? 'bg-white/90 backdrop-blur-md shadow-lg' : 'bg-white/80 backdrop-blur-md'
@@ -70,7 +84,7 @@ const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8 items-center">
             <button 
-              onClick={() => scrollToSection('contact')}
+              onClick={handleGetQuote}
               className="text-gray-700 hover:text-green-600 transition-colors font-medium"
             >
               Get a Quote
@@ -152,7 +166,7 @@ const Header = () => {
           <div className="md:hidden py-4 border-t border-green-100 bg-white/95 backdrop-blur-md">
             <nav className="space-y-2">
               <button 
-                onClick={() => scrollToSection('contact')}
+                onClick={handleGetQuote}
                 className="block w-full text-left px-4 py-2 text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors font-medium"
               >
                 Get a Quote

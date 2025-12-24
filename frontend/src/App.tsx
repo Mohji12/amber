@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, Location } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { preloadCriticalData } from './utils/apiCache';
 import { initPerformanceMonitoring } from './utils/performance';
@@ -36,14 +36,77 @@ import {
   LazyAdminAnalytics,
   LazyAdminEnquiries,
   LazyProductDetailPage,
-  LazySubcategoryDetailPage
+  LazySubcategoryDetailPage,
+  LazyContactPage,
+  LazyQuotePage
 } from './components/LazyRoutes';
 import AdminLayout from './components/AdminLayout';
 import BlogRouter from './components/BlogRouter';
-import ContactPage from './pages/ContactPage';
-import OtpTestPage from './pages/OtpTestPage';
 import About from './components/About';
 import AdminRoute from './components/AdminRoute';
+import ErrorBoundary from './components/ErrorBoundary';
+import LoadingSpinner from './components/LoadingSpinner';
+import { LazyOtpTestPage } from './components/LazyRoutes';
+import NotFoundPage from './pages/NotFoundPage';
+
+// Constants
+const SCROLL_DELAY_MS = 300; // Delay before scrolling to allow DOM to render
+const MAX_SESSIONS_STORED = 50; // Maximum number of sessions to keep in localStorage
+const SESSION_CLEANUP_DAYS = 7; // Clean up sessions older than 7 days
+
+// TypeScript interfaces
+interface LocationState {
+  scrollTo?: string;
+}
+
+interface AppUsageData {
+  [date: string]: {
+    visits: number;
+    lastVisit: string;
+  };
+}
+
+interface SessionData {
+  session_id: string;
+  start_time: string;
+  page_url: string;
+  user_agent: string;
+}
+
+// Helper function for safe localStorage operations
+const safeLocalStorageGet = <T,>(key: string, defaultValue: T): T => {
+  try {
+    const item = localStorage.getItem(key);
+    if (item === null) return defaultValue;
+    return JSON.parse(item) as T;
+  } catch (error) {
+    console.warn(`Failed to read from localStorage key "${key}":`, error);
+    return defaultValue;
+  }
+};
+
+const safeLocalStorageSet = (key: string, value: unknown): boolean => {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch (error) {
+    console.warn(`Failed to write to localStorage key "${key}":`, error);
+    return false;
+  }
+};
+
+// Clean up old sessions to prevent memory leak
+const cleanupOldSessions = (sessions: SessionData[]): SessionData[] => {
+  const now = Date.now();
+  const cutoffTime = now - (SESSION_CLEANUP_DAYS * 24 * 60 * 60 * 1000);
+  
+  return sessions
+    .filter(session => {
+      const sessionTime = new Date(session.start_time).getTime();
+      return sessionTime > cutoffTime;
+    })
+    .slice(-MAX_SESSIONS_STORED); // Keep only the most recent N sessions
+};
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -54,19 +117,35 @@ function ScrollToTop() {
 }
 
 function HomeWithScroll() {
-  const location = useLocation();
-  const { seoData } = useSEO('homepage');
+  const location = useLocation() as Location<LocationState>;
+  const { seoData, loading, error } = useSEO('homepage');
   
   React.useEffect(() => {
-    if (location.state && location.state.scrollTo) {
-      const el = document.getElementById(location.state.scrollTo);
+    const state = location.state as LocationState | null;
+    if (state?.scrollTo) {
+      const el = document.getElementById(state.scrollTo);
       if (el) {
-        setTimeout(() => {
+        const timeoutId = setTimeout(() => {
           el.scrollIntoView({ behavior: 'smooth' });
-        }, 300); // wait for DOM
+        }, SCROLL_DELAY_MS);
+        return () => clearTimeout(timeoutId);
       }
     }
   }, [location]);
+  
+  // Show loading state while SEO data is being fetched
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <LoadingSpinner size="large" message="Loading..." />
+      </div>
+    );
+  }
+  
+  // Show error state if SEO fetch failed, but still render content
+  if (error) {
+    console.warn('Failed to load SEO data:', error);
+  }
   
   return (
     <CompleteSEO seoData={seoData}>
@@ -81,44 +160,50 @@ function HomeWithScroll() {
 }
 
 function App() {
-  // Preload critical data on app start
+  // Combined initialization and tracking effect
   useEffect(() => {
+    // Preload critical data and initialize performance monitoring
     preloadCriticalData();
     initPerformanceMonitoring();
-  }, []);
 
-  // Global tracking for user engagement
-  React.useEffect(() => {
+    // Global tracking for user engagement with error handling and cleanup
     const trackGlobalEngagement = () => {
-      const currentTime = new Date().toISOString();
-      
-      // Track overall app usage
-      const appUsage = JSON.parse(localStorage.getItem('appUsage') || '{}');
-      const currentDate = new Date().toDateString();
-      
-      if (!appUsage[currentDate]) {
-        appUsage[currentDate] = {
-          visits: 0,
-          lastVisit: currentTime
+      try {
+        const currentTime = new Date().toISOString();
+        const currentDate = new Date().toDateString();
+        
+        // Track overall app usage with error handling
+        const appUsage = safeLocalStorageGet<AppUsageData>('appUsage', {});
+        
+        if (!appUsage[currentDate]) {
+          appUsage[currentDate] = {
+            visits: 0,
+            lastVisit: currentTime
+          };
+        }
+        
+        appUsage[currentDate].visits += 1;
+        appUsage[currentDate].lastVisit = currentTime;
+        safeLocalStorageSet('appUsage', appUsage);
+        
+        // Track session start with cleanup to prevent memory leak
+        const sessionId = `session_${Date.now()}`;
+        const sessionData: SessionData = {
+          session_id: sessionId,
+          start_time: currentTime,
+          page_url: window.location.href,
+          user_agent: navigator.userAgent
         };
+        
+        const activeSessions = safeLocalStorageGet<SessionData[]>('activeSessions', []);
+        activeSessions.push(sessionData);
+        
+        // Clean up old sessions to prevent localStorage from growing indefinitely
+        const cleanedSessions = cleanupOldSessions(activeSessions);
+        safeLocalStorageSet('activeSessions', cleanedSessions);
+      } catch (error) {
+        console.warn('Failed to track user engagement:', error);
       }
-      
-      appUsage[currentDate].visits += 1;
-      appUsage[currentDate].lastVisit = currentTime;
-      localStorage.setItem('appUsage', JSON.stringify(appUsage));
-      
-      // Track session start
-      const sessionId = `session_${Date.now()}`;
-      const sessionData = {
-        session_id: sessionId,
-        start_time: currentTime,
-        page_url: window.location.href,
-        user_agent: navigator.userAgent
-      };
-      
-      const activeSessions = JSON.parse(localStorage.getItem('activeSessions') || '[]');
-      activeSessions.push(sessionData);
-      localStorage.setItem('activeSessions', JSON.stringify(activeSessions));
     };
     
     trackGlobalEngagement();
@@ -127,20 +212,25 @@ function App() {
   return (
     <HelmetProvider>
       <Router>
-        <ScrollToTop />
-        <div className="min-h-screen bg-white">
-        <Header />
-        <Routes>
-          <Route path="/" element={<HomeWithScroll />} />
-          <Route path="/products" element={<LazyProductsPage />} />
-          <Route path="/products/:id" element={<LazyProductDetailPage />} />
-          <Route path="/subcategories/:id" element={<LazySubcategoryDetailPage />} />
-          <Route path="/blogs" element={<LazyBlogsPage />} />
-          <Route path="/blogs/:slug" element={<BlogRouter />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/login" element={<LazyLoginPage />} />
-          <Route path="/signup" element={<LazySignupPage />} />
-          <Route path="/otp-test" element={<OtpTestPage />} />
+        <ErrorBoundary>
+          <ScrollToTop />
+          <div className="min-h-screen bg-white">
+          <Header />
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<HomeWithScroll />} />
+            <Route path="/products" element={<LazyProductsPage />} />
+            <Route path="/products/:slug" element={<LazyProductDetailPage />} />
+            <Route path="/subcategories/:slug" element={<LazySubcategoryDetailPage />} />
+            <Route path="/blogs" element={<LazyBlogsPage />} />
+            <Route path="/blogs/:slug" element={<BlogRouter />} />
+            <Route path="/contact" element={<LazyContactPage />} />
+            <Route path="/quote" element={<LazyQuotePage />} />
+            <Route path="/login" element={<LazyLoginPage />} />
+            <Route path="/signup" element={<LazySignupPage />} />
+            <Route path="/otp-test" element={<LazyOtpTestPage />} />
+            
+            {/* Admin Routes - Protected */}
             <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
               <Route index element={<LazyAdminPage />} />
               <Route path="dashboard" element={<LazyAdminDashboard />} />
@@ -151,17 +241,23 @@ function App() {
               <Route path="analytics" element={<LazyAdminAnalytics />} />
               <Route path="enquiries" element={<LazyAdminEnquiries />} />
             </Route>
-          <Route path="/profile/*" element={<LazyProfilePage />}>
-            <Route index element={<Navigate to="business" replace />} />
-            <Route path="business" element={<LazyProfileBusiness />} />
-            <Route path="quotation" element={<LazyProfileQuotation />} />
-            <Route path="orders" element={<LazyProfileOrders />} />
-          </Route>
-        </Routes>
-        <Footer />
-        <PopupManager />
-        <WhatsAppButton />
-      </div>
+            
+            {/* Profile Routes - Protected */}
+            <Route path="/profile/*" element={<LazyProfilePage />}>
+              <Route index element={<Navigate to="business" replace />} />
+              <Route path="business" element={<LazyProfileBusiness />} />
+              <Route path="quotation" element={<LazyProfileQuotation />} />
+              <Route path="orders" element={<LazyProfileOrders />} />
+            </Route>
+            
+            {/* 404 Catch-all Route - Must be last */}
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+          <Footer />
+          <PopupManager />
+          <WhatsAppButton />
+        </div>
+        </ErrorBoundary>
       </Router>
     </HelmetProvider>
   );

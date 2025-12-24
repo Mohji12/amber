@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, MessageCircle, ArrowRight, Check } from 'lucide-react';
+import { getCategories, getSubcategories } from '../api';
 
 interface WhatsAppQuestionnaireProps {
   isOpen: boolean;
@@ -13,6 +14,7 @@ export interface QuestionnaireAnswers {
   specificProduct: string;
   quantity: string;
   destinationCountry: string;
+  aboutYou: string;
   certifications: string[];
   packaging: string;
   additionalRequirements: string;
@@ -28,6 +30,10 @@ const WhatsAppQuestionnaire: React.FC<WhatsAppQuestionnaireProps> = ({ isOpen, o
     certifications: [],
     packaging: ''
   });
+  const [categories, setCategories] = useState<any[]>([]);
+  const [subcategories, setSubcategories] = useState<any[]>([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+  const [isLoadingCategories, setIsLoadingCategories] = useState(false);
 
   const quotationTypes = [
     { value: 'bulk-order', label: 'Bulk Order', description: 'Large quantity export order' },
@@ -37,13 +43,27 @@ const WhatsAppQuestionnaire: React.FC<WhatsAppQuestionnaireProps> = ({ isOpen, o
     { value: 'custom-requirement', label: 'Custom Requirement', description: 'Special or customized products' }
   ];
 
-  const productCategories = [
-    { value: 'basmati-rice', label: 'Basmati Rice', products: ['Premium Basmati Rice', 'Organic Basmati Rice', 'Aged Basmati Rice', 'Brown Basmati Rice'] },
-    { value: 'spices', label: 'Spices', products: ['Ginger Powder', 'Turmeric Powder', 'Chili Powder', 'Cumin Seeds', 'Coriander Seeds', 'Cardamom', 'Black Pepper', 'Other Spices'] },
-    { value: 'dry-fruits', label: 'Dry Fruits', products: ['Almonds', 'Cashews', 'Raisins', 'Dates', 'Apricots', 'Other Dry Fruits'] },
-    { value: 'pulses', label: 'Pulses', products: ['Lentils', 'Chickpeas', 'Black Gram', 'Green Gram', 'Other Pulses'] },
-    { value: 'other', label: 'Other Products', products: ['Other Agricultural Products'] }
-  ];
+  // Load categories and subcategories from backend when the questionnaire opens
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const fetchData = async () => {
+      setIsLoadingCategories(true);
+      try {
+        const [cats, subs] = await Promise.all([getCategories(), getSubcategories()]);
+        setCategories(Array.isArray(cats) ? cats : []);
+        setSubcategories(Array.isArray(subs) ? subs : []);
+      } catch (error) {
+        console.error('Failed to load categories for WhatsApp questionnaire:', error);
+        setCategories([]);
+        setSubcategories([]);
+      } finally {
+        setIsLoadingCategories(false);
+      }
+    };
+
+    fetchData();
+  }, [isOpen]);
 
   const certifications = [
     'FSSAI Certified',
@@ -112,7 +132,8 @@ const WhatsAppQuestionnaire: React.FC<WhatsAppQuestionnaireProps> = ({ isOpen, o
       case 5: return true; // Certifications optional
       case 6: return true; // Packaging optional
       case 7: return true; // Additional requirements optional
-      case 8: return !!answers.name && !!answers.email && !!answers.phone;
+      case 8: return !!answers.aboutYou;
+      case 9: return !!answers.name && !!answers.email && !!answers.phone;
       default: return false;
     }
   };
@@ -150,24 +171,33 @@ const WhatsAppQuestionnaire: React.FC<WhatsAppQuestionnaireProps> = ({ isOpen, o
       title: 'Which product category are you interested in?',
       content: (
         <div className="space-y-3">
-          {productCategories.map((category) => (
-            <button
-              key={category.value}
-              onClick={() => handleAnswer('productCategory', category.value)}
-              className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
-                answers.productCategory === category.value
-                  ? 'border-green-500 bg-green-50'
-                  : 'border-gray-200 hover:border-green-300'
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <div className="font-semibold text-gray-900">{category.label}</div>
-                {answers.productCategory === category.value && (
-                  <Check className="text-green-500" size={20} />
-                )}
-              </div>
-            </button>
-          ))}
+          {isLoadingCategories ? (
+            <div className="text-sm text-gray-500">Loading categories...</div>
+          ) : (
+            categories.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => {
+                  setSelectedCategoryId(category.id);
+                  handleAnswer('productCategory', category.name);
+                  // Reset specific product when category changes
+                  handleAnswer('specificProduct', '' as any);
+                }}
+                className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
+                  answers.productCategory === category.name
+                    ? 'border-green-500 bg-green-50'
+                    : 'border-gray-200 hover:border-green-300'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="font-semibold text-gray-900">{category.name}</div>
+                  {answers.productCategory === category.name && (
+                    <Check className="text-green-500" size={20} />
+                  )}
+                </div>
+              </button>
+            ))
+          )}
         </div>
       )
     },
@@ -175,24 +205,32 @@ const WhatsAppQuestionnaire: React.FC<WhatsAppQuestionnaireProps> = ({ isOpen, o
       title: 'What specific product are you looking for?',
       content: (
         <div className="space-y-3">
-          {answers.productCategory && productCategories.find(c => c.value === answers.productCategory)?.products.map((product) => (
-            <button
-              key={product}
-              onClick={() => handleAnswer('specificProduct', product)}
-              className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
-                answers.specificProduct === product
-                  ? 'border-green-500 bg-green-50'
-                  : 'border-gray-200 hover:border-green-300'
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <div className="font-semibold text-gray-900">{product}</div>
-                {answers.specificProduct === product && (
-                  <Check className="text-green-500" size={20} />
-                )}
-              </div>
-            </button>
-          ))}
+          {isLoadingCategories ? (
+            <div className="text-sm text-gray-500">Loading products...</div>
+          ) : !selectedCategoryId ? (
+            <div className="text-sm text-gray-500">Please select a category first.</div>
+          ) : (
+            subcategories
+              .filter((sub) => sub.category_id === selectedCategoryId)
+              .map((sub) => (
+                <button
+                  key={sub.id}
+                  onClick={() => handleAnswer('specificProduct', sub.name)}
+                  className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
+                    answers.specificProduct === sub.name
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-gray-200 hover:border-green-300'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="font-semibold text-gray-900">{sub.name}</div>
+                    {answers.specificProduct === sub.name && (
+                      <Check className="text-green-500" size={20} />
+                    )}
+                  </div>
+                </button>
+              ))
+          )}
         </div>
       )
     },
@@ -311,6 +349,37 @@ const WhatsAppQuestionnaire: React.FC<WhatsAppQuestionnaireProps> = ({ isOpen, o
             rows={6}
             className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all resize-none"
           />
+        </div>
+      )
+    },
+    {
+      title: 'Who are you?',
+      content: (
+        <div className="space-y-3">
+          {[
+            { value: 'proprietor', label: 'Proprietor' },
+            { value: 'distributor', label: 'Distributor' },
+            { value: 'agent', label: 'Agent' },
+            { value: 'importer', label: 'Importer' },
+            { value: 'exporter', label: 'Exporter' }
+          ].map((role) => (
+            <button
+              key={role.value}
+              onClick={() => handleAnswer('aboutYou', role.label)}
+              className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
+                answers.aboutYou === role.label
+                  ? 'border-green-500 bg-green-50'
+                  : 'border-gray-200 hover:border-green-300'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <div className="font-semibold text-gray-900">{role.label}</div>
+                {answers.aboutYou === role.label && (
+                  <Check className="text-green-500" size={20} />
+                )}
+              </div>
+            </button>
+          ))}
         </div>
       )
     },

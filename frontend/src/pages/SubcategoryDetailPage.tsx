@@ -1,66 +1,81 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { getSubcategory, getProductsBySubcategory } from '../api';
+import { useParams, useNavigate } from 'react-router-dom';
+import { getSubcategory, getProductsBySubcategory, getSubcategories } from '../api';
 import PopupForm from '../components/PopupForm';
 import Breadcrumb from '../components/Breadcrumb';
 import CompleteSEO from '../components/SEO/CompleteSEO';
 import { useSEO } from '../hooks/useSEO';
+import { findSubcategoryBySlug, extractIdFromSlug, createProductSlug } from '../utils/slug';
+import { generateQuoteUrl, trackQuoteClick, getTrackingParamsFromUrl } from '../utils/quoteTracking';
 
 const SubcategoryDetailPage = () => {
-  const { id } = useParams();
+  const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
   const [subcategory, setSubcategory] = useState<any>(null);
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isQuoteOpen, setIsQuoteOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   
-  // Fetch SEO data using the SEO hook
-  const { seoData, loading: seoLoading } = useSEO('subcategory', id ? Number(id) : undefined);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const subcategoryId = parseInt(id!);
-        const [subData, prodsData] = await Promise.all([
-          getSubcategory(subcategoryId),
-          getProductsBySubcategory(subcategoryId)
-        ]);
+        // First, get all subcategories to find by slug
+        const allSubcategories = await getSubcategories();
+        const foundSubcategory = slug ? findSubcategoryBySlug(allSubcategories, slug) : null;
         
-        setSubcategory(subData);
-        setProducts(Array.isArray(prodsData) ? prodsData : []);
+        if (!foundSubcategory) {
+          setLoading(false);
+          return;
+        }
+        
+        setSubcategory(foundSubcategory);
+        
+        // Fetch SEO data using the subcategory ID
+        const subcategoryId = foundSubcategory.id;
+        
+        // Fetch products for this subcategory
+        try {
+          const prodsData = await getProductsBySubcategory(subcategoryId);
+          setProducts(Array.isArray(prodsData) ? prodsData : []);
+        } catch (error) {
+          // If the specific subcategory endpoint fails, try fallback to all products
+          try {
+            const { getProducts } = await import('../api');
+            const allProducts = await getProducts();
+            const filteredProducts = Array.isArray(allProducts) 
+              ? allProducts.filter((p: any) => {
+                  const productSubcategoryId = typeof p.subcategory_id === 'string' 
+                    ? parseInt(p.subcategory_id) 
+                    : p.subcategory_id;
+                  return productSubcategoryId === subcategoryId;
+                })
+              : [];
+            setProducts(filteredProducts);
+          } catch (fallbackError) {
+            console.error('Fallback also failed:', fallbackError);
+          }
+        }
+        
+        // Track subcategory view for analytics
+        trackSubcategoryView(foundSubcategory.id);
       } catch (error) {
         console.error('Error fetching data:', error);
-        // If the specific subcategory endpoint fails, try fallback to all products
-        try {
-          const { getProducts } = await import('../api');
-          const allProducts = await getProducts();
-          const subcategoryId = parseInt(id!);
-          const filteredProducts = Array.isArray(allProducts) 
-            ? allProducts.filter((p: any) => {
-                const productSubcategoryId = typeof p.subcategory_id === 'string' 
-                  ? parseInt(p.subcategory_id) 
-                  : p.subcategory_id;
-                return productSubcategoryId === subcategoryId;
-              })
-            : [];
-          setProducts(filteredProducts);
-        } catch (fallbackError) {
-          console.error('Fallback also failed:', fallbackError);
-        }
       } finally {
         setLoading(false);
       }
     };
 
-    if (id) {
+    if (slug) {
       fetchData();
-      // Track subcategory view for analytics
-      trackSubcategoryView();
     }
-  }, [id]);
+  }, [slug]);
+  
+  // Fetch SEO data using the SEO hook (use subcategory ID once found)
+  const { seoData, loading: seoLoading } = useSEO('subcategory', subcategory?.id);
 
   // Track subcategory view for analytics
-  const trackSubcategoryView = () => {
+  const trackSubcategoryView = (subcategoryId: number) => {
     const currentTime = new Date().toISOString();
     
     // Track page view
@@ -71,11 +86,11 @@ const SubcategoryDetailPage = () => {
     
     // Track subcategory engagement
     const subcategoryViews = JSON.parse(localStorage.getItem('subcategoryViews') || '{}');
-    if (!subcategoryViews[id!]) {
-      subcategoryViews[id!] = [];
+    if (!subcategoryViews[subcategoryId]) {
+      subcategoryViews[subcategoryId] = [];
     }
     
-    subcategoryViews[id!].push({
+    subcategoryViews[subcategoryId].push({
       timestamp: currentTime,
       page_url: window.location.href,
       user_agent: navigator.userAgent
@@ -184,9 +199,24 @@ const SubcategoryDetailPage = () => {
               <DetailedProductCard 
                 key={product.id} 
                 product={product} 
+                navigate={navigate}
+                subcategory={subcategory}
                 onQuote={() => {
-                  setSelectedProduct(product);
-                  setIsQuoteOpen(true);
+                  const trackingParams = getTrackingParamsFromUrl();
+                  trackQuoteClick({
+                    product: product.name,
+                    subcategory: subcategory?.name,
+                    category: product.category_name,
+                    source: 'subcategory_detail',
+                    ...trackingParams
+                  });
+                  navigate(generateQuoteUrl({
+                    product: product.name,
+                    subcategory: subcategory?.name,
+                    category: product.category_name,
+                    source: 'subcategory_detail',
+                    ...trackingParams
+                  }));
                 }} 
               />
             ))}
@@ -220,7 +250,7 @@ const SubcategoryDetailPage = () => {
   );
 }
 
-function DetailedProductCard({ product, onQuote }: { product: any, onQuote: () => void }) {
+function DetailedProductCard({ product, onQuote, navigate, subcategory }: { product: any, onQuote: () => void, navigate: (path: string) => void, subcategory?: any }) {
   const [imgLoaded, setImgLoaded] = useState(false);
 
   return (
@@ -358,7 +388,13 @@ function DetailedProductCard({ product, onQuote }: { product: any, onQuote: () =
             >
               Get Quote
             </button>
-            {/* View Details button is hidden since product description is already visible */}
+            <button
+              className="flex-1 bg-white border-2 border-green-500 text-green-600 hover:bg-green-50 hover:border-green-600 px-6 py-3 rounded-xl font-semibold shadow-lg transition-all transform hover:scale-105"
+              onClick={() => navigate(`/products/${createProductSlug(product.name, product.id)}`)}
+              aria-label={`View Details for ${product.name}`}
+            >
+              View Details
+            </button>
           </div>
         </div>
       </div>

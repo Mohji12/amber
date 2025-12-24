@@ -12,6 +12,16 @@ import PrivateLabelingGingerPowder from '../pages/blogs/PrivateLabelingGingerPow
 const BlogRouter: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
 
+  // Check if slug is numeric (ID-based dynamic blog)
+  if (slug && !isNaN(Number(slug))) {
+    const BlogDetailPage = React.lazy(() => import('../pages/BlogDetailPage'));
+    return (
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <BlogDetailPage />
+      </React.Suspense>
+    );
+  }
+
   // Route to specific blog components based on slug
   switch (slug) {
     case 'how-to-source-basmati-rice':

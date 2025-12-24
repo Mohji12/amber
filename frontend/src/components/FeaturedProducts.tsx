@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getFeaturedProducts } from '../api';
 import LoadingSpinner from './LoadingSpinner';
+import { createProductSlug } from '../utils/slug';
 
 const FeaturedProducts = () => {
   const [products, setProducts] = useState<any[]>([]);
@@ -36,7 +37,7 @@ const FeaturedProducts = () => {
               <div className="p-6">
                 <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
                 <p className="text-gray-600">Grade: {product.grade}</p>
-                <Link to={`/products/${product.id}`} className="text-green-600 hover:underline mt-4 inline-block">View Details</Link>
+                <Link to={`/products/${createProductSlug(product.name, product.id)}`} className="text-green-600 hover:underline mt-4 inline-block">View Details</Link>
               </div>
             </div>
           ))}

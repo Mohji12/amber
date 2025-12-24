@@ -14,6 +14,8 @@ export function generateWhatsAppMessage(formData: {
   phone?: string;
   contact?: string;
   company?: string;
+  aboutYou?: string;
+  about_you?: string;
   productInterest?: string;
   product_interest?: string;
   quantity?: string;
@@ -41,6 +43,10 @@ export function generateWhatsAppMessage(formData: {
   
   if (formData.company) {
     parts.push(`🏢 Company: ${formData.company}`);
+  }
+
+  if (formData.aboutYou || formData.about_you) {
+    parts.push(`💼 Role: ${formData.aboutYou || formData.about_you}`);
   }
   
   if (formData.email) {
@@ -134,6 +140,8 @@ export function openWhatsApp(formData: {
   phone?: string;
   contact?: string;
   company?: string;
+  aboutYou?: string;
+  about_you?: string;
   productInterest?: string;
   product_interest?: string;
   quantity?: string;

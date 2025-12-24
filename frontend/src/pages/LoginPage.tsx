@@ -6,8 +6,28 @@ import FeedbackToast from '../components/FeedbackToast';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ForgotPassword from '../components/ForgotPassword';
 import { login } from '../api';
+import CompleteSEO from '../components/SEO/CompleteSEO';
+import { useCustomSEO } from '../hooks/useSEO';
+import { SEORequest } from '../api';
 
 const LoginPage = () => {
+  // Generate SEO for login page
+  const seoRequest: SEORequest = {
+    url: '/login',
+    page_type: 'static',
+    primary_keyword: 'Login to Amber Global Trade',
+    secondary_keywords: [
+      'export platform login',
+      'B2B trade account',
+      'agricultural export login',
+      'trade portal access',
+      'export services login'
+    ],
+    short_description: 'Sign in to your Amber Global Trade account to access premium export services, track orders, manage quotations, and explore our comprehensive range of agricultural products.'
+  };
+
+  const { seoData } = useCustomSEO(seoRequest);
+
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -118,7 +138,8 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <CompleteSEO seoData={seoData}>
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute w-96 h-96 bg-gradient-to-r from-green-200/20 to-emerald-200/20 rounded-full blur-3xl animate-float top-1/4 left-1/4" />
@@ -260,7 +281,8 @@ const LoginPage = () => {
         isVisible={showToast}
         onClose={() => setShowToast(false)}
       />
-    </div>
+      </div>
+    </CompleteSEO>
   );
 };
 

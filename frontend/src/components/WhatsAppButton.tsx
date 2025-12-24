@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { MessageCircle } from 'lucide-react';
 import WhatsAppQuestionnaire from './WhatsAppQuestionnaire';
 import { openWhatsApp } from '../utils/whatsapp';
+import { createEnquiry } from '../api';
 import type { QuestionnaireAnswers } from './WhatsAppQuestionnaire';
 
 const WhatsAppButton: React.FC = () => {
@@ -11,8 +12,27 @@ const WhatsAppButton: React.FC = () => {
     setShowQuestionnaire(true);
   };
 
-  const handleQuestionnaireComplete = (answers: QuestionnaireAnswers) => {
+  const handleQuestionnaireComplete = async (answers: QuestionnaireAnswers) => {
     setShowQuestionnaire(false);
+
+    // Basic enquiry payload for admin when using floating WhatsApp button
+    const enquiryData = {
+      name: answers.name || null,
+      email: answers.email || null,
+      contact_number: answers.phone || null,
+      company_name: answers.company || null,
+      required_amount: answers.quantity ? parseInt(answers.quantity, 10) : null,
+      any_query: answers.additionalRequirements || null,
+      product_interest: answers.specificProduct || null,
+      destination_country: answers.destinationCountry || null
+    };
+
+    try {
+      await createEnquiry(enquiryData);
+    } catch (error) {
+      console.error('Error creating WhatsApp enquiry from floating button:', error);
+    }
+
     openWhatsApp(answers);
   };
 

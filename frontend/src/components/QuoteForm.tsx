@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, MessageCircle } from 'lucide-react';
 import { openWhatsApp } from '../utils/whatsapp';
+import { createEnquiry } from '../api';
 import WhatsAppQuestionnaire from './WhatsAppQuestionnaire';
 import type { QuestionnaireAnswers } from './WhatsAppQuestionnaire';
 
@@ -268,11 +269,11 @@ const QuoteForm: React.FC<QuoteFormProps> = ({ isOpen, onClose, productInterest 
       <WhatsAppQuestionnaire
         isOpen={showWhatsAppQuestionnaire}
         onClose={() => setShowWhatsAppQuestionnaire(false)}
-        onComplete={(answers: QuestionnaireAnswers) => {
+        onComplete={async (answers: QuestionnaireAnswers) => {
           setShowWhatsAppQuestionnaire(false);
+
           // Merge form data with questionnaire answers
-          openWhatsApp({
-            ...answers,
+          const merged = {
             name: answers.name || formData.name,
             email: answers.email || formData.email,
             phone: answers.phone || formData.phone,
@@ -281,6 +282,36 @@ const QuoteForm: React.FC<QuoteFormProps> = ({ isOpen, onClose, productInterest 
             quantity: answers.quantity || formData.quantity,
             country: answers.destinationCountry || formData.country,
             message: answers.additionalRequirements || formData.message
+          };
+
+          // 1) Store enquiry for admin panel
+          try {
+            const enquiryData = {
+              name: merged.name,
+              email: merged.email,
+              contact_number: merged.phone,
+              required_amount: merged.quantity ? parseInt(merged.quantity, 10) : null,
+              product_interest: merged.productInterest || null,
+              destination_country: merged.country || null,
+              any_query: merged.message || null
+            };
+
+            await createEnquiry(enquiryData);
+          } catch (error) {
+            console.error('Error creating WhatsApp enquiry from QuoteForm:', error);
+          }
+
+          // 2) Open WhatsApp with full details
+          openWhatsApp({
+            ...answers,
+            name: merged.name,
+            email: merged.email,
+            phone: merged.phone,
+            company: merged.company,
+            productInterest: merged.productInterest,
+            quantity: merged.quantity,
+            country: merged.country,
+            additionalRequirements: merged.message
           });
         }}
       />

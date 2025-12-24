@@ -1,118 +1,23 @@
-import React, { useState } from 'react';
-import { Mail, MapPin, Clock, Send } from 'lucide-react';
+import React from 'react';
+import { Mail, MapPin, Clock, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import AnimatedSection from './AnimatedSection';
-import FeedbackToast from './FeedbackToast';
-import LoadingSpinner from './LoadingSpinner';
-import { createEnquiry } from '../api'; // Import the API function
+import InteractiveButton from './InteractiveButton';
+import { generateQuoteUrl, trackQuoteClick, getTrackingParamsFromUrl } from '../utils/quoteTracking';
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    productInterest: '',
-    quantityRequired: '',
-    destinationCountry: '',
-    whatsappNumber: '',
-    email: '',
-    additionalRequirements: ''
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
-  const [toastType, setToastType] = useState<'success' | 'error'>('success');
-  const [errors, setErrors] = useState<any>({});
+  const navigate = useNavigate();
 
-  const validateEmail = (email: string) => {
-    return /^\S+@\S+\.\S+$/.test(email);
-  };
-  const validatePhone = (phone: string) => {
-    return /^\+?\d{7,15}$/.test(phone);
-  };
-  const validateForm = () => {
-    const newErrors: any = {};
-    if (!formData.productInterest) newErrors.productInterest = 'Product interest is required.';
-    if (!formData.quantityRequired) newErrors.quantityRequired = 'Quantity is required.';
-    if (!formData.destinationCountry) newErrors.destinationCountry = 'Destination is required.';
-    if (!formData.whatsappNumber) newErrors.whatsappNumber = 'WhatsApp number is required.';
-    else if (!validatePhone(formData.whatsappNumber)) newErrors.whatsappNumber = 'Invalid phone number.';
-    if (!formData.email) newErrors.email = 'Email is required.';
-    else if (!validateEmail(formData.email)) newErrors.email = 'Invalid email format.';
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    // Live validation for each field
-    if (e.target.name === 'productInterest') {
-      if (!e.target.value) setErrors((prev: any) => ({ ...prev, productInterest: 'Product interest is required.' }));
-      else setErrors((prev: any) => { const { productInterest, ...rest } = prev; return rest; });
-    }
-    if (e.target.name === 'quantityRequired') {
-      if (!e.target.value) setErrors((prev: any) => ({ ...prev, quantityRequired: 'Quantity is required.' }));
-      else setErrors((prev: any) => { const { quantityRequired, ...rest } = prev; return rest; });
-    }
-    if (e.target.name === 'destinationCountry') {
-      if (!e.target.value) setErrors((prev: any) => ({ ...prev, destinationCountry: 'Destination is required.' }));
-      else setErrors((prev: any) => { const { destinationCountry, ...rest } = prev; return rest; });
-    }
-    if (e.target.name === 'whatsappNumber') {
-      if (!validatePhone(e.target.value)) setErrors((prev: any) => ({ ...prev, whatsappNumber: 'Invalid phone number.' }));
-      else setErrors((prev: any) => { const { whatsappNumber, ...rest } = prev; return rest; });
-    }
-    if (e.target.name === 'email') {
-      if (!validateEmail(e.target.value)) setErrors((prev: any) => ({ ...prev, email: 'Invalid email format.' }));
-      else setErrors((prev: any) => { const { email, ...rest } = prev; return rest; });
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) {
-      setToastMessage('Please fill all required fields correctly.');
-      setToastType('error');
-      setShowToast(true);
-      return;
-    }
-    setIsSubmitting(true);
-
-    try {
-      // Map frontend state to backend model, handle optional and numeric fields
-      const enquiryData = {
-        name: 'Contact Page Enquiry', // Or add a name field to the form
-        email: formData.email,
-        contact_number: formData.whatsappNumber,
-        required_amount: parseInt(formData.quantityRequired, 10),
-        product_interest: formData.productInterest,
-        destination_country: formData.destinationCountry,
-        any_query: formData.additionalRequirements || null,
-      };
-
-      const res = await createEnquiry(enquiryData);
-
-      if (res && !res.detail) {
-        setToastMessage('Your quote request has been sent successfully!');
-        setToastType('success');
-        setShowToast(true);
-        // Reset form
-        setFormData({
-          productInterest: '',
-          quantityRequired: '',
-          destinationCountry: '',
-          whatsappNumber: '',
-          email: '',
-          additionalRequirements: ''
-        });
-      } else {
-        setToastMessage(res.detail?.[0]?.msg || 'Submission failed. Please try again.');
-        setToastType('error');
-        setShowToast(true);
-      }
-    } catch (error) {
-      setToastMessage('An unexpected error occurred. Please try again.');
-      setToastType('error');
-      setShowToast(true);
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleGetQuote = () => {
+    const trackingParams = getTrackingParamsFromUrl();
+    trackQuoteClick({
+      source: 'homepage_contact',
+      ...trackingParams
+    });
+    navigate(generateQuoteUrl({
+      source: 'homepage_contact',
+      ...trackingParams
+    }));
   };
 
 
@@ -213,118 +118,38 @@ const Contact = () => {
             </AnimatedSection>
           </AnimatedSection>
 
-          {/* Quote Form */}
+          {/* Get Quote Button */}
           <AnimatedSection animation="fadeInRight" delay={300}>
-            <div className="glass rounded-2xl p-8 border border-white/50 hover:border-green-200/50 transition-all duration-300">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Get a Quote</h3>
-              
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label htmlFor="productInterest" className="block text-sm font-medium text-gray-700 mb-2">Product Interest *</label>
-                    <select
-                      id="productInterest"
-                      name="productInterest"
-                      value={formData.productInterest}
-                      onChange={handleChange}
-                      className={`w-full p-3 bg-gray-50 rounded-lg border ${errors.productInterest ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-green-500 focus:border-green-500 transition`}
-                    >
-                      <option value="">Select Product</option>
-                      <option value="Spices">Spices</option>
-                      <option value="Rice">Rice</option>
-                      <option value="Pulses">Pulses</option>
-                      <option value="Dry Fruits">Dry Fruits</option>
-                      <option value="Perishables">Perishables</option>
-                      <option value="Gourmet">Gourmet</option>
-                    </select>
-                    {errors.productInterest && <p className="text-red-500 text-xs mt-1">{errors.productInterest}</p>}
-                  </div>
-                  <div>
-                    <label htmlFor="quantityRequired" className="block text-sm font-medium text-gray-700 mb-2">Quantity Required *</label>
-                    <input
-                      type="text"
-                      id="quantityRequired"
-                      name="quantityRequired"
-                      value={formData.quantityRequired}
-                      onChange={handleChange}
-                      placeholder="e.g., 1000 KG"
-                      className={`w-full p-3 bg-gray-50 rounded-lg border ${errors.quantityRequired ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-green-500 focus:border-green-500 transition`}
-                    />
-                    {errors.quantityRequired && <p className="text-red-500 text-xs mt-1">{errors.quantityRequired}</p>}
-                  </div>
-                  <div>
-                    <label htmlFor="destinationCountry" className="block text-sm font-medium text-gray-700 mb-2">Destination Country *</label>
-                    <input
-                      type="text"
-                      id="destinationCountry"
-                      name="destinationCountry"
-                      value={formData.destinationCountry}
-                      onChange={handleChange}
-                      placeholder="e.g., USA"
-                      className={`w-full p-3 bg-gray-50 rounded-lg border ${errors.destinationCountry ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-green-500 focus:border-green-500 transition`}
-                    />
-                    {errors.destinationCountry && <p className="text-red-500 text-xs mt-1">{errors.destinationCountry}</p>}
-                  </div>
-                  <div>
-                    <label htmlFor="whatsappNumber" className="block text-sm font-medium text-gray-700 mb-2">WhatsApp Number *</label>
-                    <input
-                      type="text"
-                      id="whatsappNumber"
-                      name="whatsappNumber"
-                      value={formData.whatsappNumber}
-                      onChange={handleChange}
-                      placeholder="+1 234 567 8900"
-                      className={`w-full p-3 bg-gray-50 rounded-lg border ${errors.whatsappNumber ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-green-500 focus:border-green-500 transition`}
-                    />
-                    {errors.whatsappNumber && <p className="text-red-500 text-xs mt-1">{errors.whatsappNumber}</p>}
-                  </div>
-                  <div className="md:col-span-2">
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="your@email.com"
-                      className={`w-full p-3 bg-gray-50 rounded-lg border ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-green-500 focus:border-green-500 transition`}
-                    />
-                    {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
-                  </div>
-                  <div className="md:col-span-2">
-                    <label htmlFor="additionalRequirements" className="block text-sm font-medium text-gray-700 mb-2">Additional Requirements</label>
-                    <textarea
-                      id="additionalRequirements"
-                      name="additionalRequirements"
-                      rows={4}
-                      value={formData.additionalRequirements}
-                      onChange={handleChange}
-                      placeholder="Tell us about your specific requirements, packaging needs, or any other details..."
-                      className="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
-                    ></textarea>
-                  </div>
-                </div>
-                <div className="text-center mt-8">
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="inline-flex items-center justify-center px-8 py-4 bg-green-600 text-white font-bold rounded-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-transform transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {isSubmitting ? <LoadingSpinner /> : <><Send size={20} className="mr-3" /> Send Quote Request</>}
-                  </button>
-                </div>
-              </form>
+            <div className="glass rounded-2xl p-8 border border-white/50 hover:border-green-200/50 transition-all duration-300 flex flex-col items-center justify-center min-h-[400px]">
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Get a Quote</h3>
+              <p className="text-gray-600 mb-8 text-center max-w-md">
+                Ready to get started? Click the button below to fill out our quote form and receive a personalized quote for your export needs.
+              </p>
+              <InteractiveButton
+                onClick={handleGetQuote}
+                variant="primary"
+                size="lg"
+                icon={ArrowRight}
+                iconPosition="right"
+                className="group relative overflow-hidden"
+              >
+                <span className="relative z-10">Get Your Quote</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-emerald-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+              </InteractiveButton>
+              <div className="mt-8 text-center">
+                <p className="text-sm text-gray-500 mb-2">What you'll get:</p>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>✓ Personalized pricing</li>
+                  <li>✓ MOQ information</li>
+                  <li>✓ Delivery estimates</li>
+                  <li>✓ Expert consultation</li>
+                </ul>
+              </div>
             </div>
           </AnimatedSection>
         </div>
       </div>
 
-      <FeedbackToast
-        message={toastMessage}
-        type={toastType}
-        isVisible={showToast}
-        onClose={() => setShowToast(false)}
-      />
     </section>
   );
 };

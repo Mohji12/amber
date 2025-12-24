@@ -2,13 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { getBlog } from '../api';
+import CompleteSEO from '../components/SEO/CompleteSEO';
+import { useSEO } from '../hooks/useSEO';
 
 const BlogDetailPage: React.FC = () => {
-  const { id } = useParams();
+  // Get slug from params (BlogRouter passes it as slug, but it's actually an ID)
+  const { slug } = useParams<{ slug: string }>();
   const [blog, setBlog] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  
+  // Use slug as ID (BlogRouter ensures it's numeric)
+  const blogId = slug && !isNaN(Number(slug)) ? Number(slug) : undefined;
+  const { seoData } = useSEO('blog', blogId);
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -16,13 +23,13 @@ const BlogDetailPage: React.FC = () => {
         setLoading(true);
         setError(null);
         
-        if (!id) {
+        if (!blogId) {
           setError('Blog ID is required');
           return;
         }
         
         // Fetch the specific blog by ID
-        const blogData = await getBlog(id);
+        const blogData = await getBlog(blogId);
         setBlog(blogData);
         
       } catch (err) {
@@ -33,8 +40,10 @@ const BlogDetailPage: React.FC = () => {
       }
     };
 
-    fetchBlog();
-  }, [id]);
+    if (blogId) {
+      fetchBlog();
+    }
+  }, [blogId]);
 
   if (loading) {
     return (
@@ -74,8 +83,45 @@ const BlogDetailPage: React.FC = () => {
     );
   }
 
+  // Use SEO data if available, otherwise use blog data for basic SEO
+  const finalSeoData = seoData || (blog && slug ? {
+    url: typeof window !== 'undefined' ? `${window.location.origin}/blogs/${slug}` : `/blogs/${slug}`,
+    meta: {
+      title: `${blog.title} | Amber Global Trade`,
+      description: blog.content?.substring(0, 160) || `Read ${blog.title} on Amber Global Trade. Expert insights on agricultural exports and global trade.`,
+      keywords: 'agricultural export, global trade, export business, B2B trade'
+    },
+    canonical: {
+      url: typeof window !== 'undefined' ? `${window.location.origin}/blogs/${slug}` : `/blogs/${slug}`
+    },
+    social_meta: {
+      'og:title': blog.title,
+      'og:description': blog.content?.substring(0, 160) || '',
+      'og:type': 'article',
+      'og:url': typeof window !== 'undefined' ? `${window.location.origin}/blogs/${slug}` : `/blogs/${slug}`
+    },
+    schema: {},
+    images: [],
+    headings: {
+      h1: blog.title,
+      h2_sections: [],
+      h3_subsections: []
+    },
+    content: {
+      hero_tagline: blog.title,
+      short_intro: blog.content?.substring(0, 200) || '',
+      long_description: blog.content || '',
+      bullet_features: []
+    },
+    product_data: {},
+    faq: [],
+    internal_links: [],
+    technical_notes: {}
+  } : null);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-emerald-50 to-green-50 py-12 px-4 pt-28">
+    <CompleteSEO seoData={finalSeoData}>
+      <div className="min-h-screen bg-gradient-to-br from-white via-emerald-50 to-green-50 py-12 px-4 pt-28">
       <div className="max-w-4xl mx-auto">
         {/* Back Button */}
         <button 
@@ -208,7 +254,8 @@ const BlogDetailPage: React.FC = () => {
           </div>
         </article>
       </div>
-    </div>
+      </div>
+    </CompleteSEO>
   );
 };
 

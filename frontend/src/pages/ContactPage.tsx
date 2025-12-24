@@ -445,21 +445,51 @@ const ContactPage: React.FC = () => {
         <WhatsAppQuestionnaire
           isOpen={showWhatsAppQuestionnaire}
           onClose={() => setShowWhatsAppQuestionnaire(false)}
-          onComplete={(answers: QuestionnaireAnswers) => {
-            setShowWhatsAppQuestionnaire(false);
-            // Merge form data with questionnaire answers
-            openWhatsApp({
-              ...answers,
-              name: answers.name || formData.name,
-              email: answers.email || formData.email,
-              phone: answers.phone || formData.whatsappNumber,
-              company: answers.company || formData.company,
-              productInterest: answers.specificProduct || formData.productInterest,
-              quantity: answers.quantity || formData.quantityRequired,
-              country: answers.destinationCountry || formData.destinationCountry,
-              message: answers.additionalRequirements || formData.additionalRequirements
-            });
-          }}
+        onComplete={async (answers: QuestionnaireAnswers) => {
+          setShowWhatsAppQuestionnaire(false);
+
+          // Merge form data with questionnaire answers
+          const merged = {
+            name: answers.name || formData.name,
+            email: answers.email || formData.email,
+            phone: answers.phone || formData.whatsappNumber,
+            company: answers.company || formData.company,
+            productInterest: answers.specificProduct || formData.productInterest,
+            quantity: answers.quantity || formData.quantityRequired,
+            country: answers.destinationCountry || formData.destinationCountry,
+            message: answers.additionalRequirements || formData.additionalRequirements
+          };
+
+          // 1) Store enquiry for admin panel
+          try {
+            const enquiryData = {
+              name: merged.name,
+              email: merged.email,
+              contact_number: merged.phone,
+              required_amount: merged.quantity ? parseInt(merged.quantity, 10) : null,
+              product_interest: merged.productInterest || null,
+              destination_country: merged.country || null,
+              any_query: merged.message || null
+            };
+
+            await createEnquiry(enquiryData);
+          } catch (error) {
+            console.error('Error creating WhatsApp enquiry from Contact page:', error);
+          }
+
+          // 2) Open WhatsApp with full details
+          openWhatsApp({
+            ...answers,
+            name: merged.name,
+            email: merged.email,
+            phone: merged.phone,
+            company: merged.company,
+            productInterest: merged.productInterest,
+            quantity: merged.quantity,
+            country: merged.country,
+            additionalRequirements: merged.message
+          });
+        }}
         />
       </div>
     </CompleteSEO>

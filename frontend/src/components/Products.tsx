@@ -9,6 +9,8 @@ import AnimatedSection from './AnimatedSection';
 import SmartSearch from './SmartSearch';
 import { SearchResult } from '../utils/smartSearch';
 import { MemoizedSubcategoryCard } from './PerformanceOptimized';
+import { createSubcategorySlug } from '../utils/slug';
+import { generateQuoteUrl, trackQuoteClick, getTrackingParamsFromUrl } from '../utils/quoteTracking';
 
 // Product image mapping for manual image handling
 const PRODUCT_IMAGE_MAPPING = {
@@ -399,7 +401,12 @@ const Products = ({
                             subcategory={subcategory}
                             categoryName={categories.find(cat => cat.id === subcategory.category_id)?.name || 'Uncategorized'}
                             searchResult={searchResults.find(r => r.item.id === subcategory.id)}
-                            onViewDetails={(id) => navigate(`/subcategories/${id}`)}
+                            onViewDetails={(id) => {
+                              const subcategory = subcategories.find(s => s.id === id);
+                              if (subcategory) {
+                                navigate(`/subcategories/${createSubcategorySlug(subcategory.name, subcategory.id)}`);
+                              }
+                            }}
                           />
                         </AnimatedSection>
                       ))}
@@ -439,7 +446,12 @@ const Products = ({
                         subcategory={subcategory}
                         categoryName={categories.find(cat => cat.id === subcategory.category_id)?.name || 'Uncategorized'}
                         searchResult={searchResults.find(r => r.item.id === subcategory.id)}
-                        onViewDetails={(id) => navigate(`/subcategories/${id}`)}
+                        onViewDetails={(id) => {
+                          const subcategory = groupedSubcategories[activeCategory]?.find(s => s.id === id);
+                          if (subcategory) {
+                            navigate(`/subcategories/${createSubcategorySlug(subcategory.name, subcategory.id)}`);
+                          }
+                        }}
                       />
                     </AnimatedSection>
                   ))}
@@ -549,7 +561,7 @@ function ProductCard({ product, onQuote, onDetails }: { product: any, onQuote: (
             {/* View Details button is hidden since product description is already visible in this detailed card view */}
             <button 
               className="w-full bg-white border-2 border-green-500 text-green-600 hover:bg-green-50 hover:border-green-600 font-semibold py-3 px-4 rounded-2xl transition-all transform hover:scale-105 shadow-lg" 
-              onClick={e => { e.stopPropagation(); onQuote(); }} 
+              onClick={handleQuoteClick}
               aria-label={`Get Quote for ${product.name}`}
             >
               Get Quote
@@ -566,7 +578,7 @@ function SubcategoryCard({ subcategory, categoryName, searchResult }: { subcateg
   const navigate = useNavigate();
 
   const handleViewDetails = () => {
-    navigate(`/subcategories/${subcategory.id}`);
+    navigate(`/subcategories/${createSubcategorySlug(subcategory.name, subcategory.id)}`);
   };
 
   // Helper function to get badge styling

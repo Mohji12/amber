@@ -331,11 +331,11 @@ const PopupForm: React.FC<PopupFormProps> = ({ isVisible, onClose, onSubmit, pro
       <WhatsAppQuestionnaire
         isOpen={showWhatsAppQuestionnaire}
         onClose={() => setShowWhatsAppQuestionnaire(false)}
-        onComplete={(answers: QuestionnaireAnswers) => {
+        onComplete={async (answers: QuestionnaireAnswers) => {
           setShowWhatsAppQuestionnaire(false);
+
           // Merge form data with questionnaire answers
-          openWhatsApp({
-            ...answers,
+          const merged = {
             name: answers.name || formData.name,
             email: answers.email || formData.email,
             phone: answers.phone || formData.contact,
@@ -344,6 +344,37 @@ const PopupForm: React.FC<PopupFormProps> = ({ isVisible, onClose, onSubmit, pro
             quantity: answers.quantity || formData.amount,
             destination_country: answers.destinationCountry || formData.destination_country,
             message: answers.additionalRequirements || formData.message
+          };
+
+          // 1) Store enquiry for admin panel
+          try {
+            const enquiryData = {
+              name: merged.name,
+              email: merged.email,
+              contact_number: merged.phone,
+              company_name: merged.company || null,
+              required_amount: merged.quantity ? parseInt(merged.quantity, 10) : null,
+              any_query: merged.message || null,
+              product_interest: merged.product_interest || null,
+              destination_country: merged.destination_country || null
+            };
+
+            await createEnquiry(enquiryData);
+          } catch (error) {
+            console.error('Error creating WhatsApp enquiry from PopupForm:', error);
+          }
+
+          // 2) Open WhatsApp with full details
+          openWhatsApp({
+            ...answers,
+            name: merged.name,
+            email: merged.email,
+            contact: merged.phone,
+            company: merged.company,
+            product_interest: merged.product_interest,
+            amount: merged.quantity,
+            destination_country: merged.destination_country,
+            additionalRequirements: merged.message
           });
         }}
       />

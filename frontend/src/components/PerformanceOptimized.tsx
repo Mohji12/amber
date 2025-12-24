@@ -1,7 +1,9 @@
 import React, { memo, useMemo, useCallback } from 'react';
 import { Package, Leaf, Award, Truck } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import OptimizedImage from './OptimizedImage';
 import LoadingSpinner from './LoadingSpinner';
+import { generateQuoteUrl, trackQuoteClick, getTrackingParamsFromUrl } from '../utils/quoteTracking';
 
 // Memoized Subcategory Card for better performance
 interface SubcategoryCardProps {
@@ -103,9 +105,25 @@ interface ProductCardProps {
 }
 
 export const MemoizedProductCard = memo<ProductCardProps>(({ product, onQuote, onDetails }) => {
+  const navigate = useNavigate();
+  
   const handleQuote = useCallback(() => {
-    onQuote(product);
-  }, [onQuote, product]);
+    const trackingParams = getTrackingParamsFromUrl();
+    trackQuoteClick({
+      product: product.name,
+      subcategory: product.subcategory_name,
+      category: product.category_name,
+      source: 'product_card',
+      ...trackingParams
+    });
+    navigate(generateQuoteUrl({
+      product: product.name,
+      subcategory: product.subcategory_name,
+      category: product.category_name,
+      source: 'product_card',
+      ...trackingParams
+    }));
+  }, [navigate, product]);
 
   const handleDetails = useCallback(() => {
     onDetails(product.id);

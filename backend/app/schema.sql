@@ -77,7 +77,6 @@ CREATE TABLE blogs (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table: enquiries
 CREATE TABLE enquiries (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
@@ -90,6 +89,7 @@ CREATE TABLE enquiries (
     any_query TEXT,
     product_interest VARCHAR(255),
     destination_country VARCHAR(100),
+    about_you VARCHAR(50),
     status VARCHAR(50) DEFAULT 'open',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );

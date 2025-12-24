@@ -92,6 +92,7 @@ class Enquiry(Base):
     any_query = Column(Text)
     product_interest = Column(String(255))
     destination_country = Column(String(100))
+    about_you = Column(String(50))
     status = Column(String(50), default="open")
     created_at = Column(DateTime, default=datetime.datetime.utcnow) 
 

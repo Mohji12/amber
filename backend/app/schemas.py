@@ -137,6 +137,7 @@ class EnquiryBase(BaseModel):
     product_id: Optional[int] = None
     product_interest: Optional[str] = None
     destination_country: Optional[str] = None
+    about_you: Optional[str] = None
 
 class EnquiryCreate(EnquiryBase):
     pass

@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Package, MapPin, Award, Truck, Star, Scale, Calendar, Tag } from 'lucide-react';
 import LoadingSpinner from '../components/LoadingSpinner';
-import PopupForm from '../components/PopupForm';
+// PopupForm removed - using /quote route instead
 import Breadcrumb from '../components/Breadcrumb';
 import CompleteSEO from '../components/SEO/CompleteSEO';
 import { useSEO } from '../hooks/useSEO';
 import { getProducts, trackProductView } from '../api';
+import { findProductBySlug, createSubcategorySlug } from '../utils/slug';
+import { generateQuoteUrl, trackQuoteClick, getTrackingParamsFromUrl } from '../utils/quoteTracking';
 
 const ProductDetailPage: React.FC = () => {
-  const { id } = useParams();
+  const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [isQuoteOpen, setIsQuoteOpen] = useState(false);
+  // Removed isQuoteOpen - using /quote route instead
   
-  // Fetch SEO data using the SEO hook
-  const { seoData, loading: seoLoading } = useSEO('product', id ? Number(id) : undefined);
-
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const products = await getProducts() as any[];
-        const found = products.find((p: any) => p.id?.toString() === id);
+        const found = slug ? findProductBySlug(products, slug) : null;
         setProduct(found);
         
         // Track product view for real-time analytics
@@ -35,8 +35,13 @@ const ProductDetailPage: React.FC = () => {
       }
     };
 
-    fetchProduct();
-  }, [id]);
+    if (slug) {
+      fetchProduct();
+    }
+  }, [slug]);
+  
+  // Fetch SEO data using the SEO hook (use product ID once found)
+  const { seoData, loading: seoLoading } = useSEO('product', product?.id);
 
   if (loading || seoLoading) return <div className="flex justify-center items-center min-h-[200px]"><LoadingSpinner size="large" /></div>;
   if (!product) return <div className="text-center text-gray-500">Product not found.</div>;
@@ -51,7 +56,7 @@ const ProductDetailPage: React.FC = () => {
           items={[
             { label: 'Products', href: '/products' },
             { label: product.category_name, href: `/products?category=${product.category_id}` },
-            { label: product.subcategory_name, href: `/subcategories/${product.subcategory_id}` },
+            { label: product.subcategory_name, href: `/subcategories/${createSubcategorySlug(product.subcategory_name, product.subcategory_id)}` },
             { label: product.name, current: true }
           ]}
         />
@@ -160,7 +165,23 @@ const ProductDetailPage: React.FC = () => {
                 <div className="flex flex-col sm:flex-row gap-2 lg:gap-3 pt-2">
                   <button
                     className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-4 lg:px-6 py-2 lg:py-3 rounded-lg lg:rounded-xl font-semibold shadow-lg transition-all transform hover:scale-105 flex items-center justify-center gap-2 text-sm lg:text-base"
-                    onClick={() => setIsQuoteOpen(true)}
+                    onClick={() => {
+                      const trackingParams = getTrackingParamsFromUrl();
+                      trackQuoteClick({
+                        product: product.name,
+                        subcategory: product.subcategory_name,
+                        category: product.category_name,
+                        source: 'product_detail',
+                        ...trackingParams
+                      });
+                      navigate(generateQuoteUrl({
+                        product: product.name,
+                        subcategory: product.subcategory_name,
+                        category: product.category_name,
+                        source: 'product_detail',
+                        ...trackingParams
+                      }));
+                    }}
                     aria-label={`Get Quote for ${product.name}`}
                   >
                     <Scale className="size-4" />
@@ -285,17 +306,6 @@ const ProductDetailPage: React.FC = () => {
           </div>
         )}
       </div>
-
-      <PopupForm 
-        isVisible={isQuoteOpen} 
-        onClose={() => setIsQuoteOpen(false)} 
-        onSubmit={() => setIsQuoteOpen(false)}
-        productInfo={product ? {
-          name: product.name,
-          subcategory: product.subcategory_name,
-          category: product.category_name
-        } : undefined}
-      />
       </div>
     </CompleteSEO>
   );

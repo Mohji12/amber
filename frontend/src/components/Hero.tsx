@@ -1,9 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { ArrowRight, Users, Sparkles, Globe, Award, Truck, Shield } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import AnimatedSection from './AnimatedSection';
 import InteractiveButton from './InteractiveButton';
+import { generateQuoteUrl, trackQuoteClick, getTrackingParamsFromUrl } from '../utils/quoteTracking';
 
 const Hero = () => {
+  const navigate = useNavigate();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [scrollY, setScrollY] = useState(0);
   const heroRef = useRef<HTMLElement>(null);
@@ -25,11 +28,16 @@ const Hero = () => {
     };
   }, []);
 
-  const scrollToContact = () => {
-    const element = document.getElementById('contact');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+  const handleGetQuote = () => {
+    const trackingParams = getTrackingParamsFromUrl();
+    trackQuoteClick({
+      source: 'homepage_hero',
+      ...trackingParams
+    });
+    navigate(generateQuoteUrl({
+      source: 'homepage_hero',
+      ...trackingParams
+    }));
   };
 
   const scrollToAbout = () => {
@@ -124,7 +132,7 @@ const Hero = () => {
             {/* Enhanced CTA Buttons with hover effects */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
               <InteractiveButton
-                onClick={scrollToContact}
+                onClick={handleGetQuote}
                 variant="primary"
                 size="lg"
                 icon={ArrowRight}

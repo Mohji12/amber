@@ -3,6 +3,7 @@ import { Package, Leaf, Award, Truck, Search, TrendingUp, Crown, Heart } from 'l
 import { useNavigate, Link } from 'react-router-dom';
 import LoadingSpinner from './LoadingSpinner';
 import { getSubcategories, getCategories } from '../api';
+import { createSubcategorySlug } from '../utils/slug';
 
 const Subcategories = ({ isHome = false }: { isHome?: boolean }) => {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -210,7 +211,8 @@ function SubcategoryCard({ subcategory, categoryName }: { subcategory: any, cate
   const navigate = useNavigate();
 
   const handleViewDetails = () => {
-    navigate(`/subcategories/${subcategory.id}`);
+    const { createSubcategorySlug } = require('../utils/slug');
+    navigate(`/subcategories/${createSubcategorySlug(subcategory.name, subcategory.id)}`);
   };
 
   // Helper function to get badge styling

@@ -1,7 +1,8 @@
 // Centralized API utility for frontend-backend connection
-// Force local backend for development
+// Local backend for development
 //const API_BASE_URL = "http://127.0.0.1:8000";
 // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+// AWS endpoints (commented out for local development)
 //const API_BASE_URL = "https://6hgfjwmhx4.execute-api.ap-south-1.amazonaws.com";
 const API_BASE_URL = "https://nlq4zcho6j.execute-api.ap-south-1.amazonaws.com";
 

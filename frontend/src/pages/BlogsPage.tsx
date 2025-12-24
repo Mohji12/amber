@@ -1,8 +1,29 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { staticBlogs, StaticBlog } from '../data/staticBlogs';
+import CompleteSEO from '../components/SEO/CompleteSEO';
+import { useCustomSEO } from '../hooks/useSEO';
+import { SEORequest } from '../api';
 
 const BlogsPage: React.FC = () => {
+  // Generate SEO for blogs listing page
+  const seoRequest: SEORequest = {
+    url: '/blogs',
+    page_type: 'static',
+    primary_keyword: 'Agricultural Export Blogs',
+    secondary_keywords: [
+      'export trade insights',
+      'agricultural export guides',
+      'B2B trade knowledge',
+      'export business tips',
+      'global trade articles',
+      'export industry news'
+    ],
+    short_description: 'Explore expert insights, guides, and articles on agricultural exports, global trade, sourcing strategies, and B2B export business. Learn from industry experts at Amber Global Trade.'
+  };
+
+  const { seoData } = useCustomSEO(seoRequest);
+
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -35,7 +56,8 @@ const BlogsPage: React.FC = () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-emerald-50 to-green-50 py-12 px-4">
+    <CompleteSEO seoData={seoData}>
+      <div className="min-h-screen bg-gradient-to-br from-white via-emerald-50 to-green-50 py-12 px-4">
       <div className="max-w-6xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-12">
@@ -198,7 +220,8 @@ const BlogsPage: React.FC = () => {
           </>
         )}
       </div>
-    </div>
+      </div>
+    </CompleteSEO>
   );
 };
 
