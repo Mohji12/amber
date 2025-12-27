@@ -318,7 +318,12 @@ const QuotePage: React.FC = () => {
   const currentSeoData = seoData || fallbackSeoData;
 
   return (
-    <CompleteSEO seoData={currentSeoData}>
+    <CompleteSEO 
+      seoData={currentSeoData}
+      pageType="quote"
+      fallbackTitle="Get Quote - Amber Global Trade | Export Pricing"
+      fallbackDescription="Get personalized pricing for your export needs. Custom pricing, MOQ options, delivery estimates. Request Quote today!"
+    >
       <div className="min-h-screen bg-gradient-to-br from-white via-emerald-50 to-green-50 pt-24 pb-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto">
           {/* Back Button */}

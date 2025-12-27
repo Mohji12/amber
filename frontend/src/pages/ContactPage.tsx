@@ -177,7 +177,12 @@ const ContactPage: React.FC = () => {
   ];
 
   return (
-    <CompleteSEO seoData={seoData}>
+    <CompleteSEO 
+      seoData={seoData}
+      pageType="contact"
+      fallbackTitle="Contact Us - Amber Global Trade | Export Consultation"
+      fallbackDescription="Expert export guidance and support. Free consultation, competitive quotes, fast response. Contact Us today!"
+    >
       <div className="min-h-screen bg-gradient-to-br from-white via-emerald-50 to-green-50 pt-24">
         {/* Hero Section */}
         <div className="bg-gradient-to-r from-emerald-600 to-green-600 text-white py-16">

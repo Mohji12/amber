@@ -26,7 +26,12 @@ const ProductsPage = () => {
   const { seoData } = useCustomSEO(seoRequest);
 
   return (
-    <CompleteSEO seoData={seoData}>
+    <CompleteSEO 
+      seoData={seoData}
+      pageType="products"
+      fallbackTitle="Premium Agricultural Products - Amber Global Trade"
+      fallbackDescription="Browse our certified export-quality products. Basmati rice, organic spices, dry fruits, pulses. Get Quote today for competitive pricing!"
+    >
       <div className="pt-32">
         <Products 
           showProducts={false}

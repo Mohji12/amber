@@ -56,7 +56,12 @@ const BlogsPage: React.FC = () => {
 
 
   return (
-    <CompleteSEO seoData={seoData}>
+    <CompleteSEO 
+      seoData={seoData}
+      pageType="blogs"
+      fallbackTitle="Export Guides & Insights - Amber Global Trade"
+      fallbackDescription="Expert insights on agricultural exports. Industry knowledge, export tips, compliance guides. Read More today!"
+    >
       <div className="min-h-screen bg-gradient-to-br from-white via-emerald-50 to-green-50 py-12 px-4">
       <div className="max-w-6xl mx-auto">
         {/* Header Section */}

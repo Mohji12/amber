@@ -148,7 +148,12 @@ function HomeWithScroll() {
   }
   
   return (
-    <CompleteSEO seoData={seoData}>
+    <CompleteSEO 
+      seoData={seoData}
+      pageType="homepage"
+      fallbackTitle="Amber Global Trade - Premium Agricultural Export Company | Basmati Rice, Spices & Dry Fruits"
+      fallbackDescription="Premium FSSAI & APEDA certified agricultural exports from India. Certified quality, competitive pricing, global shipping. Request Quote today!"
+    >
       <Hero />
       <Products isHome={true} />
       <HowWeWork />
