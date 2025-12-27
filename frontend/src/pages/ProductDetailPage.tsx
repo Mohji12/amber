@@ -25,8 +25,8 @@ const ProductDetailPage: React.FC = () => {
         setProduct(found);
         
         // Track product view for real-time analytics
-        if (found) {
-          trackProductView(found);
+        if (found && found.id) {
+          trackProductView(found.id);
         }
       } catch (error) {
         console.error('Error fetching product:', error);
@@ -55,9 +55,9 @@ const ProductDetailPage: React.FC = () => {
         <Breadcrumb 
           items={[
             { label: 'Products', href: '/products' },
-            { label: product.category_name, href: `/products?category=${product.category_id}` },
-            { label: product.subcategory_name, href: `/subcategories/${createSubcategorySlug(product.subcategory_name, product.subcategory_id)}` },
-            { label: product.name, current: true }
+            { label: product.category_name || 'Category', href: `/products?category=${product.category_id || ''}` },
+            { label: product.subcategory_name || 'Subcategory', href: `/subcategories/${createSubcategorySlug(product.subcategory_name, product.subcategory_id)}` },
+            { label: product.name || 'Product', current: true }
           ]}
         />
 

@@ -7,7 +7,10 @@
  * @param text - The text to convert to a slug
  * @returns A URL-friendly slug
  */
-export function createSlug(text: string): string {
+export function createSlug(text: string | null | undefined): string {
+  if (!text || typeof text !== 'string') {
+    return '';
+  }
   return text
     .toLowerCase()
     .trim()
@@ -28,7 +31,7 @@ export function createSlug(text: string): string {
  * @param id - Optional product ID to ensure uniqueness
  * @returns A unique slug
  */
-export function createProductSlug(name: string, id?: number): string {
+export function createProductSlug(name: string | null | undefined, id?: number): string {
   const baseSlug = createSlug(name);
   // If ID is provided, append it to ensure uniqueness
   // Format: product-name-123
@@ -63,6 +66,7 @@ export function findProductBySlug(products: any[], slug: string): any | null {
   
   // Then try to match by slug
   return products.find(product => {
+    if (!product || !product.name) return false;
     const productSlug = createProductSlug(product.name, product.id);
     return productSlug === slug || createSlug(product.name) === slug;
   }) || null;
@@ -75,7 +79,7 @@ export function findProductBySlug(products: any[], slug: string): any | null {
  * @param id - Optional subcategory ID to ensure uniqueness
  * @returns A unique slug
  */
-export function createSubcategorySlug(name: string, id?: number): string {
+export function createSubcategorySlug(name: string | null | undefined, id?: number): string {
   const baseSlug = createSlug(name);
   // If ID is provided, append it to ensure uniqueness
   // Format: subcategory-name-123
@@ -98,6 +102,7 @@ export function findSubcategoryBySlug(subcategories: any[], slug: string): any |
   
   // Then try to match by slug
   return subcategories.find(subcategory => {
+    if (!subcategory || !subcategory.name) return false;
     const subcategorySlug = createSubcategorySlug(subcategory.name, subcategory.id);
     return subcategorySlug === slug || createSlug(subcategory.name) === slug;
   }) || null;
