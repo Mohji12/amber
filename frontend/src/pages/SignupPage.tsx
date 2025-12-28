@@ -170,12 +170,7 @@ const SignupPage = () => {
   }
 
   return (
-    <CompleteSEO 
-      seoData={seoData}
-      pageType="signup"
-      fallbackTitle="Sign Up - Amber Global Trade | Create Export Account"
-      fallbackDescription="Create your free export account. Access quotes, track orders, expert support. Sign Up Free today!"
-    >
+    <CompleteSEO seoData={seoData}>
       <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden">

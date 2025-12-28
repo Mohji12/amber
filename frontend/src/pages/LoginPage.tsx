@@ -138,12 +138,7 @@ const LoginPage = () => {
   }
 
   return (
-    <CompleteSEO 
-      seoData={seoData}
-      pageType="login"
-      fallbackTitle="Login - Amber Global Trade | Export Platform"
-      fallbackDescription="Sign in to your Amber Global Trade account. Track orders, manage quotes, view analytics. Sign In today!"
-    >
+    <CompleteSEO seoData={seoData}>
       <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden">

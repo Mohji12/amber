@@ -3,14 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
-
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-P8QGCXMK');</script>
-    <!-- End Google Tag Manager -->
     
     <!-- Primary Meta Tags -->
     <title>Amber Global Trade - Premium Agricultural Export Company | Basmati Rice, Spices & Dry Fruits</title>
@@ -74,142 +66,9 @@
     <!-- Preconnect for Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
-    <!-- Google tag (gtag.js) - Google Ads -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17817195999"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'AW-17817195999');
-    </script>
-
-    <!-- Google Ads conversion function for Request quote (1) -->
-    <script>
-      function gtag_report_conversion(url) {
-        var callback = function () {
-          if (typeof(url) != 'undefined') {
-            window.location = url;
-          }
-        };
-        gtag('event', 'conversion', {
-            'send_to': 'AW-17817195999/sruUCLnT8NYbEN-r869C',
-            'value': 1.0,
-            'currency': 'INR',
-            'event_callback': callback
-        });
-        return false;
-      }
-    </script>
   </head>
   <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P8QGCXMK"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
     <div id="root"></div>
-    
-    <!-- Pre-render meta tags for crawlers (runs before React) -->
-    <script>
-      // Inject meta tags immediately for crawlers that don't execute JavaScript
-      (function() {
-        const path = window.location.pathname;
-        const siteUrl = 'https://amberglobaltrade.com';
-        
-        // Page-specific meta tag configurations
-        const metaConfig = {
-          '/': {
-            title: 'Amber Global Trade - Premium Agricultural Export Company | Basmati Rice, Spices & Dry Fruits',
-            description: 'Premium FSSAI & APEDA certified agricultural exports from India. Certified quality, competitive pricing, global shipping. Request Quote today!',
-            ogImage: siteUrl + '/assets/og-default.jpg'
-          },
-          '/products': {
-            title: 'Premium Agricultural Products - Amber Global Trade',
-            description: 'Browse our certified export-quality products. Basmati rice, organic spices, dry fruits, pulses. Get Quote today for competitive pricing!',
-            ogImage: siteUrl + '/assets/og-default.jpg'
-          },
-          '/contact': {
-            title: 'Contact Us - Amber Global Trade | Export Consultation',
-            description: 'Expert export guidance and support. Free consultation, competitive quotes, fast response. Contact Us today!',
-            ogImage: siteUrl + '/assets/og-default.jpg'
-          },
-          '/quote': {
-            title: 'Get Quote - Amber Global Trade | Export Pricing',
-            description: 'Get personalized pricing for your export needs. Custom pricing, MOQ options, delivery estimates. Request Quote today!',
-            ogImage: siteUrl + '/assets/og-default.jpg'
-          },
-          '/login': {
-            title: 'Login - Amber Global Trade | Export Platform',
-            description: 'Sign in to your Amber Global Trade account. Track orders, manage quotes, view analytics. Sign In today!',
-            ogImage: siteUrl + '/assets/og-default.jpg'
-          },
-          '/signup': {
-            title: 'Sign Up - Amber Global Trade | Create Export Account',
-            description: 'Create your free export account. Access quotes, track orders, expert support. Sign Up Free today!',
-            ogImage: siteUrl + '/assets/og-default.jpg'
-          },
-          '/blogs': {
-            title: 'Export Guides & Insights - Amber Global Trade',
-            description: 'Expert insights on agricultural exports. Industry knowledge, export tips, compliance guides. Read More today!',
-            ogImage: siteUrl + '/assets/og-default.jpg'
-          }
-        };
-        
-        // Get config for current path or use homepage as default
-        const config = metaConfig[path] || metaConfig['/'];
-        
-        if (config) {
-          // Update title
-          document.title = config.title;
-          
-          // Update or create meta description
-          let metaDesc = document.querySelector('meta[name="description"]');
-          if (!metaDesc) {
-            metaDesc = document.createElement('meta');
-            metaDesc.setAttribute('name', 'description');
-            document.head.appendChild(metaDesc);
-          }
-          metaDesc.setAttribute('content', config.description);
-          
-          // Update Open Graph tags
-          const updateOGTag = (property, content) => {
-            let tag = document.querySelector(`meta[property="${property}"]`);
-            if (!tag) {
-              tag = document.createElement('meta');
-              tag.setAttribute('property', property);
-              document.head.appendChild(tag);
-            }
-            tag.setAttribute('content', content);
-          };
-          
-          updateOGTag('og:title', config.title);
-          updateOGTag('og:description', config.description);
-          updateOGTag('og:url', siteUrl + path);
-          if (config.ogImage) {
-            updateOGTag('og:image', config.ogImage);
-          }
-          
-          // Update Twitter tags
-          const updateTwitterTag = (name, content) => {
-            let tag = document.querySelector(`meta[name="${name}"]`);
-            if (!tag) {
-              tag = document.createElement('meta');
-              tag.setAttribute('name', name);
-              document.head.appendChild(tag);
-            }
-            tag.setAttribute('content', content);
-          };
-          
-          updateTwitterTag('twitter:title', config.title);
-          updateTwitterTag('twitter:description', config.description);
-          if (config.ogImage) {
-            updateTwitterTag('twitter:image', config.ogImage);
-          }
-        }
-      })();
-    </script>
-    
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
