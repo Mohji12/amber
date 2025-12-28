@@ -7,6 +7,7 @@ import { createEnquiry } from '../api';
 import { openWhatsApp } from '../utils/whatsapp';
 import WhatsAppQuestionnaire from './WhatsAppQuestionnaire';
 import type { QuestionnaireAnswers } from './WhatsAppQuestionnaire';
+import { fireQuoteSuccess } from '../utils/gtmEvents';
 
 interface PopupFormProps {
   isVisible: boolean;
@@ -90,6 +91,9 @@ const PopupForm: React.FC<PopupFormProps> = ({ isVisible, onClose, onSubmit, pro
       const res = await createEnquiry(enquiryData);
       
       if (res && !res.detail) {
+        // Fire GTM event for Google Ads conversion tracking
+        fireQuoteSuccess('popup_form');
+
         setToastMessage("Thank you! We'll contact you within 24 hours.");
         setToastType('success');
         setShowToast(true);

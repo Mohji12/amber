@@ -82,18 +82,7 @@ export function generateQuoteUrl(params: QuoteTrackingParams = {}): string {
  * @param params - Tracking parameters
  */
 export function trackQuoteClick(params: QuoteTrackingParams = {}): void {
-  // Track in Google Analytics if available
-  if (typeof window !== 'undefined' && (window as any).gtag) {
-    (window as any).gtag('event', 'quote_button_click', {
-      source: params.source || 'direct',
-      utm_source: params.utm_source,
-      utm_medium: params.utm_medium,
-      utm_campaign: params.utm_campaign,
-      product: params.product,
-      subcategory: params.subcategory,
-      category: params.category
-    });
-  }
+  // Note: Tracking is handled via GTM dataLayer
   
   // Store in localStorage for analytics
   try {

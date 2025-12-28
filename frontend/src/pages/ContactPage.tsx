@@ -9,6 +9,7 @@ import { createEnquiry } from '../api';
 import { openWhatsApp } from '../utils/whatsapp';
 import WhatsAppQuestionnaire from '../components/WhatsAppQuestionnaire';
 import type { QuestionnaireAnswers } from '../components/WhatsAppQuestionnaire';
+import { fireQuoteSuccess } from '../utils/gtmEvents';
 
 const ContactPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -97,6 +98,9 @@ const ContactPage: React.FC = () => {
       const res = await createEnquiry(enquiryData);
 
       if (res && !res.detail) {
+        // Fire GTM event for Google Ads conversion tracking
+        fireQuoteSuccess('contact_page');
+
         setToastMessage('Your quote request has been sent successfully! We will contact you within 24 hours.');
         setToastType('success');
         setShowToast(true);
@@ -177,12 +181,7 @@ const ContactPage: React.FC = () => {
   ];
 
   return (
-    <CompleteSEO 
-      seoData={seoData}
-      pageType="contact"
-      fallbackTitle="Contact Us - Amber Global Trade | Export Consultation"
-      fallbackDescription="Expert export guidance and support. Free consultation, competitive quotes, fast response. Contact Us today!"
-    >
+    <CompleteSEO seoData={seoData}>
       <div className="min-h-screen bg-gradient-to-br from-white via-emerald-50 to-green-50 pt-24">
         {/* Hero Section */}
         <div className="bg-gradient-to-r from-emerald-600 to-green-600 text-white py-16">
