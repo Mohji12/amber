@@ -29,6 +29,12 @@ const WhatsAppButton: React.FC = () => {
 
     try {
       await createEnquiry(enquiryData);
+      
+      // Fire GTM event for Google Ads conversion tracking
+      trackQuoteSuccess({
+        form_type: 'whatsapp',
+        source: 'whatsapp',
+      });
     } catch (error) {
       console.error('Error creating WhatsApp enquiry from floating button:', error);
     }

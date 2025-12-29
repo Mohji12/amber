@@ -12,7 +12,7 @@ import CompleteSEO from '../components/SEO/CompleteSEO';
 import { useCustomSEO } from '../hooks/useSEO';
 import { SEORequest } from '../api';
 import { SEOData } from '../utils/seo';
-import { fireQuoteSuccess } from '../utils/gtmEvents';
+import { trackQuoteSuccess } from '../utils/gtmTracking';
 
 const QuotePage: React.FC = () => {
   const navigate = useNavigate();
@@ -161,7 +161,12 @@ const QuotePage: React.FC = () => {
       await createEnquiry(buildEnquiryPayload());
 
       // Fire GTM event for Google Ads conversion tracking
-      fireQuoteSuccess('quote_page');
+      trackQuoteSuccess({
+        form_type: 'quote_page',
+        product: productName,
+        source: source,
+        page: '/quote',
+      });
 
       setToastMessage('Quote request sent successfully! We\'ll get back to you soon.');
       setToastType('success');
@@ -208,6 +213,15 @@ const QuotePage: React.FC = () => {
     setIsSubmitting(true);
     try {
       await createEnquiry(buildEnquiryPayload());
+      
+      // Fire GTM event for Google Ads conversion tracking
+      trackQuoteSuccess({
+        form_type: 'whatsapp',
+        product: productName,
+        source: source,
+        page: '/quote',
+      });
+      
       setShowWhatsAppQuestionnaire(true);
     } catch (error: any) {
       console.error('Error creating enquiry before WhatsApp:', error);

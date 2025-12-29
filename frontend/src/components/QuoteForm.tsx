@@ -4,6 +4,7 @@ import { openWhatsApp } from '../utils/whatsapp';
 import { createEnquiry } from '../api';
 import WhatsAppQuestionnaire from './WhatsAppQuestionnaire';
 import type { QuestionnaireAnswers } from './WhatsAppQuestionnaire';
+import { trackQuoteSuccess } from '../utils/gtmTracking';
 
 interface QuoteFormProps {
   isOpen: boolean;
@@ -297,6 +298,12 @@ const QuoteForm: React.FC<QuoteFormProps> = ({ isOpen, onClose, productInterest 
             };
 
             await createEnquiry(enquiryData);
+            
+            // Fire GTM event for Google Ads conversion tracking
+            trackQuoteSuccess({
+              form_type: 'whatsapp',
+              source: 'whatsapp',
+            });
           } catch (error) {
             console.error('Error creating WhatsApp enquiry from QuoteForm:', error);
           }

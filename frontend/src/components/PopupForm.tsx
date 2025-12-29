@@ -7,7 +7,7 @@ import { createEnquiry } from '../api';
 import { openWhatsApp } from '../utils/whatsapp';
 import WhatsAppQuestionnaire from './WhatsAppQuestionnaire';
 import type { QuestionnaireAnswers } from './WhatsAppQuestionnaire';
-import { fireQuoteSuccess } from '../utils/gtmEvents';
+import { trackQuoteSuccess } from '../utils/gtmTracking';
 
 interface PopupFormProps {
   isVisible: boolean;
@@ -92,7 +92,11 @@ const PopupForm: React.FC<PopupFormProps> = ({ isVisible, onClose, onSubmit, pro
       
       if (res && !res.detail) {
         // Fire GTM event for Google Ads conversion tracking
-        fireQuoteSuccess('popup_form');
+        trackQuoteSuccess({
+          form_type: 'product_popup',
+          product: enquiryData.product_interest,
+          source: 'product_card',
+        });
 
         setToastMessage("Thank you! We'll contact you within 24 hours.");
         setToastType('success');
@@ -364,6 +368,12 @@ const PopupForm: React.FC<PopupFormProps> = ({ isVisible, onClose, onSubmit, pro
             };
 
             await createEnquiry(enquiryData);
+            
+            // Fire GTM event for Google Ads conversion tracking
+            trackQuoteSuccess({
+              form_type: 'whatsapp',
+              source: 'whatsapp',
+            });
           } catch (error) {
             console.error('Error creating WhatsApp enquiry from PopupForm:', error);
           }

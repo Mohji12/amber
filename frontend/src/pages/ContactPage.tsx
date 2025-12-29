@@ -9,7 +9,7 @@ import { createEnquiry } from '../api';
 import { openWhatsApp } from '../utils/whatsapp';
 import WhatsAppQuestionnaire from '../components/WhatsAppQuestionnaire';
 import type { QuestionnaireAnswers } from '../components/WhatsAppQuestionnaire';
-import { fireQuoteSuccess } from '../utils/gtmEvents';
+import { trackQuoteSuccess } from '../utils/gtmTracking';
 
 const ContactPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -99,7 +99,10 @@ const ContactPage: React.FC = () => {
 
       if (res && !res.detail) {
         // Fire GTM event for Google Ads conversion tracking
-        fireQuoteSuccess('contact_page');
+        trackQuoteSuccess({
+          form_type: 'contact_page',
+          source: 'contact',
+        });
 
         setToastMessage('Your quote request has been sent successfully! We will contact you within 24 hours.');
         setToastType('success');
@@ -477,6 +480,12 @@ const ContactPage: React.FC = () => {
             };
 
             await createEnquiry(enquiryData);
+            
+            // Fire GTM event for Google Ads conversion tracking
+            trackQuoteSuccess({
+              form_type: 'whatsapp',
+              source: 'whatsapp',
+            });
           } catch (error) {
             console.error('Error creating WhatsApp enquiry from Contact page:', error);
           }
