@@ -55,9 +55,9 @@ const ProductDetailPage: React.FC = () => {
         <Breadcrumb 
           items={[
             { label: 'Products', href: '/products' },
-            { label: product.category_name, href: `/products?category=${product.category_id}` },
-            { label: product.subcategory_name, href: `/subcategories/${createSubcategorySlug(product.subcategory_name, product.subcategory_id)}` },
-            { label: product.name, current: true }
+            { label: product.category_name || 'Category', href: `/products?category=${product.category_id || ''}` },
+            { label: product.subcategory_name || 'Subcategory', href: `/subcategories/${createSubcategorySlug(product.subcategory_name || '', product.subcategory_id)}` },
+            { label: product.name || 'Product', current: true }
           ]}
         />
 

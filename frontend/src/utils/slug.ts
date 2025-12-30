@@ -8,6 +8,9 @@
  * @returns A URL-friendly slug
  */
 export function createSlug(text: string): string {
+  if (!text || typeof text !== 'string') {
+    return '';
+  }
   return text
     .toLowerCase()
     .trim()
@@ -29,6 +32,9 @@ export function createSlug(text: string): string {
  * @returns A unique slug
  */
 export function createProductSlug(name: string, id?: number): string {
+  if (!name || typeof name !== 'string') {
+    return id ? `product-${id}` : 'product';
+  }
   const baseSlug = createSlug(name);
   // If ID is provided, append it to ensure uniqueness
   // Format: product-name-123
@@ -54,6 +60,10 @@ export function extractIdFromSlug(slug: string): number | null {
  * @returns The matching product or null
  */
 export function findProductBySlug(products: any[], slug: string): any | null {
+  if (!products || !Array.isArray(products) || !slug) {
+    return null;
+  }
+  
   // First try to extract ID from slug and find by ID
   const id = extractIdFromSlug(slug);
   if (id) {
@@ -63,6 +73,7 @@ export function findProductBySlug(products: any[], slug: string): any | null {
   
   // Then try to match by slug
   return products.find(product => {
+    if (!product || !product.name) return false;
     const productSlug = createProductSlug(product.name, product.id);
     return productSlug === slug || createSlug(product.name) === slug;
   }) || null;
@@ -76,6 +87,9 @@ export function findProductBySlug(products: any[], slug: string): any | null {
  * @returns A unique slug
  */
 export function createSubcategorySlug(name: string, id?: number): string {
+  if (!name || typeof name !== 'string') {
+    return id ? `subcategory-${id}` : 'subcategory';
+  }
   const baseSlug = createSlug(name);
   // If ID is provided, append it to ensure uniqueness
   // Format: subcategory-name-123
@@ -89,6 +103,10 @@ export function createSubcategorySlug(name: string, id?: number): string {
  * @returns The matching subcategory or null
  */
 export function findSubcategoryBySlug(subcategories: any[], slug: string): any | null {
+  if (!subcategories || !Array.isArray(subcategories) || !slug) {
+    return null;
+  }
+  
   // First try to extract ID from slug and find by ID
   const id = extractIdFromSlug(slug);
   if (id) {
@@ -98,6 +116,7 @@ export function findSubcategoryBySlug(subcategories: any[], slug: string): any |
   
   // Then try to match by slug
   return subcategories.find(subcategory => {
+    if (!subcategory || !subcategory.name) return false;
     const subcategorySlug = createSubcategorySlug(subcategory.name, subcategory.id);
     return subcategorySlug === slug || createSlug(subcategory.name) === slug;
   }) || null;
