@@ -25,8 +25,8 @@ const ProductDetailPage: React.FC = () => {
         setProduct(found);
         
         // Track product view for real-time analytics
-        if (found) {
-          trackProductView(found);
+        if (found && found.id) {
+          trackProductView(found.id);
         }
       } catch (error) {
         console.error('Error fetching product:', error);
