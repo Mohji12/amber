@@ -110,8 +110,14 @@ async def get_product_seo(product_id: int, db: Session = Depends(get_db)):
         if product.image_url:
             image_urls.append(product.image_url)
         
-        # Build related product URLs
-        related_urls = [f"/products/{p.id}" for p in related_products]
+        # Import slugify function
+        from app.seo_service import slugify
+        
+        # Build related product URLs with slugs
+        related_urls = []
+        for p in related_products:
+            slug = f"{slugify(p.name)}-{p.id}" if p.name else f"product-{p.id}"
+            related_urls.append(f"/products/{slug}")
         
         # Determine availability
         availability = "InStock"
@@ -122,9 +128,12 @@ async def get_product_seo(product_id: int, db: Session = Depends(get_db)):
             elif "soon" in status_lower or "pre" in status_lower:
                 availability = "PreOrder"
         
-        # Generate SEO
+        # Generate product slug for canonical URL
+        product_slug = f"{slugify(product.name)}-{product.id}" if product.name else f"product-{product.id}"
+        
+        # Generate SEO with slug-based URL
         seo_data = seo_service.generate_complete_seo(
-            url=f"/products/{product_id}",
+            url=f"/products/{product_slug}",
             page_type="product",
             primary_keyword=f"{product.name} export",
             secondary_keywords=[
@@ -170,18 +179,27 @@ async def get_subcategory_seo(subcategory_id: int, db: Session = Depends(get_db)
         if subcategory.category_id:
             category = db.query(models.Category).filter(models.Category.id == subcategory.category_id).first()
         
+        # Import slugify function
+        from app.seo_service import slugify
+        
         # Get products in this subcategory
         products = db.query(models.Product).filter(models.Product.subcategory_id == subcategory_id).limit(10).all()
-        related_urls = [f"/products/{p.id}" for p in products]
+        related_urls = []
+        for p in products:
+            slug = f"{slugify(p.name)}-{p.id}" if p.name else f"product-{p.id}"
+            related_urls.append(f"/products/{slug}")
         
         # Build image URLs
         image_urls = []
         if subcategory.image_url:
             image_urls.append(subcategory.image_url)
         
-        # Generate SEO
+        # Generate subcategory slug for canonical URL
+        subcategory_slug = f"{slugify(subcategory.name)}-{subcategory.id}" if subcategory.name else f"subcategory-{subcategory.id}"
+        
+        # Generate SEO with slug-based URL
         seo_data = seo_service.generate_complete_seo(
-            url=f"/subcategories/{subcategory_id}",
+            url=f"/subcategories/{subcategory_slug}",
             page_type="category",
             primary_keyword=f"{subcategory.name} export",
             secondary_keywords=[
@@ -240,12 +258,18 @@ async def get_blog_seo(blog_id: int, db: Session = Depends(get_db)):
         if not blog:
             raise HTTPException(status_code=404, detail="Blog not found")
         
+        # Import slugify function
+        from app.seo_service import slugify
+        
         # Extract primary keyword from title
         primary_keyword = blog.title.split('-')[0].split('|')[0].strip()
         
-        # Generate SEO
+        # Generate blog slug for canonical URL
+        blog_slug = f"{slugify(blog.title)}-{blog.id}" if blog.title else f"blog-{blog.id}"
+        
+        # Generate SEO with slug-based URL
         seo_data = seo_service.generate_complete_seo(
-            url=f"/blogs/{blog_id}",
+            url=f"/blogs/{blog_slug}",
             page_type="blog",
             primary_keyword=primary_keyword,
             secondary_keywords=[

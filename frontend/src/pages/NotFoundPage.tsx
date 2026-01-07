@@ -80,7 +80,7 @@ const NotFoundPage: React.FC = () => {
                 Contact Us
               </Link>
               <Link
-                to="/about"
+                to="/#about"
                 className="p-3 rounded-lg border border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 transition-colors duration-200 text-gray-700 hover:text-emerald-700"
               >
                 About Us

@@ -16,64 +16,65 @@ const HowToSourceBasmatiRice: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>How to Source and Sample Authentic Basmati Rice: A Practical Guide | Amber Global</title>
+        <title>How to Source and Sample Authentic Basmati Rice: A Practical Guide | Amber Global Trade</title>
         <meta name="description" content="A comprehensive guide to sourcing and sampling authentic Basmati rice. Learn how to find reliable exporters, evaluate samples, handle logistics, and avoid common pitfalls in rice import." />
         <meta name="keywords" content="Basmati rice, sourcing, sampling, authentic Basmati, GI certification, rice export, quality control, FSSAI, EU standards, FDA, APEDA, rice importers, supply chain, food safety, rice varieties, 1121 Basmati, Traditional Basmati, Pusa Basmati" />
-        <meta name="author" content="Amber Global" />
+        <meta name="author" content="Amber Global Trade" />
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
         <meta name="revisit-after" content="7 days" />
 
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://www.amberglobaltrade.com/blogs/how-to-source-basmati-rice" />
+
         {/* Open Graph / Facebook */}
-        <meta property="og:title" content="How to Source and Sample Authentic Basmati Rice: A Practical Guide | Amber Global" />
+        <meta property="og:title" content="How to Source and Sample Authentic Basmati Rice: A Practical Guide | Amber Global Trade" />
         <meta property="og:description" content="A comprehensive guide to sourcing and sampling authentic Basmati rice. Learn how to find reliable exporters, evaluate samples, handle logistics, and avoid common pitfalls in rice import." />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://www.amberglobal.com/blogs/how-to-source-basmati-rice" />
-        <meta property="og:site_name" content="Amber Global" />
+        <meta property="og:url" content="https://www.amberglobaltrade.com/blogs/how-to-source-basmati-rice" />
+        <meta property="og:site_name" content="Amber Global Trade" />
         <meta property="og:locale" content="en_US" />
+        <meta property="og:image" content="https://www.amberglobaltrade.com/assets/og-default.jpg" />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="How to Source and Sample Authentic Basmati Rice: A Practical Guide | Amber Global" />
+        <meta name="twitter:title" content="How to Source and Sample Authentic Basmati Rice: A Practical Guide | Amber Global Trade" />
         <meta name="twitter:description" content="A comprehensive guide to sourcing and sampling authentic Basmati rice. Learn how to find reliable exporters, evaluate samples, handle logistics, and avoid common pitfalls in rice import." />
-        <meta name="twitter:site" content="@AmberGlobal" />
+        <meta name="twitter:site" content="@amberglobaltrade" />
+        <meta name="twitter:image" content="https://www.amberglobaltrade.com/assets/og-default.jpg" />
 
         {/* JSON-LD Structured Data */}
         <script type="application/ld+json">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@type": "Article",
-              "headline": "How to Source and Sample Authentic Basmati Rice: A Practical Guide",
-              "description": "A comprehensive guide to sourcing and sampling authentic Basmati rice. Learn how to find reliable exporters, evaluate samples, handle logistics, and avoid common pitfalls in rice import.",
-              "image": [
-                "/src/assets/rice1.jpg",
-                "/src/assets/rice2.jpg",
-                "/src/assets/rice3.jpg"
-              ],
-              "author": {
-                "@type": "Organization",
-                "name": "Amber Global",
-                "url": "https://www.amberglobal.com"
-              },
-              "publisher": {
-                "@type": "Organization",
-                "name": "Amber Global",
-                "logo": {
-                  "@type": "ImageObject",
-                  "url": "https://www.amberglobal.com/logo.png"
-                }
-              },
-              "datePublished": "2024-12-19",
-              "dateModified": "2024-12-19",
-              "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": "https://www.amberglobal.com/blogs/how-to-source-basmati-rice"
-              },
-              "articleSection": "Agriculture & Food Export",
-              "keywords": "Basmati rice, sourcing, sampling, authentic Basmati, GI certification, rice export, quality control"
-            }
-          `}
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "How to Source and Sample Authentic Basmati Rice: A Practical Guide",
+            "description": "A comprehensive guide to sourcing and sampling authentic Basmati rice. Learn how to find reliable exporters, evaluate samples, handle logistics, and avoid common pitfalls in rice import.",
+            "image": [
+              "https://www.amberglobaltrade.com/assets/og-default.jpg"
+            ],
+            "author": {
+              "@type": "Organization",
+              "name": "Amber Global Trade",
+              "url": "https://www.amberglobaltrade.com"
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "Amber Global Trade",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.amberglobaltrade.com/assets/logo.png"
+              }
+            },
+            "datePublished": "2024-12-19",
+            "dateModified": "2024-12-19",
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": "https://www.amberglobaltrade.com/blogs/how-to-source-basmati-rice"
+            },
+            "articleSection": "Agriculture & Food Export",
+            "keywords": "Basmati rice, sourcing, sampling, authentic Basmati, GI certification, rice export, quality control"
+          })}
         </script>
       </Helmet>
 
@@ -428,8 +429,8 @@ const HowToSourceBasmatiRice: React.FC = () => {
             
             <p className="text-lg text-gray-700 mb-6 leading-relaxed">
               Customs delays are rare for small quantities if documentation is clean. Average delivery time is 4–8 business days, depending on origin and destination.
-              <Link to="/blogs/documentation-handling" className="text-blue-600 hover:underline ml-1">
-                Know More about how documentation should be handled
+              <Link to="/contact" className="text-blue-600 hover:underline ml-1">
+                Contact us for documentation assistance
               </Link>
             </p>
           </section>

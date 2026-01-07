@@ -16,64 +16,65 @@ const ExportOrganicGingerPowder: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>2025 Guide: How to Export Organic Ginger Powder from India—Compliance, Documentation, and Success | Amber Global</title>
+        <title>2025 Guide: How to Export Organic Ginger Powder from India—Compliance, Documentation, and Success | Amber Global Trade</title>
         <meta name="description" content="Master the process of exporting organic ginger powder from India. This guide covers mandatory registrations (IEC, CRES), organic certification, essential documentation, and common pitfalls to ensure your business thrives in global markets." />
         <meta name="keywords" content="export organic ginger powder India, ginger powder export business, organic certification NPOP, IEC registration, CRES registration, ginger powder compliance, export documentation" />
-        <meta name="author" content="Amber Global" />
+        <meta name="author" content="Amber Global Trade" />
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
         <meta name="revisit-after" content="7 days" />
 
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://www.amberglobaltrade.com/blogs/export-organic-ginger-powder" />
+
         {/* Open Graph / Facebook */}
-        <meta property="og:title" content="2025 Guide: How to Export Organic Ginger Powder from India—Compliance, Documentation, and Success | Amber Global" />
+        <meta property="og:title" content="2025 Guide: How to Export Organic Ginger Powder from India—Compliance, Documentation, and Success | Amber Global Trade" />
         <meta property="og:description" content="Master the process of exporting organic ginger powder from India. This guide covers mandatory registrations (IEC, CRES), organic certification, essential documentation, and common pitfalls to ensure your business thrives in global markets." />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://www.amberglobal.com/blogs/export-organic-ginger-powder" />
-        <meta property="og:site_name" content="Amber Global" />
+        <meta property="og:url" content="https://www.amberglobaltrade.com/blogs/export-organic-ginger-powder" />
+        <meta property="og:site_name" content="Amber Global Trade" />
         <meta property="og:locale" content="en_US" />
+        <meta property="og:image" content="https://www.amberglobaltrade.com/assets/og-default.jpg" />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="2025 Guide: How to Export Organic Ginger Powder from India—Compliance, Documentation, and Success | Amber Global" />
+        <meta name="twitter:title" content="2025 Guide: How to Export Organic Ginger Powder from India—Compliance, Documentation, and Success | Amber Global Trade" />
         <meta name="twitter:description" content="Master the process of exporting organic ginger powder from India. This guide covers mandatory registrations (IEC, CRES), organic certification, essential documentation, and common pitfalls to ensure your business thrives in global markets." />
-        <meta name="twitter:site" content="@AmberGlobal" />
+        <meta name="twitter:site" content="@amberglobaltrade" />
+        <meta name="twitter:image" content="https://www.amberglobaltrade.com/assets/og-default.jpg" />
 
         {/* JSON-LD Structured Data */}
         <script type="application/ld+json">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@type": "Article",
-              "headline": "2025 Guide: How to Export Organic Ginger Powder from India—Compliance, Documentation, and Success",
-              "description": "Master the process of exporting organic ginger powder from India. This guide covers mandatory registrations (IEC, CRES), organic certification, essential documentation, and common pitfalls to ensure your business thrives in global markets.",
-              "image": [
-                "/src/assets/rice1.jpg",
-                "/src/assets/rice2.jpg",
-                "/src/assets/rice3.jpg"
-              ],
-              "author": {
-                "@type": "Organization",
-                "name": "Amber Global",
-                "url": "https://www.amberglobal.com"
-              },
-              "publisher": {
-                "@type": "Organization",
-                "name": "Amber Global",
-                "logo": {
-                  "@type": "ImageObject",
-                  "url": "https://www.amberglobal.com/logo.png"
-                }
-              },
-              "datePublished": "2024-12-19",
-              "dateModified": "2024-12-19",
-              "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": "https://www.amberglobal.com/blogs/export-organic-ginger-powder"
-              },
-              "articleSection": "Agriculture & Food Export",
-              "keywords": "export organic ginger powder India, ginger powder export business, organic certification NPOP, IEC registration, CRES registration, ginger powder compliance, export documentation"
-            }
-          `}
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "2025 Guide: How to Export Organic Ginger Powder from India—Compliance, Documentation, and Success",
+            "description": "Master the process of exporting organic ginger powder from India. This guide covers mandatory registrations (IEC, CRES), organic certification, essential documentation, and common pitfalls to ensure your business thrives in global markets.",
+            "image": [
+              "https://www.amberglobaltrade.com/assets/og-default.jpg"
+            ],
+            "author": {
+              "@type": "Organization",
+              "name": "Amber Global Trade",
+              "url": "https://www.amberglobaltrade.com"
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "Amber Global Trade",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.amberglobaltrade.com/assets/logo.png"
+              }
+            },
+            "datePublished": "2024-12-19",
+            "dateModified": "2024-12-19",
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": "https://www.amberglobaltrade.com/blogs/export-organic-ginger-powder"
+            },
+            "articleSection": "Agriculture & Food Export",
+            "keywords": "export organic ginger powder India, ginger powder export business, organic certification NPOP, IEC registration, CRES registration, ginger powder compliance, export documentation"
+          })}
         </script>
       </Helmet>
 

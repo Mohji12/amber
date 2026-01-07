@@ -16,64 +16,65 @@ const PrivateLabelingGingerPowder: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Private Labeling Ginger Powder: Complete Guide to Building Your Brand | Amber Global</title>
+        <title>Private Labeling Ginger Powder: Complete Guide to Building Your Brand | Amber Global Trade</title>
         <meta name="description" content="Complete guide to private labeling ginger powder. Learn how to build your brand, source quality products, handle compliance, and scale your business with custom packaging and branding." />
         <meta name="keywords" content="private labeling ginger powder, ginger powder branding, custom packaging, ginger powder business, private label spices, ginger powder sourcing, brand building" />
-        <meta name="author" content="Amber Global" />
+        <meta name="author" content="Amber Global Trade" />
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
         <meta name="revisit-after" content="7 days" />
+
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://www.amberglobaltrade.com/blogs/private-labeling-ginger-powder" />
         
         {/* Open Graph / Facebook */}
-        <meta property="og:title" content="Private Labeling Ginger Powder: Complete Guide to Building Your Brand | Amber Global" />
+        <meta property="og:title" content="Private Labeling Ginger Powder: Complete Guide to Building Your Brand | Amber Global Trade" />
         <meta property="og:description" content="Complete guide to private labeling ginger powder. Learn how to build your brand, source quality products, handle compliance, and scale your business with custom packaging and branding." />
         <meta property="og:type" content="article" />
         <meta property="og:url" content="https://www.amberglobaltrade.com/blogs/private-labeling-ginger-powder" />
-        <meta property="og:site_name" content="Amber Global" />
+        <meta property="og:site_name" content="Amber Global Trade" />
         <meta property="og:locale" content="en_US" />
+        <meta property="og:image" content="https://www.amberglobaltrade.com/assets/og-default.jpg" />
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Private Labeling Ginger Powder: Complete Guide to Building Your Brand | Amber Global" />
+        <meta name="twitter:title" content="Private Labeling Ginger Powder: Complete Guide to Building Your Brand | Amber Global Trade" />
         <meta name="twitter:description" content="Complete guide to private labeling ginger powder. Learn how to build your brand, source quality products, handle compliance, and scale your business with custom packaging and branding." />
-        <meta name="twitter:site" content="@AmberGlobal" />
+        <meta name="twitter:site" content="@amberglobaltrade" />
+        <meta name="twitter:image" content="https://www.amberglobaltrade.com/assets/og-default.jpg" />
         
         {/* JSON-LD Structured Data */}
         <script type="application/ld+json">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@type": "Article",
-              "headline": "Private Labeling Ginger Powder: Complete Guide to Building Your Brand",
-              "description": "Complete guide to private labeling ginger powder. Learn how to build your brand, source quality products, handle compliance, and scale your business with custom packaging and branding.",
-              "image": [
-                "/src/assets/rice1.jpg",
-                "/src/assets/rice2.jpg",
-                "/src/assets/rice3.jpg"
-              ],
-              "author": {
-                "@type": "Organization",
-                "name": "Amber Global",
-                "url": "https://www.amberglobaltrade.com"
-              },
-              "publisher": {
-                "@type": "Organization",
-                "name": "Amber Global",
-                "logo": {
-                  "@type": "ImageObject",
-                  "url": "https://www.amberglobaltrade.com/logo.png"
-                }
-              },
-              "datePublished": "2024-12-19",
-              "dateModified": "2024-12-19",
-              "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": "https://www.amberglobaltrade.com/blogs/private-labeling-ginger-powder"
-              },
-              "articleSection": "Agriculture & Food Export",
-              "keywords": "private labeling ginger powder, ginger powder branding, custom packaging, ginger powder business, private label spices, ginger powder sourcing, brand building"
-            }
-          `}
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "Private Labeling Ginger Powder: Complete Guide to Building Your Brand",
+            "description": "Complete guide to private labeling ginger powder. Learn how to build your brand, source quality products, handle compliance, and scale your business with custom packaging and branding.",
+            "image": [
+              "https://www.amberglobaltrade.com/assets/og-default.jpg"
+            ],
+            "author": {
+              "@type": "Organization",
+              "name": "Amber Global Trade",
+              "url": "https://www.amberglobaltrade.com"
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "Amber Global Trade",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.amberglobaltrade.com/assets/logo.png"
+              }
+            },
+            "datePublished": "2024-12-19",
+            "dateModified": "2024-12-19",
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": "https://www.amberglobaltrade.com/blogs/private-labeling-ginger-powder"
+            },
+            "articleSection": "Agriculture & Food Export",
+            "keywords": "private labeling ginger powder, ginger powder branding, custom packaging, ginger powder business, private label spices, ginger powder sourcing, brand building"
+          })}
         </script>
       </Helmet>
 

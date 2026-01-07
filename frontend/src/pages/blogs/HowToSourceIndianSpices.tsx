@@ -16,64 +16,65 @@ const HowToSourceIndianSpices: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>How to Source and Sample Authentic Indian Spices: A Practical Guide (2025 Edition) | Amber Global</title>
+        <title>How to Source and Sample Authentic Indian Spices: A Practical Guide (2025 Edition) | Amber Global Trade</title>
         <meta name="description" content="Complete 2025 guide to sourcing and sampling authentic Indian spices. Learn about quality assessment, compliance, traceability, and avoiding common pitfalls in spice import." />
         <meta name="keywords" content="Indian spices sourcing, spice sampling, spice quality assessment, spice import guide, spice compliance, spice traceability, authentic spices" />
-        <meta name="author" content="Amber Global" />
+        <meta name="author" content="Amber Global Trade" />
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
         <meta name="revisit-after" content="7 days" />
 
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://www.amberglobaltrade.com/blogs/how-to-source-indian-spices" />
+
         {/* Open Graph / Facebook */}
-        <meta property="og:title" content="How to Source and Sample Authentic Indian Spices: A Practical Guide (2025 Edition) | Amber Global" />
+        <meta property="og:title" content="How to Source and Sample Authentic Indian Spices: A Practical Guide (2025 Edition) | Amber Global Trade" />
         <meta property="og:description" content="Complete 2025 guide to sourcing and sampling authentic Indian spices. Learn about quality assessment, compliance, traceability, and avoiding common pitfalls in spice import." />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://www.amberglobal.com/blogs/how-to-source-indian-spices" />
-        <meta property="og:site_name" content="Amber Global" />
+        <meta property="og:url" content="https://www.amberglobaltrade.com/blogs/how-to-source-indian-spices" />
+        <meta property="og:site_name" content="Amber Global Trade" />
         <meta property="og:locale" content="en_US" />
+        <meta property="og:image" content="https://www.amberglobaltrade.com/assets/og-default.jpg" />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="How to Source and Sample Authentic Indian Spices: A Practical Guide (2025 Edition) | Amber Global" />
+        <meta name="twitter:title" content="How to Source and Sample Authentic Indian Spices: A Practical Guide (2025 Edition) | Amber Global Trade" />
         <meta name="twitter:description" content="Complete 2025 guide to sourcing and sampling authentic Indian spices. Learn about quality assessment, compliance, traceability, and avoiding common pitfalls in spice import." />
-        <meta name="twitter:site" content="@AmberGlobal" />
+        <meta name="twitter:site" content="@amberglobaltrade" />
+        <meta name="twitter:image" content="https://www.amberglobaltrade.com/assets/og-default.jpg" />
 
         {/* JSON-LD Structured Data */}
         <script type="application/ld+json">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@type": "Article",
-              "headline": "How to Source and Sample Authentic Indian Spices: A Practical Guide (2025 Edition)",
-              "description": "Complete 2025 guide to sourcing and sampling authentic Indian spices. Learn about quality assessment, compliance, traceability, and avoiding common pitfalls in spice import.",
-              "image": [
-                "/src/assets/rice1.jpg",
-                "/src/assets/rice2.jpg",
-                "/src/assets/rice3.jpg"
-              ],
-              "author": {
-                "@type": "Organization",
-                "name": "Amber Global",
-                "url": "https://www.amberglobal.com"
-              },
-              "publisher": {
-                "@type": "Organization",
-                "name": "Amber Global",
-                "logo": {
-                  "@type": "ImageObject",
-                  "url": "https://www.amberglobal.com/logo.png"
-                }
-              },
-              "datePublished": "2024-12-19",
-              "dateModified": "2024-12-19",
-              "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": "https://www.amberglobal.com/blogs/how-to-source-indian-spices"
-              },
-              "articleSection": "Agriculture & Food Export",
-              "keywords": "Indian spices sourcing, spice sampling, spice quality assessment, spice import guide, spice compliance, spice traceability, authentic spices"
-            }
-          `}
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "How to Source and Sample Authentic Indian Spices: A Practical Guide (2025 Edition)",
+            "description": "Complete 2025 guide to sourcing and sampling authentic Indian spices. Learn about quality assessment, compliance, traceability, and avoiding common pitfalls in spice import.",
+            "image": [
+              "https://www.amberglobaltrade.com/assets/og-default.jpg"
+            ],
+            "author": {
+              "@type": "Organization",
+              "name": "Amber Global Trade",
+              "url": "https://www.amberglobaltrade.com"
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "Amber Global Trade",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.amberglobaltrade.com/assets/logo.png"
+              }
+            },
+            "datePublished": "2024-12-19",
+            "dateModified": "2024-12-19",
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": "https://www.amberglobaltrade.com/blogs/how-to-source-indian-spices"
+            },
+            "articleSection": "Agriculture & Food Export",
+            "keywords": "Indian spices sourcing, spice sampling, spice quality assessment, spice import guide, spice compliance, spice traceability, authentic spices"
+          })}
         </script>
       </Helmet>
 

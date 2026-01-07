@@ -10,7 +10,7 @@ from urllib.parse import quote
 
 # Global SEO Configuration
 BRAND_NAME = "Amber Global Trade"
-SITE_URL = "https://amberglobaltrade.com"
+SITE_URL = "https://www.amberglobaltrade.com"
 DEFAULT_CURRENCY = "USD"
 DEFAULT_COUNTRY_OF_ORIGIN = "India"
 DEFAULT_TARGET_MARKETS = ["USA", "UAE", "EU", "Singapore", "UK", "Australia", "Canada"]
@@ -770,6 +770,27 @@ Whether you're a distributor, retailer, or private label brand, we provide the p
                 "dateModified": datetime.now().isoformat()
             }
     
+    def generate_faq_schema(self, faqs: List[Dict[str, str]]) -> Dict[str, Any]:
+        """Generate FAQPage schema from FAQ list"""
+        if not faqs or len(faqs) == 0:
+            return {}
+        
+        return {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": faq["question"],
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": faq["answer"]
+                    }
+                }
+                for faq in faqs
+            ]
+        }
+    
     def generate_social_meta(
         self,
         title: str,
@@ -893,11 +914,29 @@ Whether you're a distributor, retailer, or private label brand, we provide the p
         )
         
         # Generate schema
-        schema = self.generate_schema(
+        main_schema = self.generate_schema(
             page_type, url, meta_title, meta_description,
             product_name, product_data if page_type == "product" else None,
             image_urls, category_name
         )
+        
+        # Generate FAQ schema if FAQs exist
+        faq_schema = self.generate_faq_schema(faqs) if faqs else {}
+        
+        # Merge schemas - if main schema has @graph, add FAQ to it, otherwise combine
+        if faq_schema and "@type" in faq_schema:
+            if "@graph" in main_schema:
+                # Add FAQ schema to graph
+                main_schema["@graph"].append(faq_schema)
+                schema = main_schema
+            else:
+                # Combine schemas in a graph
+                schema = {
+                    "@context": "https://schema.org",
+                    "@graph": [main_schema, faq_schema]
+                }
+        else:
+            schema = main_schema
         
         # Generate social meta
         social_meta = self.generate_social_meta(

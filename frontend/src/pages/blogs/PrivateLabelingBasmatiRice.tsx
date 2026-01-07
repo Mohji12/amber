@@ -16,64 +16,65 @@ const PrivateLabelingBasmatiRice: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Guide for Private Labeling in Wholesale Basmati Rice in 2025: Building Your Brand Without Owning a Mill | Amber Global</title>
+        <title>Guide for Private Labeling in Wholesale Basmati Rice in 2025: Building Your Brand Without Owning a Mill | Amber Global Trade</title>
         <meta name="description" content="Complete guide to private labeling in wholesale Basmati rice. Learn how to build your brand without owning a mill, step-by-step process, compliance requirements, and market trends for 2025." />
         <meta name="keywords" content="private labeling, Basmati rice, wholesale, brand building, rice export, private label rice, rice packaging, rice certification, FSSAI, FDA, BRC, ISO 22000, rice compliance, rice branding, rice mill, rice manufacturing" />
-        <meta name="author" content="Amber Global" />
+        <meta name="author" content="Amber Global Trade" />
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
         <meta name="revisit-after" content="7 days" />
 
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://www.amberglobaltrade.com/blogs/private-labeling-basmati-rice" />
+
         {/* Open Graph / Facebook */}
-        <meta property="og:title" content="Guide for Private Labeling in Wholesale Basmati Rice in 2025: Building Your Brand Without Owning a Mill | Amber Global" />
+        <meta property="og:title" content="Guide for Private Labeling in Wholesale Basmati Rice in 2025: Building Your Brand Without Owning a Mill | Amber Global Trade" />
         <meta property="og:description" content="Complete guide to private labeling in wholesale Basmati rice. Learn how to build your brand without owning a mill, step-by-step process, compliance requirements, and market trends for 2025." />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://www.amberglobal.com/blogs/private-labeling-basmati-rice" />
-        <meta property="og:site_name" content="Amber Global" />
+        <meta property="og:url" content="https://www.amberglobaltrade.com/blogs/private-labeling-basmati-rice" />
+        <meta property="og:site_name" content="Amber Global Trade" />
         <meta property="og:locale" content="en_US" />
+        <meta property="og:image" content="https://www.amberglobaltrade.com/assets/og-default.jpg" />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Guide for Private Labeling in Wholesale Basmati Rice in 2025: Building Your Brand Without Owning a Mill | Amber Global" />
+        <meta name="twitter:title" content="Guide for Private Labeling in Wholesale Basmati Rice in 2025: Building Your Brand Without Owning a Mill | Amber Global Trade" />
         <meta name="twitter:description" content="Complete guide to private labeling in wholesale Basmati rice. Learn how to build your brand without owning a mill, step-by-step process, compliance requirements, and market trends for 2025." />
-        <meta name="twitter:site" content="@AmberGlobal" />
+        <meta name="twitter:site" content="@amberglobaltrade" />
+        <meta name="twitter:image" content="https://www.amberglobaltrade.com/assets/og-default.jpg" />
 
         {/* JSON-LD Structured Data */}
         <script type="application/ld+json">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@type": "Article",
-              "headline": "Guide for Private Labeling in Wholesale Basmati Rice in 2025: Building Your Brand Without Owning a Mill",
-              "description": "Complete guide to private labeling in wholesale Basmati rice. Learn how to build your brand without owning a mill, step-by-step process, compliance requirements, and market trends for 2025.",
-              "image": [
-                "/src/assets/rice1.jpg",
-                "/src/assets/rice2.jpg",
-                "/src/assets/rice3.jpg"
-              ],
-              "author": {
-                "@type": "Organization",
-                "name": "Amber Global",
-                "url": "https://www.amberglobal.com"
-              },
-              "publisher": {
-                "@type": "Organization",
-                "name": "Amber Global",
-                "logo": {
-                  "@type": "ImageObject",
-                  "url": "https://www.amberglobal.com/logo.png"
-                }
-              },
-              "datePublished": "2024-12-19",
-              "dateModified": "2024-12-19",
-              "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": "https://www.amberglobal.com/blogs/private-labeling-basmati-rice"
-              },
-              "articleSection": "Agriculture & Food Export",
-              "keywords": "private labeling, Basmati rice, wholesale, brand building, rice export, private label rice, rice packaging, rice certification"
-            }
-          `}
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "Guide for Private Labeling in Wholesale Basmati Rice in 2025: Building Your Brand Without Owning a Mill",
+            "description": "Complete guide to private labeling in wholesale Basmati rice. Learn how to build your brand without owning a mill, step-by-step process, compliance requirements, and market trends for 2025.",
+            "image": [
+              "https://www.amberglobaltrade.com/assets/og-default.jpg"
+            ],
+            "author": {
+              "@type": "Organization",
+              "name": "Amber Global Trade",
+              "url": "https://www.amberglobaltrade.com"
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "Amber Global Trade",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.amberglobaltrade.com/assets/logo.png"
+              }
+            },
+            "datePublished": "2024-12-19",
+            "dateModified": "2024-12-19",
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": "https://www.amberglobaltrade.com/blogs/private-labeling-basmati-rice"
+            },
+            "articleSection": "Agriculture & Food Export",
+            "keywords": "private labeling, Basmati rice, wholesale, brand building, rice export, private label rice, rice packaging, rice certification"
+          })}
         </script>
       </Helmet>
 

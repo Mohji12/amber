@@ -16,64 +16,65 @@ const BasmatiRiceExportBusiness: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>2025 Guide: How to Start a Compliant Basmati Rice Export Business from India | Amber Global</title>
+        <title>2025 Guide: How to Start a Compliant Basmati Rice Export Business from India | Amber Global Trade</title>
         <meta name="description" content="Complete 2025 guide to starting a compliant Basmati rice export business from India. Learn about IEC renewal, APEDA registration, FSSAI compliance, digital traceability, and export documentation." />
         <meta name="keywords" content="Basmati rice export business, IEC renewal 2025, APEDA registration, FSSAI compliance, rice export India, digital traceability, export documentation, rice export compliance" />
-        <meta name="author" content="Amber Global" />
+        <meta name="author" content="Amber Global Trade" />
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
         <meta name="revisit-after" content="7 days" />
 
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://www.amberglobaltrade.com/blogs/basmati-rice-export-business" />
+
         {/* Open Graph / Facebook */}
-        <meta property="og:title" content="2025 Guide: How to Start a Compliant Basmati Rice Export Business from India | Amber Global" />
+        <meta property="og:title" content="2025 Guide: How to Start a Compliant Basmati Rice Export Business from India | Amber Global Trade" />
         <meta property="og:description" content="Complete 2025 guide to starting a compliant Basmati rice export business from India. Learn about IEC renewal, APEDA registration, FSSAI compliance, digital traceability, and export documentation." />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://www.amberglobal.com/blogs/basmati-rice-export-business" />
-        <meta property="og:site_name" content="Amber Global" />
+        <meta property="og:url" content="https://www.amberglobaltrade.com/blogs/basmati-rice-export-business" />
+        <meta property="og:site_name" content="Amber Global Trade" />
         <meta property="og:locale" content="en_US" />
+        <meta property="og:image" content="https://www.amberglobaltrade.com/assets/og-default.jpg" />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="2025 Guide: How to Start a Compliant Basmati Rice Export Business from India | Amber Global" />
+        <meta name="twitter:title" content="2025 Guide: How to Start a Compliant Basmati Rice Export Business from India | Amber Global Trade" />
         <meta name="twitter:description" content="Complete 2025 guide to starting a compliant Basmati rice export business from India. Learn about IEC renewal, APEDA registration, FSSAI compliance, digital traceability, and export documentation." />
-        <meta name="twitter:site" content="@AmberGlobal" />
+        <meta name="twitter:site" content="@amberglobaltrade" />
+        <meta name="twitter:image" content="https://www.amberglobaltrade.com/assets/og-default.jpg" />
 
         {/* JSON-LD Structured Data */}
         <script type="application/ld+json">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@type": "Article",
-              "headline": "2025 Guide: How to Start a Compliant Basmati Rice Export Business from India",
-              "description": "Complete 2025 guide to starting a compliant Basmati rice export business from India. Learn about IEC renewal, APEDA registration, FSSAI compliance, digital traceability, and export documentation.",
-              "image": [
-                "/src/assets/rice1.jpg",
-                "/src/assets/rice2.jpg",
-                "/src/assets/rice3.jpg"
-              ],
-              "author": {
-                "@type": "Organization",
-                "name": "Amber Global",
-                "url": "https://www.amberglobal.com"
-              },
-              "publisher": {
-                "@type": "Organization",
-                "name": "Amber Global",
-                "logo": {
-                  "@type": "ImageObject",
-                  "url": "https://www.amberglobal.com/logo.png"
-                }
-              },
-              "datePublished": "2024-12-19",
-              "dateModified": "2024-12-19",
-              "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": "https://www.amberglobal.com/blogs/basmati-rice-export-business"
-              },
-              "articleSection": "Agriculture & Food Export",
-              "keywords": "Basmati rice export business, IEC renewal 2025, APEDA registration, FSSAI compliance, rice export India, digital traceability, export documentation"
-            }
-          `}
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "2025 Guide: How to Start a Compliant Basmati Rice Export Business from India",
+            "description": "Complete 2025 guide to starting a compliant Basmati rice export business from India. Learn about IEC renewal, APEDA registration, FSSAI compliance, digital traceability, and export documentation.",
+            "image": [
+              "https://www.amberglobaltrade.com/assets/og-default.jpg"
+            ],
+            "author": {
+              "@type": "Organization",
+              "name": "Amber Global Trade",
+              "url": "https://www.amberglobaltrade.com"
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "Amber Global Trade",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.amberglobaltrade.com/assets/logo.png"
+              }
+            },
+            "datePublished": "2024-12-19",
+            "dateModified": "2024-12-19",
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": "https://www.amberglobaltrade.com/blogs/basmati-rice-export-business"
+            },
+            "articleSection": "Agriculture & Food Export",
+            "keywords": "Basmati rice export business, IEC renewal 2025, APEDA registration, FSSAI compliance, rice export India, digital traceability, export documentation"
+          })}
         </script>
       </Helmet>
 
