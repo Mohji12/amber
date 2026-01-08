@@ -1,16 +1,19 @@
 import React from 'react';
-import { MapPin, Mail, Globe, Award, Truck, Shield, HelpCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { MapPin, Mail, Globe, Award, Truck, Shield, HelpCircle, Sitemap } from 'lucide-react';
 import logo from '../assets/IMG_20250714_151848.jpg';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const quickLinks = [
-    { name: 'Get a Quote', href: '#contact' },
-    { name: 'Products', href: '#products' },
-    { name: 'About Us', href: '#about' },
-    { name: 'How We Work', href: '#howwework' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Get a Quote', href: '#contact', isAnchor: true },
+    { name: 'Products', href: '/products', isAnchor: false },
+    { name: 'Blogs', href: '/blogs', isAnchor: false },
+    { name: 'About Us', href: '#about', isAnchor: true },
+    { name: 'How We Work', href: '#howwework', isAnchor: true },
+    { name: 'Contact', href: '#contact', isAnchor: true },
+    { name: 'Sitemap', href: '/sitemap.xml', isAnchor: false, isExternal: true },
   ];
 
   const productCategories = [
@@ -73,12 +76,31 @@ const Footer = () => {
             <ul className="space-y-3">
               {quickLinks.map((link, index) => (
                 <li key={index}>
-                  <button
-                    onClick={() => scrollToSection(link.href)}
-                    className="text-gray-300 hover:text-green-400 transition-colors"
-                  >
-                    {link.name}
-                  </button>
+                  {link.isExternal ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-300 hover:text-green-400 transition-colors flex items-center space-x-2"
+                    >
+                      <span>{link.name}</span>
+                      <Sitemap size={14} className="text-green-400" />
+                    </a>
+                  ) : link.isAnchor ? (
+                    <button
+                      onClick={() => scrollToSection(link.href)}
+                      className="text-gray-300 hover:text-green-400 transition-colors"
+                    >
+                      {link.name}
+                    </button>
+                  ) : (
+                    <Link
+                      to={link.href}
+                      className="text-gray-300 hover:text-green-400 transition-colors"
+                    >
+                      {link.name}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -159,10 +181,14 @@ const Footer = () => {
             <div className="text-gray-400 text-sm">
               © {currentYear} Amber Global Export-Import Platform. All rights reserved.
             </div>
-            <div className="flex space-x-6 text-sm text-gray-400">
-              <span>Privacy Policy</span>
-              <span>Terms of Service</span>
-              <span>Export Terms</span>
+            <div className="flex flex-wrap gap-4 text-sm text-gray-400">
+              <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer" className="hover:text-green-400 transition-colors flex items-center space-x-1">
+                <Sitemap size={14} />
+                <span>Sitemap</span>
+              </a>
+              <span className="cursor-pointer hover:text-green-400 transition-colors">Privacy Policy</span>
+              <span className="cursor-pointer hover:text-green-400 transition-colors">Terms of Service</span>
+              <span className="cursor-pointer hover:text-green-400 transition-colors">Export Terms</span>
             </div>
           </div>
         </div>
