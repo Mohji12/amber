@@ -9,6 +9,7 @@ interface FAQItem {
 interface FAQProps {
   faqs?: FAQItem[];
   className?: string;
+  seoFAQs?: FAQItem[]; // SEO-generated FAQs take priority
 }
 
 const defaultFAQs: FAQItem[] = [
@@ -46,8 +47,11 @@ const defaultFAQs: FAQItem[] = [
   }
 ];
 
-const FAQ: React.FC<FAQProps> = ({ faqs = defaultFAQs, className = '' }) => {
+const FAQ: React.FC<FAQProps> = ({ faqs = defaultFAQs, className = '', seoFAQs }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  // Use SEO FAQs if provided, otherwise use regular FAQs
+  const displayFAQs = seoFAQs && seoFAQs.length > 0 ? seoFAQs : faqs;
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -66,7 +70,7 @@ const FAQ: React.FC<FAQProps> = ({ faqs = defaultFAQs, className = '' }) => {
         </div>
 
         <div className="space-y-4">
-          {faqs.map((faq, index) => (
+          {displayFAQs.map((faq, index) => (
             <div
               key={index}
               className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden"

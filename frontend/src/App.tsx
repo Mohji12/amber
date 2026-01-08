@@ -48,6 +48,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import LoadingSpinner from './components/LoadingSpinner';
 import { LazyOtpTestPage } from './components/LazyRoutes';
 import NotFoundPage from './pages/NotFoundPage';
+import GoogleAnalytics from './components/GoogleAnalytics';
 
 // Constants
 const SCROLL_DELAY_MS = 300; // Delay before scrolling to allow DOM to render
@@ -214,6 +215,7 @@ function App() {
       <Router>
         <ErrorBoundary>
           <ScrollToTop />
+          <GoogleAnalytics />
           <div className="min-h-screen bg-white">
           <Header />
           <Routes>

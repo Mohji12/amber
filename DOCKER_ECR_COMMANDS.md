@@ -1,180 +1,248 @@
-# Docker and ECR Commands for Amber
+# Docker & ECR Commands - Amber Repository
 
-## Configuration
-- **AWS Account ID**: 474833638797
-- **Repository Name**: amber
-- **Region**: ap-south-1
-- **ECR Repository URI**: `474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber`
-
----
-
-## Prerequisites
-
-1. **AWS CLI installed and configured**
-   ```bash
-   aws --version
-   ```
-
-2. **Docker installed and running**
-   ```bash
-   docker --version
-   ```
-
-3. **Create ECR Repository** (if not exists)
-   ```bash
-   aws ecr create-repository --repository-name amber --region ap-south-1
-   ```
+## 📋 Configuration
+- **AWS Account ID:** `474833638797`
+- **ECR Repository:** `amber`
+- **AWS Region:** `ap-south-1`
+- **ECR URI:** `474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber`
 
 ---
 
-## Step-by-Step Commands
+## 🔐 Step 1: Login to Amazon ECR
 
-### 1. Authenticate Docker to ECR
-
-**Linux/Mac (Bash):**
 ```bash
 aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 474833638797.dkr.ecr.ap-south-1.amazonaws.com
 ```
 
-**Windows (PowerShell):**
-```powershell
-aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 474833638797.dkr.ecr.ap-south-1.amazonaws.com
+**Expected Output:** `Login Succeeded`
+
+---
+
+## 📦 Step 2: Create ECR Repository (First Time Only)
+
+```bash
+aws ecr create-repository \
+    --repository-name amber \
+    --region ap-south-1 \
+    --image-scanning-configuration scanOnPush=true \
+    --encryption-configuration encryptionType=AES256
 ```
 
-### 2. Build Docker Image
+---
 
-Navigate to the `backend` directory first:
+## 🏷️ Step 3: Tag Docker Image
+
 ```bash
-cd backend
-```
-
-**Build the image:**
-```bash
-docker build -t amber:latest -f Dockerfile .
-```
-
-**Or with a specific tag:**
-```bash
-docker build -t amber:v1.0.0 -f Dockerfile .
-```
-
-### 3. Tag Image for ECR
-
-**For latest tag:**
-```bash
+# Tag with 'latest'
 docker tag amber:latest 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:latest
+
+# Tag with timestamp
+docker tag amber:latest 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:$(date +%Y%m%d-%H%M%S)
+
+# Tag with version (example)
+docker tag amber:latest 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:v1.0.0
 ```
 
-**For version tag:**
-```bash
-docker tag amber:v1.0.0 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:v1.0.0
-```
+---
 
-### 4. Push Image to ECR
+## 📤 Step 4: Push Image to ECR
 
-**Push latest:**
 ```bash
+# Push latest tag
 docker push 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:latest
-```
 
-**Push version:**
-```bash
+# Push timestamp tag
+docker push 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:$(date +%Y%m%d-%H%M%S)
+
+# Push version tag
 docker push 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:v1.0.0
 ```
 
 ---
 
-## One-Line Commands
+## 🚀 Combined Commands (Tag + Push)
 
-### Linux/Mac (Bash)
+### Tag and Push Latest
 ```bash
-cd backend && aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 474833638797.dkr.ecr.ap-south-1.amazonaws.com && docker build -t amber:latest -f Dockerfile . && docker tag amber:latest 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:latest && docker push 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:latest
+docker tag amber:latest 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:latest && \
+docker push 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:latest
 ```
 
-### Windows (PowerShell)
-```powershell
-cd backend; aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 474833638797.dkr.ecr.ap-south-1.amazonaws.com; docker build -t amber:latest -f Dockerfile .; docker tag amber:latest 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:latest; docker push 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:latest
+### Tag and Push with Timestamp
+```bash
+docker tag amber:latest 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:$(date +%Y%m%d-%H%M%S) && \
+docker push 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:$(date +%Y%m%d-%H%M%S)
+```
+
+### Complete: Login + Tag + Push
+```bash
+aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 474833638797.dkr.ecr.ap-south-1.amazonaws.com && \
+docker tag amber:latest 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:latest && \
+docker push 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:latest
 ```
 
 ---
 
-## Verify Commands
+## 📥 Pull Image from ECR
 
-### List Images in ECR
 ```bash
-aws ecr describe-images --repository-name amber --region ap-south-1
+# Pull latest
+docker pull 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:latest
+
+# Pull specific tag
+docker pull 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:v1.0.0
 ```
 
-### List Local Docker Images
+---
+
+## 🔍 List Images in ECR
+
 ```bash
-docker images | grep amber
+# List all images
+aws ecr list-images --repository-name amber --region ap-south-1
+
+# List with details
+aws ecr describe-images --repository-name amber --region ap-south-1 --output table
 ```
 
-### Check ECR Repository
+---
+
+## 🗑️ Delete Image from ECR
+
+```bash
+# Delete specific tag
+aws ecr batch-delete-image \
+    --repository-name amber \
+    --region ap-south-1 \
+    --image-ids imageTag=old-tag
+
+# Delete multiple tags
+aws ecr batch-delete-image \
+    --repository-name amber \
+    --region ap-south-1 \
+    --image-ids imageTag=tag1 imageTag=tag2
+```
+
+---
+
+## 🚀 Deployment Script (Bash)
+
+Create `deploy-amber.sh`:
+
+```bash
+#!/bin/bash
+
+set -e
+
+ECR_URI="474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber"
+AWS_REGION="ap-south-1"
+TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+
+echo "=== Login to ECR ==="
+aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_URI}
+
+echo "=== Tag Image ==="
+docker tag amber:latest ${ECR_URI}:latest
+docker tag amber:latest ${ECR_URI}:${TIMESTAMP}
+
+echo "=== Push Image ==="
+docker push ${ECR_URI}:latest
+docker push ${ECR_URI}:${TIMESTAMP}
+
+echo "=== Deployment Complete ==="
+echo "Image: ${ECR_URI}:latest"
+echo "Timestamp: ${TIMESTAMP}"
+```
+
+**Run:**
+```bash
+chmod +x deploy-amber.sh
+./deploy-amber.sh
+```
+
+---
+
+## 📋 Deployment Script (PowerShell)
+
+Create `deploy-amber.ps1`:
+
+```powershell
+$ECR_URI = "474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber"
+$AWS_REGION = "ap-south-1"
+$TIMESTAMP = Get-Date -Format "yyyyMMdd-HHmmss"
+
+Write-Host "=== Login to ECR ===" -ForegroundColor Blue
+aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_URI
+
+Write-Host "=== Tag Image ===" -ForegroundColor Blue
+docker tag amber:latest "${ECR_URI}:latest"
+docker tag amber:latest "${ECR_URI}:${TIMESTAMP}"
+
+Write-Host "=== Push Image ===" -ForegroundColor Blue
+docker push "${ECR_URI}:latest"
+docker push "${ECR_URI}:${TIMESTAMP}"
+
+Write-Host "=== Deployment Complete ===" -ForegroundColor Green
+Write-Host "Image: ${ECR_URI}:latest"
+Write-Host "Timestamp: $TIMESTAMP"
+```
+
+**Run:**
+```powershell
+.\deploy-amber.ps1
+```
+
+---
+
+## 🔧 Quick Reference
+
+### Login
+```bash
+aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 474833638797.dkr.ecr.ap-south-1.amazonaws.com
+```
+
+### Tag
+```bash
+docker tag amber:latest 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:latest
+```
+
+### Push
+```bash
+docker push 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:latest
+```
+
+### Tag + Push (One Line)
+```bash
+docker tag amber:latest 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:latest && docker push 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:latest
+```
+
+### Pull
+```bash
+docker pull 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:latest
+```
+
+---
+
+## 🐛 Troubleshooting
+
+### Re-login (Token Expired)
+```bash
+aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 474833638797.dkr.ecr.ap-south-1.amazonaws.com
+```
+
+### Create Repository
+```bash
+aws ecr create-repository --repository-name amber --region ap-south-1
+```
+
+### Verify Repository
 ```bash
 aws ecr describe-repositories --repository-names amber --region ap-south-1
 ```
 
 ---
 
-## Using Different Tags
-
-Replace `latest` with your desired tag:
-
-```bash
-# Build with version tag
-docker build -t amber:v1.0.0 -f Dockerfile .
-
-# Tag for ECR
-docker tag amber:v1.0.0 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:v1.0.0
-
-# Push to ECR
-docker push 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:v1.0.0
-```
-
-**Common tag examples:**
-- `latest` - Latest version
-- `v1.0.0` - Version number
-- `production` - Production environment
-- `staging` - Staging environment
-- `dev` - Development environment
-
----
-
-## Quick Reference
-
-```bash
-# Full workflow (from backend directory)
-aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 474833638797.dkr.ecr.ap-south-1.amazonaws.com
-docker build -t amber:latest -f Dockerfile .
-docker tag amber:latest 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:latest
-docker push 474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber:latest
-```
-
----
-
-## Troubleshooting
-
-### Authentication Error
-If you get authentication errors, ensure:
-1. AWS CLI is configured: `aws configure`
-2. Your AWS credentials have ECR permissions
-3. The ECR repository exists
-
-### Permission Denied
-Ensure your IAM user/role has these ECR permissions:
-- `ecr:GetAuthorizationToken`
-- `ecr:BatchCheckLayerAvailability`
-- `ecr:GetDownloadUrlForLayer`
-- `ecr:BatchGetImage`
-- `ecr:PutImage`
-- `ecr:InitiateLayerUpload`
-- `ecr:UploadLayerPart`
-- `ecr:CompleteLayerUpload`
-
-### Repository Not Found
-Create the repository first:
-```bash
-aws ecr create-repository --repository-name amber --region ap-south-1
-```
-
+**Repository:** `amber`  
+**Region:** `ap-south-1`  
+**Account ID:** `474833638797`  
+**ECR URI:** `474833638797.dkr.ecr.ap-south-1.amazonaws.com/amber`

@@ -5,6 +5,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 // PopupForm removed - using /quote route instead
 import Breadcrumb from '../components/Breadcrumb';
 import CompleteSEO from '../components/SEO/CompleteSEO';
+import InternalLinks from '../components/SEO/InternalLinks';
 import { useSEO } from '../hooks/useSEO';
 import { getProducts, trackProductView } from '../api';
 import { findProductBySlug, createSubcategorySlug } from '../utils/slug';
@@ -79,8 +80,9 @@ const ProductDetailPage: React.FC = () => {
                 <div className="relative">
                   <img 
                     src={product.image_url || 'https://images.pexels.com/photos/4198939/pexels-photo-4198939.jpeg?auto=compress&cs=tinysrgb&w=600'} 
-                    alt={`${product.name} - Premium export quality ${product.category_name} with ${product.grade || 'Premium'} grade from ${product.origin || 'India'}`} 
+                    alt={seoData?.images?.[0]?.alt_text || `${product.name} - Premium export quality ${product.category_name} with ${product.grade || 'Premium'} grade from ${product.origin || 'India'}`} 
                     className="w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] lg:w-[400px] lg:h-[400px] object-cover rounded-lg lg:rounded-xl shadow-lg lg:shadow-2xl"
+                    loading="lazy"
                   />
                   {product.is_featured && (
                     <div className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-2 lg:px-3 py-1 rounded-full text-xs lg:text-sm font-bold shadow-lg">
@@ -161,6 +163,17 @@ const ProductDetailPage: React.FC = () => {
                   </div>
                 )}
 
+                {/* SEO Internal Links - Above Fold */}
+                {seoData?.internal_links && seoData.internal_links.length > 0 && (
+                  <div className="pt-2">
+                    <InternalLinks 
+                      links={seoData.internal_links} 
+                      placement="above-fold"
+                      className="mb-4"
+                    />
+                  </div>
+                )}
+
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-2 lg:gap-3 pt-2">
                   <button
@@ -191,11 +204,54 @@ const ProductDetailPage: React.FC = () => {
               </div>
             </div>
 
+            {/* SEO-Generated Long Description */}
+            {seoData?.content?.long_description && (
+              <div className="border-t border-gray-100 p-4 lg:p-6">
+                <h2 className="text-xl lg:text-2xl font-bold text-gray-900 mb-3 lg:mb-4">
+                  {seoData.headings?.h2_sections?.[0] || 'About This Product'}
+                </h2>
+                <div className="prose prose-emerald max-w-none">
+                  <p className="text-gray-700 leading-relaxed whitespace-pre-line text-sm lg:text-base">
+                    {seoData.content.long_description}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* SEO-Generated Bullet Features */}
+            {seoData?.content?.bullet_features && seoData.content.bullet_features.length > 0 && (
+              <div className="border-t border-gray-100 p-4 lg:p-6 bg-gradient-to-r from-emerald-50 to-green-50">
+                <h2 className="text-xl lg:text-2xl font-bold text-gray-900 mb-3 lg:mb-4">
+                  {seoData.headings?.h2_sections?.[1] || 'Key Features'}
+                </h2>
+                <ul className="space-y-2 lg:space-y-3">
+                  {seoData.content.bullet_features.map((feature, idx) => (
+                    <li key={idx} className="flex items-start gap-2 lg:gap-3">
+                      <div className="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center mt-0.5">
+                        <span className="text-white text-xs font-bold">✓</span>
+                      </div>
+                      <span className="text-gray-700 text-sm lg:text-base">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                
+                {/* SEO Internal Links - Mid Content */}
+                {seoData?.internal_links && seoData.internal_links.length > 0 && (
+                  <div className="mt-4 pt-4 border-t border-emerald-200">
+                    <InternalLinks 
+                      links={seoData.internal_links} 
+                      placement="mid-content"
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Product Specifications */}
             <div className="border-t border-gray-100 p-4 lg:p-6">
               <h2 className="text-xl lg:text-2xl font-bold text-gray-900 mb-3 lg:mb-4 flex items-center gap-2 lg:gap-3">
                 <Tag className="text-emerald-600" size={20} />
-                Product Specifications
+                {seoData?.headings?.h2_sections?.[2] || 'Product Specifications'}
               </h2>
                
               {/* Product Highlights */}
@@ -258,11 +314,42 @@ const ProductDetailPage: React.FC = () => {
                               )}
              </div>
 
+            {/* SEO-Generated FAQ Section */}
+            {seoData?.faq && seoData.faq.length > 0 && (
+              <div className="border-t border-gray-100 p-4 lg:p-6">
+                <h2 className="text-xl lg:text-2xl font-bold text-gray-900 mb-4 lg:mb-6">
+                  {seoData.headings?.h2_sections?.[3] || 'Frequently Asked Questions'}
+                </h2>
+                <div className="space-y-4">
+                  {seoData.faq.map((faq, idx) => (
+                    <div key={idx} className="bg-white rounded-lg border border-gray-200 p-4 lg:p-5 shadow-sm">
+                      <h3 className="text-base lg:text-lg font-semibold text-gray-900 mb-2">
+                        {faq.question}
+                      </h3>
+                      <p className="text-gray-600 text-sm lg:text-base leading-relaxed">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+                
+                {/* SEO Internal Links - FAQ Section */}
+                {seoData?.internal_links && seoData.internal_links.length > 0 && (
+                  <div className="mt-6 pt-6 border-t border-gray-200">
+                    <InternalLinks 
+                      links={seoData.internal_links} 
+                      placement="faq"
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Why Choose This Product */}
             <div className="border-t border-gray-100 p-6 lg:p-8 bg-gradient-to-r from-emerald-50 to-green-50">
               <h2 className="text-xl lg:text-2xl font-bold text-gray-900 mb-4 lg:mb-6 flex items-center gap-2 lg:gap-3">
                 <Star className="text-yellow-500" size={24} />
-                Why Choose This Product?
+                {seoData?.headings?.h2_sections?.[4] || 'Why Choose This Product?'}
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
                 <div className="flex items-start gap-2 lg:gap-3">

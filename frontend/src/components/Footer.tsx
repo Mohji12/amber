@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Mail, Globe, Award, Truck, Shield, HelpCircle, Sitemap } from 'lucide-react';
+import { MapPin, Mail, Globe, Award, Truck, Shield, HelpCircle, FileText } from 'lucide-react';
 import logo from '../assets/IMG_20250714_151848.jpg';
 
 const Footer = () => {
@@ -84,7 +84,7 @@ const Footer = () => {
                       className="text-gray-300 hover:text-green-400 transition-colors flex items-center space-x-2"
                     >
                       <span>{link.name}</span>
-                      <Sitemap size={14} className="text-green-400" />
+                      <FileText size={14} className="text-green-400" />
                     </a>
                   ) : link.isAnchor ? (
                     <button
@@ -183,7 +183,7 @@ const Footer = () => {
             </div>
             <div className="flex flex-wrap gap-4 text-sm text-gray-400">
               <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer" className="hover:text-green-400 transition-colors flex items-center space-x-1">
-                <Sitemap size={14} />
+                <FileText size={14} />
                 <span>Sitemap</span>
               </a>
               <span className="cursor-pointer hover:text-green-400 transition-colors">Privacy Policy</span>
