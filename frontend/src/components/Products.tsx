@@ -339,6 +339,7 @@ const Products = ({
             <button
               key="all"
               onClick={() => setActiveCategory('all')}
+              rel="nofollow"
               className={`flex items-center justify-center space-x-2 sm:space-x-3 px-3 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 text-sm sm:text-base ${
                 activeCategory === 'all'
                   ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-xl'
@@ -359,6 +360,7 @@ const Products = ({
               <button
                 key={category.id}
                 onClick={() => setActiveCategory(category.id)}
+                rel="nofollow"
                 className={`flex items-center justify-center space-x-2 sm:space-x-3 px-3 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 text-sm sm:text-base ${
                   activeCategory === category.id
                     ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-xl'

@@ -62,12 +62,12 @@ async def generate_sitemap(db: Session = Depends(get_db)):
         "priority": "1.0"
     })
     
-    # 2. Static pages
+    # 2. Static pages (with trailing slashes)
     static_pages = [
-        {"path": "/products", "changefreq": "weekly", "priority": "0.9"},
-        {"path": "/blogs", "changefreq": "daily", "priority": "0.8"},
-        {"path": "/contact", "changefreq": "monthly", "priority": "0.7"},
-        {"path": "/quote", "changefreq": "monthly", "priority": "0.7"},
+        {"path": "/products/", "changefreq": "weekly", "priority": "0.9"},
+        {"path": "/blogs/", "changefreq": "daily", "priority": "0.8"},
+        {"path": "/contact/", "changefreq": "monthly", "priority": "0.7"},
+        {"path": "/quote/", "changefreq": "monthly", "priority": "0.7"},
     ]
     
     for page in static_pages:
@@ -91,7 +91,7 @@ async def generate_sitemap(db: Session = Depends(get_db)):
                 lastmod = product.created_at.strftime("%Y-%m-%dT%H:%M:%S+00:00") if product.created_at else current_date
                 
                 urls.append({
-                    "loc": f"{SITE_URL}/products/{slug}",
+                    "loc": f"{SITE_URL}/products/{slug}/",
                     "lastmod": lastmod,
                     "changefreq": "weekly",
                     "priority": "0.8"
@@ -115,7 +115,7 @@ async def generate_sitemap(db: Session = Depends(get_db)):
                     slug = create_subcategory_slug(subcategory.name, subcategory.id)
                     
                     urls.append({
-                        "loc": f"{SITE_URL}/subcategories/{slug}",
+                        "loc": f"{SITE_URL}/subcategories/{slug}/",
                         "lastmod": current_date,
                         "changefreq": "weekly",
                         "priority": "0.7"
@@ -133,7 +133,7 @@ async def generate_sitemap(db: Session = Depends(get_db)):
                 lastmod = blog.created_at.strftime("%Y-%m-%dT%H:%M:%S+00:00") if blog.created_at else current_date
                 
                 urls.append({
-                    "loc": f"{SITE_URL}/blogs/{slug}",
+                    "loc": f"{SITE_URL}/blogs/{slug}/",
                     "lastmod": lastmod,
                     "changefreq": "monthly",
                     "priority": "0.6"

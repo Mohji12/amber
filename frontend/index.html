@@ -82,6 +82,61 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     
+    <!-- Initial Meta Tag Injection Script -->
+    <script>
+      // Inject meta tags before React hydration for better SEO
+      (function() {
+        const path = window.location.pathname;
+        const apiBase = 'https://nlq4zcho6j.execute-api.ap-south-1.amazonaws.com';
+        
+        // Fetch meta tags synchronously for initial load (only for critical pages)
+        if (path === '/' || path.startsWith('/products/') || path.startsWith('/subcategories/') || path.startsWith('/blogs/')) {
+          fetch(apiBase + '/api/seo/meta-tags?path=' + encodeURIComponent(path))
+            .then(response => response.ok ? response.text() : null)
+            .then(html => {
+              if (html) {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                const elements = Array.from(tempDiv.querySelectorAll('title, meta, link[rel="canonical"], script[type="application/ld+json"]'));
+                
+                elements.forEach(element => {
+                  if (element.tagName === 'TITLE') {
+                    const title = document.querySelector('title') || document.createElement('title');
+                    title.textContent = element.textContent || '';
+                    if (!document.querySelector('title')) document.head.appendChild(title);
+                  } else if (element.tagName === 'META') {
+                    const meta = element;
+                    const name = meta.getAttribute('name') || meta.getAttribute('property');
+                    const content = meta.getAttribute('content');
+                    if (name && content) {
+                      const existing = document.querySelector(meta.getAttribute('property') ? 'meta[property="' + name + '"]' : 'meta[name="' + name + '"]');
+                      if (existing) existing.remove();
+                      const newMeta = document.createElement('meta');
+                      if (meta.getAttribute('property')) newMeta.setAttribute('property', name);
+                      else newMeta.setAttribute('name', name);
+                      newMeta.setAttribute('content', content);
+                      document.head.appendChild(newMeta);
+                    }
+                  } else if (element.tagName === 'LINK' && element.getAttribute('rel') === 'canonical') {
+                    const href = element.getAttribute('href');
+                    if (href) {
+                      const existing = document.querySelector('link[rel="canonical"]');
+                      if (existing) existing.remove();
+                      const canonical = document.createElement('link');
+                      canonical.setAttribute('rel', 'canonical');
+                      canonical.setAttribute('href', href);
+                      document.head.appendChild(canonical);
+                    }
+                  }
+                });
+              }
+            })
+            .catch(() => {
+              // Silently fail - React will handle SEO via CompleteSEO component
+            });
+        }
+      })();
+    </script>
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->

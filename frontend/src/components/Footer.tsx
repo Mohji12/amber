@@ -1,18 +1,49 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { MapPin, Mail, Globe, Award, Truck, Shield, HelpCircle, FileText } from 'lucide-react';
 import logo from '../assets/IMG_20250714_151848.jpg';
+import { getCategories, getSubcategories } from '../api';
+import { createSubcategorySlug } from '../utils/slug';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
+  const [categories, setCategories] = useState<any[]>([]);
+  const [subcategories, setSubcategories] = useState<any[]>([]);
+
+  // Fetch categories and subcategories for footer links
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [catsData, subcatsData] = await Promise.all([
+          getCategories(),
+          getSubcategories()
+        ]);
+        setCategories(Array.isArray(catsData) ? catsData : []);
+        setSubcategories(Array.isArray(subcatsData) ? subcatsData : []);
+      } catch (error) {
+        console.error('Error fetching footer data:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  // Determine link behavior based on current page
+  const getLinkHref = (anchorHref: string, routeHref: string) => {
+    if (isHomePage) {
+      return anchorHref; // Use anchor on homepage
+    }
+    return routeHref; // Use route on other pages
+  };
 
   const quickLinks = [
-    { name: 'Get a Quote', href: '#contact', isAnchor: true },
-    { name: 'Products', href: '/products', isAnchor: false },
-    { name: 'Blogs', href: '/blogs', isAnchor: false },
-    { name: 'About Us', href: '#about', isAnchor: true },
-    { name: 'How We Work', href: '#howwework', isAnchor: true },
-    { name: 'Contact', href: '#contact', isAnchor: true },
+    { name: 'Get a Quote', href: getLinkHref('#contact', '/quote/'), isAnchor: isHomePage },
+    { name: 'Products', href: '/products/', isAnchor: false },
+    { name: 'Blogs', href: '/blogs/', isAnchor: false },
+    { name: 'About Us', href: getLinkHref('#about', '/#about'), isAnchor: isHomePage },
+    { name: 'How We Work', href: getLinkHref('#howwework', '/#howwework'), isAnchor: isHomePage },
+    { name: 'Contact', href: getLinkHref('#contact', '/contact/'), isAnchor: isHomePage },
     { name: 'Sitemap', href: '/sitemap.xml', isAnchor: false, isExternal: true },
   ];
 
@@ -87,12 +118,21 @@ const Footer = () => {
                       <FileText size={14} className="text-green-400" />
                     </a>
                   ) : link.isAnchor ? (
-                    <button
-                      onClick={() => scrollToSection(link.href)}
-                      className="text-gray-300 hover:text-green-400 transition-colors"
-                    >
-                      {link.name}
-                    </button>
+                    isHomePage ? (
+                      <button
+                        onClick={() => scrollToSection(link.href)}
+                        className="text-gray-300 hover:text-green-400 transition-colors"
+                      >
+                        {link.name}
+                      </button>
+                    ) : (
+                      <Link
+                        to={link.href}
+                        className="text-gray-300 hover:text-green-400 transition-colors"
+                      >
+                        {link.name}
+                      </Link>
+                    )
                   ) : (
                     <Link
                       to={link.href}
@@ -106,16 +146,57 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Products */}
+          {/* Products - Clickable Category Links */}
           <div>
             <h4 className="text-lg font-semibold text-white mb-6">Our Products</h4>
             <ul className="space-y-3">
-              {productCategories.map((product, index) => (
-                <li key={index} className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                  <span className="text-gray-300">{product}</span>
-                </li>
-              ))}
+              {categories.length > 0 ? (
+                categories.slice(0, 5).map((category) => {
+                  // Find first subcategory for this category to link to
+                  const categorySubcategory = subcategories.find(
+                    sub => sub.category_id === category.id
+                  );
+                  
+                  if (categorySubcategory) {
+                    const subcategorySlug = createSubcategorySlug(
+                      categorySubcategory.name,
+                      categorySubcategory.id
+                    );
+                    return (
+                      <li key={category.id}>
+                        <Link
+                          to={`/subcategories/${subcategorySlug}/`}
+                          className="text-gray-300 hover:text-green-400 transition-colors flex items-center space-x-2"
+                        >
+                          <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                          <span>{category.name}</span>
+                        </Link>
+                      </li>
+                    );
+                  }
+                  
+                  // Fallback: link to products page with category filter
+                  return (
+                    <li key={category.id}>
+                      <Link
+                        to={`/products/?category=${category.id}`}
+                        className="text-gray-300 hover:text-green-400 transition-colors flex items-center space-x-2"
+                      >
+                        <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                        <span>{category.name}</span>
+                      </Link>
+                    </li>
+                  );
+                })
+              ) : (
+                // Fallback to static list if categories not loaded
+                productCategories.map((product, index) => (
+                  <li key={index} className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                    <span className="text-gray-300">{product}</span>
+                  </li>
+                ))
+              )}
             </ul>
           </div>
 

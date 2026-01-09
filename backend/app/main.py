@@ -14,7 +14,7 @@ try:
     MANGUM_AVAILABLE = True
 except ImportError:
     MANGUM_AVAILABLE = False
-from app.routers import auth, blogs, analytics, products, enquiries, categories, subcategories, admin, seo, sitemap
+from app.routers import auth, blogs, analytics, products, enquiries, categories, subcategories, admin, seo, seo_meta, sitemap
 from app import models
 from app.database import engine
 
@@ -78,6 +78,7 @@ app.include_router(categories.router, prefix="/categories", tags=["Categories"])
 app.include_router(subcategories.router, prefix="/subcategories", tags=["Subcategories"])
 app.include_router(admin.router, prefix="/admin", tags=["Admin"])
 app.include_router(seo.router, prefix="/seo", tags=["SEO"])
+app.include_router(seo_meta.router, prefix="/api/seo", tags=["SEO Meta"])
 app.include_router(sitemap.router, tags=["Sitemap"])
 
 @app.get("/")

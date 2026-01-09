@@ -619,7 +619,7 @@ Whether you're a distributor, retailer, or private label brand, we provide the p
                             "@type": "SearchAction",
                             "target": {
                                 "@type": "EntryPoint",
-                                "urlTemplate": f"{self.site_url}/products?search={{search_term_string}}"
+                                "urlTemplate": f"{self.site_url}/products/?search={{search_term_string}}"
                             },
                             "query-input": "required name=search_term_string"
                         }

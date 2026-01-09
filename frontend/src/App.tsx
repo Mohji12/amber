@@ -49,6 +49,7 @@ import LoadingSpinner from './components/LoadingSpinner';
 import { LazyOtpTestPage } from './components/LazyRoutes';
 import NotFoundPage from './pages/NotFoundPage';
 import GoogleAnalytics from './components/GoogleAnalytics';
+import TrailingSlashRedirect from './components/TrailingSlashRedirect';
 
 // Constants
 const SCROLL_DELAY_MS = 300; // Delay before scrolling to allow DOM to render
@@ -214,42 +215,43 @@ function App() {
     <HelmetProvider>
       <Router>
         <ErrorBoundary>
-          <ScrollToTop />
-          <GoogleAnalytics />
-          <div className="min-h-screen bg-white">
-          <Header />
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<HomeWithScroll />} />
-            <Route path="/products" element={<LazyProductsPage />} />
-            <Route path="/products/:slug" element={<LazyProductDetailPage />} />
-            <Route path="/subcategories/:slug" element={<LazySubcategoryDetailPage />} />
-            <Route path="/blogs" element={<LazyBlogsPage />} />
-            <Route path="/blogs/:slug" element={<BlogRouter />} />
-            <Route path="/contact" element={<LazyContactPage />} />
-            <Route path="/quote" element={<LazyQuotePage />} />
-            <Route path="/login" element={<LazyLoginPage />} />
-            <Route path="/signup" element={<LazySignupPage />} />
-            <Route path="/otp-test" element={<LazyOtpTestPage />} />
+          <TrailingSlashRedirect>
+            <ScrollToTop />
+            <GoogleAnalytics />
+            <div className="min-h-screen bg-white">
+            <Header />
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<HomeWithScroll />} />
+              <Route path="/products/" element={<LazyProductsPage />} />
+              <Route path="/products/:slug/" element={<LazyProductDetailPage />} />
+              <Route path="/subcategories/:slug/" element={<LazySubcategoryDetailPage />} />
+              <Route path="/blogs/" element={<LazyBlogsPage />} />
+              <Route path="/blogs/:slug/" element={<BlogRouter />} />
+              <Route path="/contact/" element={<LazyContactPage />} />
+              <Route path="/quote/" element={<LazyQuotePage />} />
+            <Route path="/login/" element={<LazyLoginPage />} />
+            <Route path="/signup/" element={<LazySignupPage />} />
+            <Route path="/otp-test/" element={<LazyOtpTestPage />} />
             
             {/* Admin Routes - Protected */}
-            <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
+            <Route path="/admin/" element={<AdminRoute><AdminLayout /></AdminRoute>}>
               <Route index element={<LazyAdminPage />} />
-              <Route path="dashboard" element={<LazyAdminDashboard />} />
-              <Route path="products" element={<LazyAdminProducts />} />
-              <Route path="categories" element={<LazyAdminCategories />} />
-              <Route path="subcategories" element={<LazyAdminSubcategories />} />
-              <Route path="blogs" element={<LazyAdminBlogs />} />
-              <Route path="analytics" element={<LazyAdminAnalytics />} />
-              <Route path="enquiries" element={<LazyAdminEnquiries />} />
+              <Route path="dashboard/" element={<LazyAdminDashboard />} />
+              <Route path="products/" element={<LazyAdminProducts />} />
+              <Route path="categories/" element={<LazyAdminCategories />} />
+              <Route path="subcategories/" element={<LazyAdminSubcategories />} />
+              <Route path="blogs/" element={<LazyAdminBlogs />} />
+              <Route path="analytics/" element={<LazyAdminAnalytics />} />
+              <Route path="enquiries/" element={<LazyAdminEnquiries />} />
             </Route>
             
             {/* Profile Routes - Protected */}
             <Route path="/profile/*" element={<LazyProfilePage />}>
-              <Route index element={<Navigate to="business" replace />} />
-              <Route path="business" element={<LazyProfileBusiness />} />
-              <Route path="quotation" element={<LazyProfileQuotation />} />
-              <Route path="orders" element={<LazyProfileOrders />} />
+              <Route index element={<Navigate to="business/" replace />} />
+              <Route path="business/" element={<LazyProfileBusiness />} />
+              <Route path="quotation/" element={<LazyProfileQuotation />} />
+              <Route path="orders/" element={<LazyProfileOrders />} />
             </Route>
             
             {/* 404 Catch-all Route - Must be last */}
@@ -259,6 +261,7 @@ function App() {
           <PopupManager />
           <WhatsAppButton />
         </div>
+          </TrailingSlashRedirect>
         </ErrorBoundary>
       </Router>
     </HelmetProvider>

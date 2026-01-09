@@ -7,8 +7,9 @@ import gst from '../assets/gst.png';
 import iec from '../assets/iec.png';
 import spiceboard from '../assets/spiceboard.png';
 import iso from '../assets/iso.png';
+import logo from '../assets/IMG_20250714_151848.jpg';
 
-const certImages = [apeda, fssai, gst, iec, spiceboard, iso];
+const certImages = [logo, apeda, fssai, gst, iec, spiceboard, iso];
 
 const About = () => {
   const stats = [

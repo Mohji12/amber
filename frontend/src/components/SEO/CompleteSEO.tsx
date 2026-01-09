@@ -28,7 +28,21 @@ const CompleteSEO: React.FC<CompleteSEOProps> = ({ seoData, children }) => {
   // CRITICAL: Ensure canonical URL is self-referencing (matches current page URL)
   // This prevents "Alternative page with canonical" errors in Google Search Console
   // Canonical URLs should NOT include query parameters - use pathname only
-  const currentPath = location.pathname;
+  // All URLs must have trailing slashes except homepage
+  let currentPath = location.pathname;
+  
+  // Strip query parameters and hash from pathname
+  currentPath = currentPath.split('?')[0].split('#')[0];
+  
+  // Add trailing slash to all paths except homepage and file extensions
+  if (currentPath !== '/' && !currentPath.endsWith('/')) {
+    // Check if it's a file extension (like .xml, .txt, .jpg, etc.)
+    const hasFileExtension = /\.[a-zA-Z0-9]+$/.test(currentPath);
+    if (!hasFileExtension) {
+      currentPath = `${currentPath}/`;
+    }
+  }
+  
   const selfReferencingCanonical = `${siteUrl}${currentPath}`;
   
   // Use self-referencing canonical (current page URL) instead of backend-provided canonical

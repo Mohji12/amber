@@ -1,13 +1,14 @@
 import React from 'react';
 import Products from '../components/Products';
 import CompleteSEO from '../components/SEO/CompleteSEO';
+import QueryParamHandler from '../components/SEO/QueryParamHandler';
 import { useCustomSEO } from '../hooks/useSEO';
 import { SEORequest } from '../api';
 
 const ProductsPage = () => {
   // Generate SEO for products listing page
   const seoRequest: SEORequest = {
-    url: '/products',
+    url: '/products/',
     page_type: 'static',
     primary_keyword: 'Premium Agricultural Products Export',
     secondary_keywords: [
@@ -27,6 +28,7 @@ const ProductsPage = () => {
 
   return (
     <CompleteSEO seoData={seoData}>
+      <QueryParamHandler />
       <div className="pt-32">
         <Products 
           showProducts={false}

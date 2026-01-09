@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getSubcategory, getProductsBySubcategory, getSubcategories } from '../api';
+import { getSubcategory, getProductsBySubcategory, getSubcategories, getCategories } from '../api';
+import { Link } from 'react-router-dom';
 import PopupForm from '../components/PopupForm';
 import Breadcrumb from '../components/Breadcrumb';
 import CompleteSEO from '../components/SEO/CompleteSEO';
@@ -13,6 +14,7 @@ const SubcategoryDetailPage = () => {
   const navigate = useNavigate();
   const [subcategory, setSubcategory] = useState<any>(null);
   const [products, setProducts] = useState<any[]>([]);
+  const [category, setCategory] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isQuoteOpen, setIsQuoteOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
@@ -30,6 +32,19 @@ const SubcategoryDetailPage = () => {
         }
         
         setSubcategory(foundSubcategory);
+        
+        // Fetch parent category
+        if (foundSubcategory.category_id) {
+          try {
+            const categories = await getCategories();
+            const parentCategory = Array.isArray(categories) 
+              ? categories.find((c: any) => c.id === foundSubcategory.category_id)
+              : null;
+            setCategory(parentCategory);
+          } catch (error) {
+            console.error('Error fetching category:', error);
+          }
+        }
         
         // Fetch SEO data using the subcategory ID
         const subcategoryId = foundSubcategory.id;
@@ -127,11 +142,43 @@ const SubcategoryDetailPage = () => {
         {/* Breadcrumb Navigation */}
         <Breadcrumb 
           items={[
-            { label: 'Products', href: '/products' },
-            { label: subcategory.category_name, href: `/products?category=${subcategory.category_id}` },
+            { label: 'Home', href: '/' },
+            { label: 'Products', href: '/products/' },
+            { label: subcategory.category_name || category?.name || 'Category', href: `/products/?category=${subcategory.category_id || category?.id || ''}` },
             { label: subcategory.name, current: true }
           ]}
         />
+        
+        {/* Parent Category & Navigation Links */}
+        {(category || subcategory.category_name) && (
+          <div className="mb-6 px-4">
+            <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="text-gray-600 text-sm">Browse:</span>
+                {category && (
+                  <Link
+                    to={`/products/?category=${category.id}`}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg transition-colors duration-200 text-sm font-medium border border-emerald-200"
+                  >
+                    All {category.name} Products
+                  </Link>
+                )}
+                <Link
+                  to="/products/"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg transition-colors duration-200 text-sm font-medium border border-gray-200"
+                >
+                  All Products
+                </Link>
+                <Link
+                  to="/"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg transition-colors duration-200 text-sm font-medium border border-gray-200"
+                >
+                  Home
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
         
         {/* Header */}
         <div className="text-center mb-12 px-2 sm:px-4">

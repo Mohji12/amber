@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Package, MapPin, Award, Truck, Star, Scale, Calendar, Tag } from 'lucide-react';
+import { Package, MapPin, Award, Truck, Star, Scale, Calendar, Tag, ArrowRight } from 'lucide-react';
 import LoadingSpinner from '../components/LoadingSpinner';
 // PopupForm removed - using /quote route instead
 import Breadcrumb from '../components/Breadcrumb';
 import CompleteSEO from '../components/SEO/CompleteSEO';
 import InternalLinks from '../components/SEO/InternalLinks';
 import { useSEO } from '../hooks/useSEO';
-import { getProducts, trackProductView } from '../api';
-import { findProductBySlug, createSubcategorySlug } from '../utils/slug';
+import { getProducts, trackProductView, getProductsBySubcategory } from '../api';
+import { findProductBySlug, createSubcategorySlug, createProductSlug } from '../utils/slug';
 import { generateQuoteUrl, trackQuoteClick, getTrackingParamsFromUrl } from '../utils/quoteTracking';
 
 const ProductDetailPage: React.FC = () => {
@@ -16,6 +16,7 @@ const ProductDetailPage: React.FC = () => {
   const navigate = useNavigate();
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
   // Removed isQuoteOpen - using /quote route instead
   
   useEffect(() => {
@@ -28,6 +29,21 @@ const ProductDetailPage: React.FC = () => {
         // Track product view for real-time analytics
         if (found && found.id) {
           trackProductView(found.id);
+          
+          // Fetch related products from same subcategory
+          if (found.subcategory_id) {
+            try {
+              const related = await getProductsBySubcategory(found.subcategory_id);
+              const relatedList = Array.isArray(related) ? related : [];
+              // Filter out current product and limit to 4
+              const filtered = relatedList
+                .filter((p: any) => p.id !== found.id)
+                .slice(0, 4);
+              setRelatedProducts(filtered);
+            } catch (error) {
+              console.error('Error fetching related products:', error);
+            }
+          }
         }
       } catch (error) {
         console.error('Error fetching product:', error);
@@ -55,9 +71,9 @@ const ProductDetailPage: React.FC = () => {
         {/* Breadcrumb Navigation */}
         <Breadcrumb 
           items={[
-            { label: 'Products', href: '/products' },
-            { label: product.category_name || 'Category', href: `/products?category=${product.category_id || ''}` },
-            { label: product.subcategory_name || 'Subcategory', href: `/subcategories/${createSubcategorySlug(product.subcategory_name || '', product.subcategory_id)}` },
+            { label: 'Products', href: '/products/' },
+            { label: product.category_name || 'Category', href: `/products/?category=${product.category_id || ''}` },
+            { label: product.subcategory_name || 'Subcategory', href: `/subcategories/${createSubcategorySlug(product.subcategory_name || '', product.subcategory_id)}/` },
             { label: product.name || 'Product', current: true }
           ]}
         />
@@ -344,6 +360,45 @@ const ProductDetailPage: React.FC = () => {
                 )}
               </div>
             )}
+
+            {/* Parent Subcategory & Related Products Links */}
+            <div className="border-t border-gray-100 p-4 lg:p-6 bg-white">
+              <div className="space-y-4">
+                {/* Parent Subcategory Link */}
+                {product.subcategory_name && product.subcategory_id && (
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">Browse More in This Category</h3>
+                    <Link
+                      to={`/subcategories/${createSubcategorySlug(product.subcategory_name, product.subcategory_id)}/`}
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg transition-colors duration-200 font-medium border border-emerald-200"
+                    >
+                      View All {product.subcategory_name} Products
+                      <ArrowRight size={16} />
+                    </Link>
+                  </div>
+                )}
+                
+                {/* Related Products */}
+                {relatedProducts.length > 0 && (
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">Related Products</h3>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                      {relatedProducts.map((relatedProduct) => (
+                        <Link
+                          key={relatedProduct.id}
+                          to={`/products/${createProductSlug(relatedProduct.name, relatedProduct.id)}/`}
+                          className="p-3 bg-gray-50 hover:bg-emerald-50 rounded-lg border border-gray-200 hover:border-emerald-300 transition-colors"
+                        >
+                          <p className="text-sm font-medium text-gray-900 line-clamp-2">
+                            {relatedProduct.name}
+                          </p>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
 
             {/* Why Choose This Product */}
             <div className="border-t border-gray-100 p-6 lg:p-8 bg-gradient-to-r from-emerald-50 to-green-50">
