@@ -25,7 +25,7 @@ load_dotenv()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup: Initialize critical services
-    print("🚀 Starting Amber Global API...")
+    print("Starting Amber Global API...")
     
     # Pre-warm database connection
     try:
@@ -35,18 +35,18 @@ async def lifespan(app: FastAPI):
         try:
             db.execute(text("SELECT 1"))
             db.commit()
-            print("✅ Database connection established")
+            print("Database connection established")
         except Exception as db_error:
-            print(f"⚠️ Database connection warning: {db_error}")
+            print(f"Database connection warning: {db_error}")
         finally:
             db.close()
     except Exception as e:
-        print(f"⚠️ Database connection warning: {e}")
+        print(f"Database connection warning: {e}")
     
     yield
     
     # Shutdown: Cleanup
-    print("🛑 Shutting down Amber Global API...")
+    print("Shutting down Amber Global API...")
 
 app = FastAPI(
     title="Amber Global API", 

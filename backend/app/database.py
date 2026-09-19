@@ -5,15 +5,23 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import text
 
 
-# Local MySQL connection (commented out)
-# SQLALCHEMY_DATABASE_URL = "mysql+mysqlconnector://root:AnithaS%4000@127.0.0.1:3306/amberdata"
+from dotenv import load_dotenv
+from urllib.parse import quote_plus
 
+load_dotenv()
 
-# AWS RDS MySQL connection
-SQLALCHEMY_DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "mysql+pymysql://admin:Mentee_tracker#2025@mentee.cr82604eu9d2.ap-south-1.rds.amazonaws.com:3306/amber"
-)
+def _build_database_url() -> str:
+    explicit = os.getenv("DATABASE_URL")
+    if explicit:
+        return explicit
+    host = os.getenv("DB_HOST", "127.0.0.1")
+    port = os.getenv("DB_PORT", "3306")
+    user = os.getenv("DB_USER", "root")
+    password = quote_plus(os.getenv("DB_PASSWORD", ""))
+    name = os.getenv("DB_NAME", "amber")
+    return f"mysql+pymysql://{user}:{password}@{host}:{port}/{name}"
+
+SQLALCHEMY_DATABASE_URL = _build_database_url()
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL,

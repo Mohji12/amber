@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import AnimatedSection from './AnimatedSection';
 import InteractiveButton from './InteractiveButton';
 import { generateQuoteUrl, trackQuoteClick, getTrackingParamsFromUrl } from '../utils/quoteTracking';
+import heroVideo from '../assets/Grass_swaying_in_breeze_20260920042631.mp4';
 
 const Hero = () => {
   const navigate = useNavigate();
@@ -55,22 +56,22 @@ const Hero = () => {
       {/* Video Background */}
       <video
         className="absolute inset-0 w-full h-full object-cover z-0"
-        src="https://jgi-menteetrackers.s3.ap-south-1.amazonaws.com/agri1.mp4"
+        src={heroVideo}
         autoPlay
         loop
         muted
         playsInline
         preload="auto"
-        style={{ pointerEvents: 'none', filter: 'brightness(0.0)' }}
+        style={{ pointerEvents: 'none' }}
       />
       
       {/* Dark Overlay for better text readability */}
-      <div className="absolute inset-0 bg-black/30 z-[5]"></div>
+      <div className="absolute inset-0 bg-black/45 z-[5]"></div>
       
-      {/* Enhanced Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden z-10">
+      {/* Soft ambient accents over video */}
+      <div className="absolute inset-0 overflow-hidden z-10 pointer-events-none">
         <div 
-          className="absolute w-96 h-96 bg-gradient-to-r from-green-200/30 to-emerald-200/30 rounded-full blur-3xl animate-float"
+          className="absolute w-96 h-96 bg-gradient-to-r from-green-200/10 to-emerald-200/10 rounded-full blur-3xl animate-float"
           style={{
             left: `${mousePosition.x * 0.02}px`,
             top: `${mousePosition.y * 0.02}px`,
@@ -78,31 +79,12 @@ const Hero = () => {
           }}
         />
         <div 
-          className="absolute w-64 h-64 bg-gradient-to-r from-emerald-200/20 to-green-200/20 rounded-full blur-2xl animate-float"
+          className="absolute w-64 h-64 bg-gradient-to-r from-emerald-200/10 to-green-200/10 rounded-full blur-2xl animate-float"
           style={{
             right: `${mousePosition.x * 0.01}px`,
             bottom: `${mousePosition.y * 0.01}px`,
             animationDelay: '1s',
             transform: `translateY(${parallaxOffset * 0.2}px)`,
-          }}
-        />
-        {/* Additional floating elements */}
-        <div 
-          className="absolute w-32 h-32 bg-gradient-to-r from-yellow-200/20 to-orange-200/20 rounded-full blur-xl animate-float"
-          style={{
-            left: '20%',
-            top: '30%',
-            animationDelay: '2s',
-            transform: `translateY(${parallaxOffset * 0.1}px)`,
-          }}
-        />
-        <div 
-          className="absolute w-48 h-48 bg-gradient-to-r from-blue-200/15 to-purple-200/15 rounded-full blur-2xl animate-float"
-          style={{
-            right: '15%',
-            top: '60%',
-            animationDelay: '3s',
-            transform: `translateY(${parallaxOffset * 0.4}px)`,
           }}
         />
       </div>

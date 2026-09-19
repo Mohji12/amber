@@ -1,6 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Search, FlaskConical, Package, Plane, FileCheck, Truck } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
+import sourcingVideo from '../assets/Inspector_examining_rice_crop_20260920044435.mp4';
+import samplingVideo from '../assets/Lab_technician_testing_rice_grains_20260920044948.mp4';
+import packagingVideo from '../assets/Packaging_food_products_for_export_20260920045729.mp4';
+import documentationVideo from '../assets/Professional_reviewing_export_docs_20260920045918.mp4';
+import exportVideo from '../assets/Global_export_logistics_shown_20260920050147.mp4';
+import trackingVideo from '../assets/Shipment_tracking_and_delivery_20260920050601.mp4';
 
 const HowWeWork = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -36,42 +42,42 @@ const HowWeWork = () => {
       title: 'Sourcing',
       description: 'Direct sourcing from certified farms and suppliers across India',
       details: ['Farm visits', 'Quality assessment', 'Supplier verification'],
-      video: 'https://jgi-menteetrackers.s3.ap-south-1.amazonaws.com/sourcing.mp4',
+      video: sourcingVideo,
     },
     {
       icon: FlaskConical,
       title: 'Sampling',
       description: 'Professional sampling and lab testing for quality assurance',
       details: ['Lab testing', 'Quality reports', 'Sample approval'],
-      video: 'https://jgi-menteetrackers.s3.ap-south-1.amazonaws.com/sampling.mp4',
+      video: samplingVideo,
     },
     {
       icon: Package,
       title: 'Packaging',
       description: 'Custom packaging solutions meeting international standards',
       details: ['Custom branding', 'Export packaging', 'Quality sealing'],
-      video: 'https://jgi-menteetrackers.s3.ap-south-1.amazonaws.com/packing.mp4',
+      video: packagingVideo,
     },
     {
       icon: FileCheck,
       title: 'Documentation',
       description: 'Complete export documentation and compliance handling',
       details: ['Export permits', 'Phytosanitary certificates', 'COA reports'],
-      video: 'https://jgi-menteetrackers.s3.ap-south-1.amazonaws.com/documentation.mp4',
+      video: documentationVideo,
     },
     {
       icon: Plane,
       title: 'Export',
       description: 'Efficient logistics and shipping to global destinations',
       details: ['Sea freight', 'Air cargo', 'Cold chain'],
-      video: 'https://jgi-menteetrackers.s3.ap-south-1.amazonaws.com/export.mp4',
+      video: exportVideo,
     },
     {
       icon: Truck,
       title: 'Tracking',
       description: 'Real-time shipment tracking and delivery updates',
       details: ['Live tracking', 'Status updates', 'Delivery confirmation'],
-      video: 'https://jgi-menteetrackers.s3.ap-south-1.amazonaws.com/tracking.mp4',
+      video: trackingVideo,
     },
   ];
 

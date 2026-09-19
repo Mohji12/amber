@@ -73,11 +73,15 @@ const Header = () => {
       isScrolled ? 'bg-white/90 backdrop-blur-md shadow-lg' : 'bg-white/80 backdrop-blur-md'
     } border-b border-green-100`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4">
+        <div className="flex justify-between items-center py-1.5">
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
-                <img src={logo} alt="Amber Global Trade Logo" className="h-20 w-auto mr-3 rounded-lg shadow-sm object-contain" style={{maxHeight:80}} />
+                <img
+                  src={logo}
+                  alt="Amber Global Trade Logo"
+                  className="h-16 w-auto max-w-[180px] mr-2 rounded-md shadow-sm object-contain"
+                />
             </Link>
           </div>
 
