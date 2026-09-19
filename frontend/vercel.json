@@ -6,19 +6,18 @@
   "framework": "vite",
   "redirects": [
     {
-      "source": "/(.*)",
+      "source": "/:path*",
       "has": [
         {
           "type": "host",
           "value": "amberglobaltrade.com"
         }
       ],
-      "destination": "https://www.amberglobaltrade.com/:splat",
-      "permanent": true,
-      "statusCode": 301
+      "destination": "https://www.amberglobaltrade.com/:path*",
+      "permanent": true
     },
     {
-      "source": "/(.*)",
+      "source": "/:path*",
       "has": [
         {
           "type": "host",
@@ -30,9 +29,8 @@
           "value": "http"
         }
       ],
-      "destination": "https://www.amberglobaltrade.com/:splat",
-      "permanent": true,
-      "statusCode": 301
+      "destination": "https://www.amberglobaltrade.com/:path*",
+      "permanent": true
     }
   ],
   "rewrites": [
