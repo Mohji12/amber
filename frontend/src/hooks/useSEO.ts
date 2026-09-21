@@ -36,24 +36,27 @@ export function useSEO(
     try {
       setLoading(true);
       setError(null);
+
+      // Wait until required IDs are available (avoids noisy console errors on mount)
+      if ((pageType === 'product' || pageType === 'subcategory' || pageType === 'blog') && !id) {
+        setLoading(false);
+        return;
+      }
       
       let data: SEOData;
       
       switch (pageType) {
         case 'product':
-          if (!id) throw new Error('Product ID is required');
-          data = await getProductSEO(id);
+          data = await getProductSEO(id!);
           break;
         case 'subcategory':
-          if (!id) throw new Error('Subcategory ID is required');
-          data = await getSubcategorySEO(id);
+          data = await getSubcategorySEO(id!);
           break;
         case 'homepage':
           data = await getHomepageSEO();
           break;
         case 'blog':
-          if (!id) throw new Error('Blog ID is required');
-          data = await getBlogSEO(id);
+          data = await getBlogSEO(id!);
           break;
         default:
           throw new Error(`Unsupported page type: ${pageType}`);

@@ -1,0 +1,402 @@
+[
+  {
+    "id": 68,
+    "subcategory": "Beetroot Powder",
+    "category": "Dehydrated Foods"
+  },
+  {
+    "id": 66,
+    "subcategory": "Curry Leaves",
+    "category": "Dehydrated Foods"
+  },
+  {
+    "id": 64,
+    "subcategory": "Garlic Powder",
+    "category": "Dehydrated Foods"
+  },
+  {
+    "id": 69,
+    "subcategory": "Ginger Powder",
+    "category": "Dehydrated Foods"
+  },
+  {
+    "id": 67,
+    "subcategory": "Lemon Powder",
+    "category": "Dehydrated Foods"
+  },
+  {
+    "id": 63,
+    "subcategory": "Onion Flakes",
+    "category": "Dehydrated Foods"
+  },
+  {
+    "id": 65,
+    "subcategory": "Tomato Powder",
+    "category": "Dehydrated Foods"
+  },
+  {
+    "id": 39,
+    "subcategory": "Almonds",
+    "category": "Dry Fruits"
+  },
+  {
+    "id": 97,
+    "subcategory": "Almonds",
+    "category": "Dry Fruits"
+  },
+  {
+    "id": 38,
+    "subcategory": "Cashew",
+    "category": "Dry Fruits"
+  },
+  {
+    "id": 98,
+    "subcategory": "Cashews",
+    "category": "Dry Fruits"
+  },
+  {
+    "id": 41,
+    "subcategory": "Raisins",
+    "category": "Dry Fruits"
+  },
+  {
+    "id": 40,
+    "subcategory": "Walnuts",
+    "category": "Dry Fruits"
+  },
+  {
+    "id": 81,
+    "subcategory": "Agro Grow Mats",
+    "category": "Eco & Agro Products"
+  },
+  {
+    "id": 78,
+    "subcategory": "Coir Mats",
+    "category": "Eco & Agro Products"
+  },
+  {
+    "id": 77,
+    "subcategory": "Jute Bags",
+    "category": "Eco & Agro Products"
+  },
+  {
+    "id": 80,
+    "subcategory": "Jute Carpets",
+    "category": "Eco & Agro Products"
+  },
+  {
+    "id": 79,
+    "subcategory": "Ropes",
+    "category": "Eco & Agro Products"
+  },
+  {
+    "id": 49,
+    "subcategory": "Coffee",
+    "category": "Gourmet"
+  },
+  {
+    "id": 51,
+    "subcategory": "Olive Oil",
+    "category": "Gourmet"
+  },
+  {
+    "id": 50,
+    "subcategory": "Tea",
+    "category": "Gourmet"
+  },
+  {
+    "id": 99,
+    "subcategory": "Basmati Rice",
+    "category": "Grains"
+  },
+  {
+    "id": 89,
+    "subcategory": "Bathroom Fittings",
+    "category": "Hardware Exports"
+  },
+  {
+    "id": 87,
+    "subcategory": "Door Handles",
+    "category": "Hardware Exports"
+  },
+  {
+    "id": 86,
+    "subcategory": "Hinges",
+    "category": "Hardware Exports"
+  },
+  {
+    "id": 88,
+    "subcategory": "Pipes",
+    "category": "Hardware Exports"
+  },
+  {
+    "id": 83,
+    "subcategory": "Belts",
+    "category": "Leather Exports"
+  },
+  {
+    "id": 84,
+    "subcategory": "Gloves",
+    "category": "Leather Exports"
+  },
+  {
+    "id": 85,
+    "subcategory": "Industrial Shoes",
+    "category": "Leather Exports"
+  },
+  {
+    "id": 82,
+    "subcategory": "Wallets",
+    "category": "Leather Exports"
+  },
+  {
+    "id": 4,
+    "subcategory": "Barnyard Millet (Sanwa / Kuthiraivali)",
+    "category": "Organic Millets"
+  },
+  {
+    "id": 7,
+    "subcategory": "Browntop Millet (Korale / Andu Korralu)",
+    "category": "Organic Millets"
+  },
+  {
+    "id": 1,
+    "subcategory": "Finger Millet (Ragi / Nachni)",
+    "category": "Organic Millets"
+  },
+  {
+    "id": 2,
+    "subcategory": "Foxtail Millet (Kangni / Thinai)",
+    "category": "Organic Millets"
+  },
+  {
+    "id": 5,
+    "subcategory": "Kodo Millet (Kodra / Arikelu)",
+    "category": "Organic Millets"
+  },
+  {
+    "id": 3,
+    "subcategory": "Little Millet (Kutki / Sama)",
+    "category": "Organic Millets"
+  },
+  {
+    "id": 6,
+    "subcategory": "Pearl Millet (Bajra / Sajje)",
+    "category": "Organic Millets"
+  },
+  {
+    "id": 48,
+    "subcategory": "Drumstick",
+    "category": "Perishables"
+  },
+  {
+    "id": 44,
+    "subcategory": "Lemon",
+    "category": "Perishables"
+  },
+  {
+    "id": 46,
+    "subcategory": "Mango",
+    "category": "Perishables"
+  },
+  {
+    "id": 42,
+    "subcategory": "Onion",
+    "category": "Perishables"
+  },
+  {
+    "id": 47,
+    "subcategory": "Papaya",
+    "category": "Perishables"
+  },
+  {
+    "id": 45,
+    "subcategory": "Pomegranate",
+    "category": "Perishables"
+  },
+  {
+    "id": 95,
+    "subcategory": "Chickpeas",
+    "category": "Pulses"
+  },
+  {
+    "id": 96,
+    "subcategory": "Lentils",
+    "category": "Pulses"
+  },
+  {
+    "id": 31,
+    "subcategory": "Chana Dal",
+    "category": "Pulses & Lentils"
+  },
+  {
+    "id": 34,
+    "subcategory": "Desi Chana",
+    "category": "Pulses & Lentils"
+  },
+  {
+    "id": 37,
+    "subcategory": "Green Gram",
+    "category": "Pulses & Lentils"
+  },
+  {
+    "id": 33,
+    "subcategory": "Kabuli Chana",
+    "category": "Pulses & Lentils"
+  },
+  {
+    "id": 36,
+    "subcategory": "Lobia",
+    "category": "Pulses & Lentils"
+  },
+  {
+    "id": 30,
+    "subcategory": "Masoor Dal",
+    "category": "Pulses & Lentils"
+  },
+  {
+    "id": 29,
+    "subcategory": "Moong Dal",
+    "category": "Pulses & Lentils"
+  },
+  {
+    "id": 35,
+    "subcategory": "Rajma",
+    "category": "Pulses & Lentils"
+  },
+  {
+    "id": 28,
+    "subcategory": "Toor Dal",
+    "category": "Pulses & Lentils"
+  },
+  {
+    "id": 32,
+    "subcategory": "Urad Dal",
+    "category": "Pulses & Lentils"
+  },
+  {
+    "id": 26,
+    "subcategory": "Basmati Rice",
+    "category": "Rice"
+  },
+  {
+    "id": 27,
+    "subcategory": "Non-Basmati Rice",
+    "category": "Rice"
+  },
+  {
+    "id": 10,
+    "subcategory": "Black Pepper",
+    "category": "Spices"
+  },
+  {
+    "id": 92,
+    "subcategory": "Black Pepper",
+    "category": "Spices"
+  },
+  {
+    "id": 93,
+    "subcategory": "Cardamom",
+    "category": "Spices"
+  },
+  {
+    "id": 8,
+    "subcategory": "Cardamom",
+    "category": "Spices"
+  },
+  {
+    "id": 15,
+    "subcategory": "Chilli",
+    "category": "Spices"
+  },
+  {
+    "id": 9,
+    "subcategory": "Cinnamon",
+    "category": "Spices"
+  },
+  {
+    "id": 14,
+    "subcategory": "Clove",
+    "category": "Spices"
+  },
+  {
+    "id": 13,
+    "subcategory": "Coriander",
+    "category": "Spices"
+  },
+  {
+    "id": 11,
+    "subcategory": "Cumin",
+    "category": "Spices"
+  },
+  {
+    "id": 16,
+    "subcategory": "Fennel",
+    "category": "Spices"
+  },
+  {
+    "id": 94,
+    "subcategory": "Turmeric",
+    "category": "Spices"
+  },
+  {
+    "id": 12,
+    "subcategory": "Turmeric",
+    "category": "Spices"
+  },
+  {
+    "id": 58,
+    "subcategory": "Amla",
+    "category": "Wellness & Medicinals"
+  },
+  {
+    "id": 53,
+    "subcategory": "Ashwagandha",
+    "category": "Wellness & Medicinals"
+  },
+  {
+    "id": 59,
+    "subcategory": "Giloy",
+    "category": "Wellness & Medicinals"
+  },
+  {
+    "id": 52,
+    "subcategory": "Moringa Powder",
+    "category": "Wellness & Medicinals"
+  },
+  {
+    "id": 57,
+    "subcategory": "Neem",
+    "category": "Wellness & Medicinals"
+  },
+  {
+    "id": 55,
+    "subcategory": "Sea Buckthorn",
+    "category": "Wellness & Medicinals"
+  },
+  {
+    "id": 54,
+    "subcategory": "Shilajit",
+    "category": "Wellness & Medicinals"
+  },
+  {
+    "id": 60,
+    "subcategory": "Spirulina",
+    "category": "Wellness & Medicinals"
+  },
+  {
+    "id": 56,
+    "subcategory": "Triphala",
+    "category": "Wellness & Medicinals"
+  },
+  {
+    "id": 62,
+    "subcategory": "Tulsi",
+    "category": "Wellness & Medicinals"
+  },
+  {
+    "id": 61,
+    "subcategory": "Wheatgrass",
+    "category": "Wellness & Medicinals"
+  }
+]
