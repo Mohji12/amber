@@ -146,7 +146,7 @@ export async function cachedFetch<T>(
 
 // Preload critical data
 export async function preloadCriticalData() {
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://api.amberglobaltrade.com";
   const criticalEndpoints = [
     { url: `${API_BASE_URL}/categories/`, key: 'categories' },
     { url: `${API_BASE_URL}/subcategories/`, key: 'subcategories' }

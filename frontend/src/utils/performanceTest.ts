@@ -4,7 +4,7 @@ import { performanceMonitor } from './performance';
 // Check if backend is available
 const checkBackendAvailability = async (): Promise<boolean> => {
   try {
-    const API_BASE_URL = "http://127.0.0.1:8000";
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://api.amberglobaltrade.com";
     const response = await fetch(`${API_BASE_URL}/health`, {
       method: 'GET',
       signal: AbortSignal.timeout(2000) // 2 second timeout
@@ -23,7 +23,7 @@ export const testAPICaching = async () => {
   const backendAvailable = await checkBackendAvailability();
   if (!backendAvailable) {
     console.warn('⚠️ Backend server is not available. Skipping API caching tests.');
-    console.warn('   Make sure the backend server is running on http://127.0.0.1:8000');
+    console.warn(`   Make sure the backend API is reachable at ${API_BASE_URL}`);
     return;
   }
   

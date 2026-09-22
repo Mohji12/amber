@@ -4,7 +4,7 @@
  * Improves SEO by ensuring meta tags are visible in initial HTML
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://nlq4zcho6j.execute-api.ap-south-1.amazonaws.com';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.amberglobaltrade.com';
 
 /**
  * Fetch meta tags from backend API
